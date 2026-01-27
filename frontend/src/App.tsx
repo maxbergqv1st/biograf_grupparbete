@@ -1,10 +1,11 @@
-import './App.css'
+import HelloTag from './components/Test';
+import './css/App.css'
 
 export default function App() {
 
   return (
     <>
-      <h1>hello biografen</h1>
+      <HelloTag />
     </>
   )
 }
