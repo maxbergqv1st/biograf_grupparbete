@@ -34,7 +34,7 @@ export default function BiografButton({
     <Button
       variant={toneToVariant[tone]}
       className={cn(
-        "!rounded-md text-sm font-medium",
+        "cursor-pointer !rounded-md text-sm font-medium",
         toneClasses[tone],
         className,
       )}

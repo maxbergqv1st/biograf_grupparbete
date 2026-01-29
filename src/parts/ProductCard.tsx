@@ -14,11 +14,7 @@ export default function ProductCard({
 }: Product) {
   const navigate = useNavigate();
   return (
-    <BiografCard
-      className="group mb-4 cursor-pointer transition-shadow hover:shadow-md"
-      role="button"
-      onClick={() => navigate("/products/" + slug)}
-    >
+    <BiografCard className="group mb-4 transition-shadow hover:shadow-md">
       <div className="flex flex-col gap-4 md:flex-row md:items-stretch">
         <div className="flex flex-1 flex-col gap-3">
           <div>
@@ -36,7 +32,9 @@ export default function ProductCard({
             <span className="text-foreground">${price$.toFixed(2)}</span>
           </div>
           <div className="pt-2">
-            <BiografButton>More info</BiografButton>
+            <BiografButton onClick={() => navigate("/products/" + slug)}>
+              More info
+            </BiografButton>
           </div>
         </div>
         <div className="md:w-44">
