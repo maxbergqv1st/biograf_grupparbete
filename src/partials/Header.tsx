@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Container, Nav, Navbar } from 'react-bootstrap';
+import { BiografContainer } from '@/components/custom/BiografContainer';
 import routes from '../routes';
 
 export default function Header() {
@@ -18,33 +18,68 @@ export default function Header() {
   const isActive = (path: string) =>
     path === currentRoute?.path || path === currentRoute?.parent;
 
-  return <header>
-    <Navbar
-      expanded={expanded}
-      expand="md"
-      className="bg-primary"
-      data-bs-theme="dark"
-      fixed="top"
-    >
-      <Container fluid>
-        <Navbar.Brand className="me-5" as={Link} to="/">
+  return <header className="sticky top-0 z-40 w-full border-b bg-background/90 backdrop-blur">
+    <BiografContainer>
+      <div className="flex h-16 items-center justify-between">
+        <Link
+          className="text-lg font-semibold tracking-tight text-foreground"
+          to="/"
+        >
           The Good Grocery
-        </Navbar.Brand>
-        <Navbar.Toggle onClick={() => setExpanded(!expanded)} />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
+        </Link>
+        <button
+          className="rounded-md border border-input px-3 py-1.5 text-sm font-medium text-foreground transition hover:bg-accent md:hidden"
+          type="button"
+          aria-controls="primary-navigation"
+          aria-expanded={expanded}
+          aria-label="Toggle navigation"
+          onClick={() => setExpanded(!expanded)}
+        >
+          Menu
+        </button>
+        <nav className="hidden md:flex" id="primary-navigation">
+          <ul className="flex items-center gap-6 text-sm font-medium">
             {routes.filter(x => x.menuLabel).map(
-              ({ menuLabel, path }, i) =>
-                <Nav.Link
-                  as={Link} key={i} to={path}
-                  className={isActive(path) ? 'active' : ''}
-                  /* close menu after selection*/
-                  onClick={() => setTimeout(() => setExpanded(false), 200)}
-                >{menuLabel}</Nav.Link>
+              ({ menuLabel, path }) =>
+                <li key={path}>
+                  <Link
+                    to={path}
+                    className={
+                      isActive(path)
+                        ? 'text-foreground'
+                        : 'text-muted-foreground transition hover:text-foreground'
+                    }
+                    onClick={() => setTimeout(() => setExpanded(false), 200)}
+                  >
+                    {menuLabel}
+                  </Link>
+                </li>
             )}
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
+          </ul>
+        </nav>
+      </div>
+      {expanded ? (
+        <nav className="md:hidden" id="primary-navigation">
+          <ul className="flex flex-col gap-3 pb-5 text-sm font-medium">
+            {routes.filter(x => x.menuLabel).map(
+              ({ menuLabel, path }) =>
+                <li key={path}>
+                  <Link
+                    to={path}
+                    className={
+                      isActive(path)
+                        ? 'text-foreground'
+                        : 'text-muted-foreground transition hover:text-foreground'
+                    }
+                    onClick={() => setTimeout(() => setExpanded(false), 200)}
+                  >
+                    {menuLabel}
+                  </Link>
+                </li>
+            )}
+          </ul>
+        </nav>
+      ) : null}
+    </BiografContainer>
   </header>;
 }

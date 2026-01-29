@@ -1,5 +1,5 @@
 import { Outlet } from 'react-router-dom';
-import { Container } from 'react-bootstrap';
+import { BiografContainer } from '@/components/custom/BiografContainer';
 import { useStateObject } from '../utils/useStateObject';
 
 export default function Main() {
@@ -10,9 +10,9 @@ export default function Main() {
     bwImages: false
   });
 
-  return <main className="mt-5">
-    <Container className="mt-5 mb-4">
+  return <main className="py-10">
+    <BiografContainer className="space-y-10">
       <Outlet context={stateAndSetter} />
-    </Container>
+    </BiografContainer>
   </main>;
 }

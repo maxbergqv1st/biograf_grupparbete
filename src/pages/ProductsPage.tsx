@@ -1,8 +1,8 @@
 import type { SortOption } from '../utils/productPageHelpers';
 import { useLoaderData } from 'react-router-dom';
-import { Row, Col, Form } from 'react-bootstrap';
+import BiografSelect from '@/components/custom/BiografSelect';
+import BiografSwitch from '@/components/custom/BiografSwitch';
 import { useStateContext } from '../utils/useStateObject';
-import Select from '../parts/Select';
 import ProductCard from '../parts/ProductCard';
 import productsLoader from '../utils/productsLoader';
 import { getHelpers } from '../utils/productPageHelpers';
@@ -36,69 +36,68 @@ export default function ProductsPage() {
   const { key: sortKey, order: sortOrder } =
     sortOptions.find(x => x.description === sortChoice) as SortOption;
 
-  return <>
-    <Row>
-      <Col>
-        <h2 className="text-primary">Our products</h2>
-        <p>
-          Our products are fantastic, organic and fresh.
-          They are also very reasonably priced, considering
-          they are all harvested with the greatest care.
+  return (
+    <section className="space-y-8">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+          Our products
+        </h1>
+        <p className="max-w-2xl text-sm text-muted-foreground">
+          Our products are fantastic, organic, and fresh. They are also
+          reasonably priced, considering they are harvested with the greatest
+          care.
         </p>
-      </Col>
-    </Row>
-    <Row>
-      <Col className="px-4 pt-1 pb-4">
-        <Row className="bg-primary-subtle pt-3 rounded">
-          <Col md="4">
-            <label className="d-block">
-              <div className="d-none d-md-block">
-                Color images:
+      </header>
+
+      <div className="rounded-lg border bg-card p-6 shadow-sm">
+        <div className="grid gap-6 md:grid-cols-3">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <div className="text-sm font-medium text-foreground">
+                Image style
               </div>
-              <div
-                className={'form-switch-text position-absolute' +
-                  ' d-md-none px-5' + (bwImages ? '' : ' text-white')}
-              >
-                B/W Images
-                <span className="float-end">Color Images</span>
+              <div className="text-xs text-muted-foreground">
+                {bwImages ? "Black & white" : "Full color"}
               </div>
-              <Form.Switch
-                className="mt-2 mb-4 mb-md-2"
-                defaultChecked={!bwImages}
-                onChange={e => setState('bwImages', !e.target.checked)}
-              />
-            </label>
-          </Col>
-          <Col md="4">
-            <Select
-              label="Category"
+            </div>
+            <BiografSwitch
+              checked={!bwImages}
+              onCheckedChange={(checked) =>
+                setState('bwImages', !checked)
+              }
+            />
+          </div>
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-foreground">Category</div>
+            <BiografSelect
               value={categoryChoice}
-              changeHandler={(x: string) => setState('categoryChoice', x)}
-              options={categories}
+              onValueChange={(nextValue) => setState('categoryChoice', nextValue)}
+              options={categories.map((option) => ({ value: option }))}
+              placeholder="Select"
             />
-          </Col>
-          <Col md="4">
-            <Select
-              label="Sort by"
+          </div>
+          <div className="space-y-2">
+            <div className="text-sm font-medium text-foreground">Sort by</div>
+            <BiografSelect
               value={sortChoice}
-              changeHandler={(x: string) => setState('sortChoice', x)}
-              options={sortDescriptions}
+              onValueChange={(nextValue) => setState('sortChoice', nextValue)}
+              options={sortDescriptions.map((option) => ({ value: option }))}
+              placeholder="Select"
             />
-          </Col>
-        </Row>
-      </Col >
-    </Row >
-    <Row className="mt-1 mb-n3">
-      {products
-        // filter by the chosen category
-        .filter(x => category === 'All' || x.categories.includes(category))
-        // sort by the chosen choice for sorting
-        .sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1) * sortOrder)
-        // map to product cards
-        .map(product => <Col xs={12} lg={6} key={product.id}>
-          <ProductCard {...product} />
-        </Col>)
-      }
-    </Row>
-  </>;
+          </div>
+        </div>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {products
+          // filter by the chosen category
+          .filter(x => category === 'All' || x.categories.includes(category))
+          // sort by the chosen choice for sorting
+          .sort((a, b) => (a[sortKey] > b[sortKey] ? 1 : -1) * sortOrder)
+          // map to product cards
+          .map(product => <ProductCard {...product} key={product.id} />)
+        }
+      </div>
+    </section>
+  );
 };

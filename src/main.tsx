@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider }
   from 'react-router-dom';
 import '../sass/index.scss';
+import './index.css';
 import routes from './routes';
 import App from './App';
 
