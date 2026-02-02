@@ -1,20 +1,20 @@
-import type Product from '../interfaces/Product';
 import { Link, useLoaderData } from 'react-router-dom';
+
 import BiografButton from '@/components/custom/BiografButton';
-import NotFoundPage from './NotFoundPage';
+
+import type Product from '../interfaces/Product';
 import Image from '../parts/Image';
 import productsLoader from '../utils/productsLoader';
+import NotFoundPage from './NotFoundPage';
 
 ProductDetailsPage.route = {
   path: '/products/:slug',
   parent: '/',
-  loader: productsLoader
+  loader: productsLoader,
 };
 
 export default function ProductDetailsPage() {
-
-  const product =
-    useLoaderData().products[0] as Product;
+  const product = useLoaderData().products[0] as Product;
 
   // if no product found, show 404
   if (!product) {
@@ -27,10 +27,10 @@ export default function ProductDetailsPage() {
     <article className="space-y-8">
       <header className="space-y-4">
         <div className="space-y-2">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+          <p className="text-muted-foreground text-xs tracking-widest uppercase">
             Product details
           </p>
-          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+          <h1 className="text-foreground text-3xl font-semibold tracking-tight">
             {name}
           </h1>
         </div>
@@ -42,21 +42,19 @@ export default function ProductDetailsPage() {
 
       <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
         <div className="prose prose-neutral max-w-none">
-          {description
-            .split('\n')
-            .map((text) => <p key={`${id}-${text}`}>{text}</p>)}
+          {description.split('\n').map((text) => (
+            <p key={`${id}-${text}`}>{text}</p>
+          ))}
         </div>
-        <div className="rounded-lg border bg-card p-4 shadow-sm">
+        <div className="bg-card rounded-lg border p-4 shadow-sm">
           <div className="space-y-4 text-sm">
             <div className="flex items-center justify-between">
-              <span className="font-medium text-foreground">Quantity</span>
+              <span className="text-foreground font-medium">Quantity</span>
               <span className="text-foreground">{quantity}</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="font-medium text-foreground">Price</span>
-              <span className="text-foreground">
-                ${price$.toFixed(2)}
-              </span>
+              <span className="text-foreground font-medium">Price</span>
+              <span className="text-foreground">${price$.toFixed(2)}</span>
             </div>
             <BiografButton asChild className="w-full">
               <Link to="/">Back to the product list</Link>

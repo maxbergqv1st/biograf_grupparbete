@@ -13,7 +13,7 @@ main {
     }
   }
 
-  img:not(img[src*="products"]) {
+  img:not(img[src*='products']) {
     object-position: top left;
   }
 

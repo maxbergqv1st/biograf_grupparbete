@@ -4,8 +4,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/select';
+
+import { cn } from '@/lib/utils';
 
 type BiografSelectOption = {
   value: string;
@@ -35,7 +36,7 @@ export default function BiografSelect({
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         className={cn(
-          "h-10 w-full !rounded-md border border-input bg-background px-3 text-sm text-foreground shadow-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          'border-input bg-background text-foreground ring-offset-background focus:ring-ring h-10 w-full !rounded-md border px-3 text-sm shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none',
           triggerClassName,
           className,
         )}
@@ -44,7 +45,7 @@ export default function BiografSelect({
       </SelectTrigger>
       <SelectContent
         className={cn(
-          "!rounded-md border bg-popover text-popover-foreground shadow-md",
+          'bg-popover text-popover-foreground !rounded-md border shadow-md',
           contentClassName,
         )}
       >
