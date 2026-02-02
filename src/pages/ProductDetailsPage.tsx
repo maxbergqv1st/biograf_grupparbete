@@ -1,6 +1,6 @@
 import type Product from '../interfaces/Product';
-import { Row, Col } from 'react-bootstrap';
 import { Link, useLoaderData } from 'react-router-dom';
+import BiografButton from '@/components/custom/BiografButton';
 import NotFoundPage from './NotFoundPage';
 import Image from '../parts/Image';
 import productsLoader from '../utils/productsLoader';
@@ -23,45 +23,47 @@ export default function ProductDetailsPage() {
 
   const { id, name, quantity, price$, description } = product;
 
-  return <article className="product-details">
-    <Row>
-      <Col>
-        <h2 className="text-primary">{name}</h2>
+  return (
+    <article className="space-y-8">
+      <header className="space-y-4">
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+            Product details
+          </p>
+          <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+            {name}
+          </h1>
+        </div>
         <Image
           src={'/images/products/' + id + '.jpg'}
           alt={'Product image of the product ' + name + '.'}
         />
-        {description.split('\n').map((x, i) => <p key={i}>{x}</p>)}
-      </Col>
-    </Row>
-    <Row>
-      <Col className="px-4 pb-4">
-        <Row className="p-3 bg-primary-subtle rounded">
-          <Col className="pe-4 pe-sm-5 border-end border-primary">
-            <strong>Quantity</strong>:
-            <span
-              className="d-block d-sm-inline float-sm-end"
-            >
-              {quantity}
-            </span>
-          </Col>
-          <Col className="ps-4 ps-sm-5 text-end text-sm-start">
-            <strong>Price</strong>:
-            <span
-              className="d-block d-sm-inline float-sm-end"
-            >
-              ${price$.toFixed(2)}
-            </span>
-          </Col>
-        </Row>
-      </Col>
-    </Row >
-    <Row>
-      <Col>
-        <Link to="/" className="btn btn-primary float-end">
-          Back to the product list
-        </Link>
-      </Col>
-    </Row>
-  </article >;
+      </header>
+
+      <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
+        <div className="prose prose-neutral max-w-none">
+          {description
+            .split('\n')
+            .map((text) => <p key={`${id}-${text}`}>{text}</p>)}
+        </div>
+        <div className="rounded-lg border bg-card p-4 shadow-sm">
+          <div className="space-y-4 text-sm">
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-foreground">Quantity</span>
+              <span className="text-foreground">{quantity}</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="font-medium text-foreground">Price</span>
+              <span className="text-foreground">
+                ${price$.toFixed(2)}
+              </span>
+            </div>
+            <BiografButton asChild className="w-full">
+              <Link to="/">Back to the product list</Link>
+            </BiografButton>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
 }
