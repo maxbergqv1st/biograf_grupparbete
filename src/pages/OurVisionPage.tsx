@@ -46,15 +46,15 @@ export default function OurVisionPage() {
           <p>
             Our customers are partners in this vision, running alongside us as
             we make conscious choices that ripple outward to support sustainable
-            agriculture and healthier communities. Together, we&apos;re proving that
-            grocery shopping can be both convenient and conscientious.
+            agriculture and healthier communities. Together, we&apos;re proving
+            that grocery shopping can be both convenient and conscientious.
           </p>
           <p>
             Looking ahead, we see The Good Grocery as a model for responsible
             retail, inspiring other businesses to prioritize people and planet
             alongside profit. Through education, transparency, and unwavering
-            commitment to quality, we&apos;re building a future where good food and
-            good values are accessible to everyone in our community.
+            commitment to quality, we&apos;re building a future where good food
+            and good values are accessible to everyone in our community.
           </p>
         </div>
       </div>
