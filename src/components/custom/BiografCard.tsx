@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 
 import {
   Card,
@@ -7,8 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/card';
+
+import { cn } from '@/lib/utils';
 
 interface BiografCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
@@ -31,21 +32,23 @@ export default function BiografCard({
   return (
     <Card
       className={cn(
-        "rounded-lg border bg-card text-card-foreground shadow-sm",
-        className
+        'bg-card text-card-foreground rounded-lg border shadow-sm',
+        className,
       )}
       {...props}
     >
       {(title || description) && (
-        <CardHeader className={cn("pb-2", headerClassName)}>
+        <CardHeader className={cn('pb-2', headerClassName)}>
           {title ? <CardTitle>{title}</CardTitle> : null}
-          {description ? <CardDescription>{description}</CardDescription> : null}
+          {description ? (
+            <CardDescription>{description}</CardDescription>
+          ) : null}
         </CardHeader>
       )}
       <CardContent
         className={cn(
-          !title && !description ? "p-4" : "pt-0",
-          contentClassName
+          !title && !description ? 'p-4' : 'pt-0',
+          contentClassName,
         )}
       >
         {children}

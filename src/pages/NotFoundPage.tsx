@@ -1,24 +1,25 @@
-import { Link, useLocation } from "react-router-dom";
-import BiografButton from "@/components/custom/BiografButton";
+import { Link, useLocation } from 'react-router-dom';
+
+import BiografButton from '@/components/custom/BiografButton';
 
 NotFoundPage.route = {
-  path: '*'
+  path: '*',
 };
 
 export default function NotFoundPage() {
   return (
-    <section className="flex flex-col gap-6 rounded-lg border bg-card p-8 text-center shadow-sm">
+    <section className="bg-card flex flex-col gap-6 rounded-lg border p-8 text-center shadow-sm">
       <div className="space-y-2">
-        <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+        <p className="text-muted-foreground text-xs tracking-[0.3em] uppercase">
           404
         </p>
-        <h1 className="text-2xl font-semibold text-foreground">
+        <h1 className="text-foreground text-2xl font-semibold">
           Page not found
         </h1>
-        <p className="text-sm text-muted-foreground">
-          We couldn't find a page that matches:
+        <p className="text-muted-foreground text-sm">
+          We couldn&apos;t find a page that matches:
         </p>
-        <p className="rounded-md bg-muted px-3 py-2 text-sm font-medium text-foreground">
+        <p className="bg-muted text-foreground rounded-md px-3 py-2 text-sm font-medium">
           {useLocation().pathname}
         </p>
       </div>

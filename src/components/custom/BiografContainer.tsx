@@ -1,6 +1,6 @@
-import type { HTMLAttributes } from "react";
+import type { HTMLAttributes } from 'react';
 
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
   fluid?: boolean;
@@ -14,27 +14,22 @@ export function BiografContainer({
   return (
     <div
       className={cn(
-        "mx-auto w-full px-3",
-        fluid ? "max-w-none" : "max-w-[970px]",
-        className
+        'mx-auto w-full px-3',
+        fluid ? 'max-w-none' : 'max-w-[970px]',
+        className,
       )}
       {...props}
     />
   );
 }
 
-interface RowProps extends HTMLAttributes<HTMLDivElement> {}
+type RowProps = HTMLAttributes<HTMLDivElement>;
 
 export function BiografRow({ className, ...props }: RowProps) {
-  return (
-    <div
-      className={cn("-mx-3 flex flex-wrap", className)}
-      {...props}
-    />
-  );
+  return <div className={cn('-mx-3 flex flex-wrap', className)} {...props} />;
 }
 
-type ColSpan = number | "auto";
+type ColSpan = number | 'auto';
 
 interface ColProps extends HTMLAttributes<HTMLDivElement> {
   xs?: ColSpan;
@@ -50,7 +45,7 @@ const spanClass = (prefix: string, span?: ColSpan) => {
     return null;
   }
 
-  if (span === "auto") {
+  if (span === 'auto') {
     return `${prefix}w-auto ${prefix}flex-none`;
   }
 
@@ -79,15 +74,15 @@ export function BiografCol({
   return (
     <div
       className={cn(
-        "px-3",
-        hasExplicitSpan ? "w-full" : "min-w-0 flex-1",
-        spanClass("", xs),
-        spanClass("sm:", sm),
-        spanClass("md:", md),
-        spanClass("lg:", lg),
-        spanClass("xl:", xl),
-        spanClass("2xl:", xxl),
-        className
+        'px-3',
+        hasExplicitSpan ? 'w-full' : 'min-w-0 flex-1',
+        spanClass('', xs),
+        spanClass('sm:', sm),
+        spanClass('md:', md),
+        spanClass('lg:', lg),
+        spanClass('xl:', xl),
+        spanClass('2xl:', xxl),
+        className,
       )}
       {...props}
     />
