@@ -24,7 +24,7 @@ export default function NotFoundPage() {
         </p>
       </div>
       <div className="flex justify-center">
-        <BiografButton asChild>
+        <BiografButton>
           <Link to="/">Back to the start page</Link>
         </BiografButton>
       </div>

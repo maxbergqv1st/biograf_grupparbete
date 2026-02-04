@@ -56,7 +56,7 @@ export default function ProductDetailsPage() {
               <span className="text-foreground font-medium">Price</span>
               <span className="text-foreground">${price$.toFixed(2)}</span>
             </div>
-            <BiografButton asChild className="w-full">
+            <BiografButton className="w-full">
               <Link to="/">Back to the product list</Link>
             </BiografButton>
           </div>
