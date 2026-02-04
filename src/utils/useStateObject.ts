@@ -18,6 +18,9 @@ export function useStateObject<T extends Record<string, unknown>>(object: T) {
 
 export function useStateContext() {
   return useOutletContext<
-    readonly [AppState, <K extends keyof AppState>(key: K, value: AppState[K]) => void]
+    readonly [
+      AppState,
+      <K extends keyof AppState>(key: K, value: AppState[K]) => void,
+    ]
   >();
 }

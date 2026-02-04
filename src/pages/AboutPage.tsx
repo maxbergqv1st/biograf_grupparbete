@@ -48,8 +48,8 @@ export default function AboutPage() {
           </p>
           <p>
             Whether you&apos;re planning a simple weeknight dinner or hosting a
-            special celebration, we&apos;re here to provide ingredients that make
-            every meal memorable and meaningful.
+            special celebration, we&apos;re here to provide ingredients that
+            make every meal memorable and meaningful.
           </p>
         </div>
       </div>
