@@ -11,7 +11,7 @@ import { useStateContext } from '../utils/useStateObject';
 
 ProductsPage.route = {
   path: '/',
-  menuLabel: 'Products',
+  menuLabel: 'main.navigation.products',
   index: 1,
   parent: '/',
   loader: productsLoader,

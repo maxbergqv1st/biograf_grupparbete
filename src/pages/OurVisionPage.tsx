@@ -2,7 +2,7 @@ import Image from '../parts/Image';
 
 OurVisionPage.route = {
   path: '/our-vision',
-  menuLabel: 'Our Vision',
+  menuLabel: 'main.navigation.vision',
   index: 3,
 };
 
