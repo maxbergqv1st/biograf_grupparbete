@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
+import { LANGUAGES } from '@/i18n';
+import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 
 import { BiografContainer } from '@/components/custom/BiografContainer';
+import BiografSelect from '@/components/custom/BiografSelect';
 
 import routes from '../routes';
 
@@ -10,6 +13,7 @@ export default function Header() {
   // whether the navbar is expanded or not
   // (we use this to close it after a click/selection)
   const [expanded, setExpanded] = useState(false);
+  const { t, i18n } = useTranslation();
 
   //  get the current route
   const pathName = useLocation().pathname;
@@ -56,12 +60,18 @@ export default function Header() {
                       }
                       onClick={() => setTimeout(() => setExpanded(false), 200)}
                     >
-                      {menuLabel}
+                      {t(menuLabel as string)}
                     </Link>
                   </li>
                 ))}
             </ul>
           </nav>
+          <BiografSelect
+            className="max-w-25"
+            options={LANGUAGES.map((x) => ({ value: x }))}
+            onValueChange={(lang) => i18n.changeLanguage(lang)}
+            value={i18n.language}
+          />
         </div>
         {expanded ? (
           <nav className="md:hidden" id="primary-navigation">

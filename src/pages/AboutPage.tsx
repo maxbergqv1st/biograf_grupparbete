@@ -1,17 +1,21 @@
+import { useTranslation } from 'react-i18next';
+
 import Image from '../parts/Image';
 
 AboutPage.route = {
   path: '/about-us',
-  menuLabel: 'About us',
+  menuLabel: 'main.navigation.about',
   index: 2,
 };
 
 export default function AboutPage() {
+  const { t } = useTranslation();
+
   return (
     <section className="space-y-8">
       <header className="space-y-3">
         <p className="text-muted-foreground text-xs tracking-[0.3em] uppercase">
-          About us
+          {t('main.navigation.about')}
         </p>
         <h1 className="text-foreground text-3xl font-semibold tracking-tight">
           About The Good Grocery
