@@ -1,10 +1,18 @@
 namespace WebApp;
+
 public static class Server
 {
     public static void Start()
     {
         var builder = WebApplication.CreateBuilder();
+        builder.Services.AddEndpointsApiExplorer();
+        builder.Services.AddSwaggerGen();
         App = builder.Build();
+        if (App.Environment.IsDevelopment())
+        {
+            App.UseSwagger();
+            App.UseSwaggerUI();
+        }
         Middleware();
         DebugLog.Start();
         Acl.Start();
@@ -57,6 +65,7 @@ public static class Server
                 info.Delete("contentLengthKB");
             }
             DebugLog.Add(context, info);
+
         });
     }
 }

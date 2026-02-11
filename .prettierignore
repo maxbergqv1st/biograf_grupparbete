@@ -1,5 +1,7 @@
 # Backend
 backend/
+*.csproj
+*.cs
 
 # Build output
 dist/
