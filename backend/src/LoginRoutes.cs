@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Identity.Data;
+
 namespace WebApp;
+
 public static class LoginRoutes
 {
     private static Obj GetUser(HttpContext context)
@@ -46,7 +49,10 @@ public static class LoginRoutes
 
             // Return the user
             return RestResult.Parse(context, dbUser!);
-        });
+        })
+        .WithName("Login")
+        .WithTags("Authentication")
+        .WithDescription("Authenticate user with email and password.");
 
         App.MapGet("/api/login", (HttpContext context) =>
         {
