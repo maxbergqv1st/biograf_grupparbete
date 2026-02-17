@@ -82,19 +82,19 @@ public static class DbQuery
                 categories JSON NOT NULL
             );
 
-            CREATE TABLE `sound_system` (
+            CREATE TABLE IF NOT EXISTS `sound_system` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `system_name` VARCHAR(50) NOT NULL,
                 `description` text NOT NULL
             );
 
-            CREATE TABLE `hall_type` (
+            CREATE TABLE IF NOT EXISTS `hall_type` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `type` ENUM ('Standard', 'IMAX', '4DX', 'Dolby Cinema', 'iSense', '3D') NOT NULL DEFAULT 'Standard',
                 `description` text NOT NULL
             );
 
-            CREATE TABLE `hall` (
+            CREATE TABLE IF NOT EXISTS `hall` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `name` VARCHAR(100) NOT NULL,
                 `type` INT NOT NULL,
@@ -105,7 +105,7 @@ public static class DbQuery
                 FOREIGN KEY (`type`) REFERENCES `hall_type` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `hall_row_config` (
+            CREATE TABLE IF NOT EXISTS `hall_row_config` (
                 `hall_id` INT NOT NULL,
                 `name` VARCHAR(10) NOT NULL,
                 `number_of_seats` INT NOT NULL, -- Added manually by admin
@@ -113,13 +113,13 @@ public static class DbQuery
                 FOREIGN KEY (`hall_id`) REFERENCES `hall` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `seat_type` (
+            CREATE TABLE IF NOT EXISTS `seat_type` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `name` ENUM ('Standard', 'Premium', 'VIP', 'Handicap', 'Recliner') NOT NULL DEFAULT 'Standard',
                 `surcharge` decimal(10,2) DEFAULT 0
             );
 
-            CREATE TABLE `seat` (
+            CREATE TABLE IF NOT EXISTS `seat` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `hall_id` INT,
                 `row_name` VARCHAR(10) NOT NULL,
@@ -130,18 +130,18 @@ public static class DbQuery
                 FOREIGN KEY (`type`) REFERENCES `seat_type` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `movie_language` (
+            CREATE TABLE IF NOT EXISTS `movie_language` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `movie_lang_enum` ENUM ('Svenska', 'Engelska') NOT NULL,
                 `movie_lang_short_enum` ENUM ('Sv', 'En') NOT NULL
             );
 
-            CREATE TABLE `genre` (
+            CREATE TABLE IF NOT EXISTS `genre` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `name` ENUM ('Action', 'Äventyr', 'Komedi', 'Drama', 'Skräck', 'Science Fiction', 'Thriller', 'Fantasy', 'Romantik', 'Western', 'Krig', 'Musikal', 'Dokumentär', 'Animerat') NOT NULL
             );
 
-            CREATE TABLE `movie` (
+            CREATE TABLE IF NOT EXISTS `movie` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `title` VARCHAR(255) NOT NULL,
                 `description_short` VARCHAR(255) NOT NULL,
@@ -156,7 +156,7 @@ public static class DbQuery
             );
 
             
-            CREATE TABLE `movie_genre` (
+            CREATE TABLE IF NOT EXISTS `movie_genre` (
                 `movie_id` INT NOT NULL,
                 `genre_id` INT NOT NULL,
                 PRIMARY KEY (`movie_id`, `genre_id`),
@@ -164,7 +164,7 @@ public static class DbQuery
                 FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `screening` (
+            CREATE TABLE IF NOT EXISTS `screening` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `movie_id` INT NOT NULL,
                 `hall_id` INT NOT NULL,
@@ -175,7 +175,7 @@ public static class DbQuery
                 FOREIGN KEY (`hall_id`) REFERENCES `hall` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `booking` (
+            CREATE TABLE IF NOT EXISTS `booking` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `user_id` INT,
                 `email` VARCHAR(254) NOT NULL,
@@ -188,13 +188,13 @@ public static class DbQuery
                 FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)  ON DELETE CASCADE
             );
 
-            CREATE TABLE `price_category_seat` (
+            CREATE TABLE IF NOT EXISTS `price_category_seat` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `category` ENUM ('Adult', 'Child', 'Senior', 'Student', 'Handicap') NOT NULL,
                 `discount_modifier` decimal(5,2) DEFAULT 0
             );
 
-            CREATE TABLE `booking_seat` (
+            CREATE TABLE IF NOT EXISTS `booking_seat` (
                 `booking_id` INT NOT NULL,
                 `seat_id` INT NOT NULL,
                 `price_category_seat_id` INT NOT NULL,
@@ -205,7 +205,7 @@ public static class DbQuery
                 FOREIGN KEY (`price_category_seat_id`) REFERENCES `price_category_seat` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `payment` (
+            CREATE TABLE IF NOT EXISTS `payment` (
                 `payment_id` INT PRIMARY KEY AUTO_INCREMENT,
                 `booking_id` INT NOT NULL,
                 `payment_method` VARCHAR(50) NOT NULL,
@@ -215,7 +215,7 @@ public static class DbQuery
                 FOREIGN KEY (`booking_id`) REFERENCES `booking` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `seat_ghost` (
+            CREATE TABLE IF NOT EXISTS `seat_ghost` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `screening_id` INT NOT NULL,
                 `seat_id` INT NOT NULL,
@@ -226,7 +226,7 @@ public static class DbQuery
                 FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE `snacks` (
+            CREATE TABLE IF NOT EXISTS `snacks` (
             `id` INT PRIMARY KEY AUTO_INCREMENT,
             `name` VARCHAR(100) NOT NULL,
             `description` text NOT NULL,
@@ -271,6 +271,39 @@ public static class DbQuery
             command.ExecuteNonQuery();
         }
 
+// Seed products
+        command.CommandText = "SELECT COUNT(*) FROM products";
+        if (Convert.ToInt32(command.ExecuteScalar()) == 0)
+        {
+            var productsData = new List<string>
+            {
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Croissant', 'Buttery, flaky French-style croissant baked fresh daily with premium European butter. Perfect for breakfast with jam, afternoon coffee, or as the base for elegant sandwiches.\nGolden layers that melt in your mouth with authentic French pastry techniques.', '1 large', 0.99, 'croissant', '[""Bread & rice""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Gherkins', 'Crisp, tangy gherkin pickles packed in traditional brine with dill and spices. These small pickles add perfect acidity to sandwiches, charcuterie boards, and salads.\nA classic European-style pickle with authentic flavor that brightens any meal.', 'A can of 10', 4.5, 'gherkins', '[""Vegetables"",""Canned food""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Bay Leaves', 'Aromatic dried bay leaves from the Mediterranean, essential for soups, stews, and braised dishes. These whole leaves release their subtle, woodsy flavor slowly during cooking.\nRemove before serving for the perfect herbal note in your favorite recipes.', '1 bundle', 3.45, 'bay-leaves', '[""Vegetables"",""Spices""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Tomatoes', 'Fresh, vine-ripened tomatoes bursting with sweet, balanced flavor. Perfect for salads, sandwiches, or cooking.\nThese tomatoes have been allowed to ripen naturally on the vine for maximum taste and vibrant red color.', '1 lb', 2.5, 'tomatoes-on-the-vine', '[""Vegetables""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Basmati Rice', 'Premium long-grain basmati rice with a distinctive nutty aroma and fluffy texture. Aged for optimal flavor, this rice cooks to perfection with separate, non-sticky grains.\nIdeal for Indian dishes, pilafs, and everyday meals where quality matters.', '4 lb', 6.99, 'basmati-rice', '[""Bread & rice""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Green Olives', 'Plump, buttery green olives cured in traditional Mediterranean style. These olives have a mild, fruity flavor with a satisfying firm texture.\nPerfect for antipasto platters, salads, or enjoying straight from the can.', '1 lb, canned', 9.75, 'green-olives', '[""Canned food""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Parsley', 'Fresh, vibrant flat-leaf parsley with bright, clean flavor. Essential for Mediterranean cooking, garnishing, and adding fresh herb notes to any dish.\nThis aromatic herb brightens sauces, soups, and grain dishes beautifully.', '1 bundle', 2.75, 'parsley', '[""Vegetables"",""Spices""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Artichoke', 'Fresh, globe artichoke with tender heart and meaty leaves. Steam, grill, or stuff for an elegant side dish.\nThis versatile vegetable offers a subtle, nutty flavor and satisfying texture when properly prepared.', '1', 1.75, 'artichoke', '[""Vegetables""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Focaccia', 'Rustic Italian focaccia bread with herbs and olive oil, baked to golden perfection. Soft, airy interior with a slightly crispy crust.\nPerfect for sandwiches, dipping in olive oil, or serving alongside Mediterranean meals.', '1 large', 4.3, 'focaccia', '[""Bread & rice""]')",
+                @"INSERT INTO products (name, description, quantity, `price$`, slug, categories) VALUES
+                ('Rosemary', 'Fresh rosemary plant in a convenient pot for your kitchen windowsill. This aromatic herb adds pine-like fragrance to roasted meats, potatoes, and bread.\nSnip fresh sprigs as needed for cooking or cocktail garnishes.', '1 pot', 3.6, 'rosemary', '[""Vegetables"",""Spices""]')"
+            };
+            foreach (var sql in productsData)
+            {
+                command.CommandText = sql;
+                command.ExecuteNonQuery();
+            }
+        }
         
         command.CommandText = "SELECT COUNT(*) FROM users";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
