@@ -158,3 +158,10 @@ De enda api-routes som inte styrs av vilka tabeller och vyer du har i din databa
 ### Lösenord
 * Lösenord är BCryptade (med styrka 13) och tas bort från REST-api-svar också.
 * Det finns inga begränsningar för hur komplexa de måste vara just nu - men jag funderar på att lägga till en kontroll för minsta lösenordsentropi och/eller kräva en minimilängd och att de är en blandning av små och stora bokstäver, siffror och minst ett annat tecken.
+
+
+### DB Migrations
+
+Naming is important here. If we specify a version, it means that the migration will be run only once, f.e: V1_0__Init_tables.sql
+If we want to run the queries every time, then the name should start with R, f.e:  R__[description].sql
+It can be some tests like creating a view or somtheing like that.
