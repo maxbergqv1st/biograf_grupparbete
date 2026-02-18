@@ -1,9 +1,10 @@
 {
-  "host": "xxx.xxx.xxx.xxx",
+  "host": "5.189.183.23",
   "port": 4567,
-  "username": "your-username",
-  "password": "your-password",
-  "database": "your-database",
+  "username": "h25halmstad-grupp4",
+  "password": "ZHXXG73729",
+  "database": "h25halmstad-grupp4",
   "createTablesIfNotExist": true,
-  "seedDataIfEmpty": true
+  "seedDataIfEmpty": true,
+  "aiAccessToken": "YHQu?U?ex5R?"
 }
