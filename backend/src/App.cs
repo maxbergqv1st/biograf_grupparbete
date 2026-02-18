@@ -1,3 +1,9 @@
+if (args.Length > 0 && args[0] == "migrate")
+{
+    DbQuery.RunMigrations();
+    return;
+}
+
 // Global settings
 Globals = Obj(new
 {
