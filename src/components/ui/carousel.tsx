@@ -42,6 +42,9 @@ function useCarousel() {
   return context
 }
 
+export type BaseCarouselProps = React.ComponentProps<"div"> & CarouselProps
+
+
 function Carousel({
   orientation = "horizontal",
   opts,

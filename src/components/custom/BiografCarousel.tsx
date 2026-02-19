@@ -6,12 +6,14 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type BaseCarouselProps,
 } from "@/components/ui/carousel"
 import type { background } from "storybook/theming"
 
-export default function CarouselSize() {
+export default function CarouselSize({...props}: BaseCarouselProps) {
   return (
     <Carousel
+    orientation={props.orientation}
       opts={{
         align: "start",
       }}
@@ -20,10 +22,10 @@ export default function CarouselSize() {
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
           <CarouselItem key={index} className="basis-1/2 lg:basis-1/3">
-            <Card className="m-2 border-0 bg-[#141414]  text-[#f3eee4] shadow-[0px_0px_5px_1px_#b69852] hover:shadow-[0px_0px_15px_1px_#b69852]">
-              <CardContent className="flex flex-col aspect-square items-center justify-center p-6 text-sm">
-                <span>{index + 15}:e Feb</span>
-                <span className="text-xs">Salong 2</span>
+            <Card className="m-2 border-0 bg-[#141414]  text-[#f3eee4] p-0 shadow-[0px_0px_5px_1px_#b69852] hover:shadow-[0px_0px_15px_1px_#b69852]">
+              <CardContent className="flex aspect-square items-center justify-center p-0 text-sm">
+                {props.children ? props.children : <><span>{index + 15}:e Feb</span>
+                <span className="text-xs">Salong 2</span></>}
 
 
               </CardContent>
@@ -31,8 +33,6 @@ export default function CarouselSize() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
     </Carousel>
   );
 }
