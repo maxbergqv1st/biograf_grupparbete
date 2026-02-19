@@ -11,7 +11,8 @@ const meta = {
   tags: ['autodocs'],
   argTypes: {
     fluid: {
-      description: 'When true, the container spans the full width with no max-width constraint.',
+      description:
+        'When true, the container spans the full width with no max-width constraint.',
       control: 'boolean',
       table: {
         type: { detail: 'boolean' },

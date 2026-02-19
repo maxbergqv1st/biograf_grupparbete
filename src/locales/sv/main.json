@@ -1,8 +1,8 @@
 {
-    "title": "Välkommen till Biograf",
-    "navigation": {
-        "about": "Om oss",
-        "products": "Produkter",
-        "vision": "Vår vision"
-    }
+  "title": "Välkommen till Biograf",
+  "navigation": {
+    "about": "Om oss",
+    "products": "Produkter",
+    "vision": "Vår vision"
+  }
 }
