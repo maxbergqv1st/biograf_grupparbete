@@ -3,7 +3,7 @@ export default async function moviesLoader({
 }: {
   params: Record<string, string | undefined>;
 }) {
-  let url = '/api/movies';
+  let url = '/api/movie';
   if (params.slug) {
     url += '?slug=' + params.slug;
   }

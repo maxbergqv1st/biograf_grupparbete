@@ -5,14 +5,14 @@ import MovieCard from '@/components/custom/MovieCard';
 
 import moviesLoader from '@/utils/moviesLoader';
 
-dev.route = {
+DevPage.route = {
   path: '/dev',
   menuLabel: 'dev',
   index: 2,
   loader: moviesLoader,
 };
 
-export default function dev() {
+export default function DevPage() {
   const { movies } = useLoaderData();
 
   return (
