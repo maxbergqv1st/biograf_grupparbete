@@ -13,8 +13,8 @@ export default function dev() {
     <section>
       <div>hello</div>
       <BiografCard
-        title="Min titel"
-        description="En beskrivning"
+        title="Card "
+        description="Hej max"
         footer={<button>Klicka här</button>}
       >
         <p>Ditt innehåll här</p>
