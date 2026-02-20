@@ -1,24 +1,25 @@
-import BiografCard from '@/components/custom/BiografCard';
+import type Movie from '@/interfaces/Movie';
+import { useLoaderData } from 'react-router-dom';
+
+import MovieCard from '@/components/custom/MovieCard';
+
+import moviesLoader from '@/utils/moviesLoader';
 
 dev.route = {
   path: '/dev',
-  menuLabel: 'main.navigation.dev',
+  menuLabel: 'dev',
   index: 2,
+  loader: moviesLoader,
 };
 
 export default function dev() {
-  //   const { t } = useTranslation();
+  const { movies } = useLoaderData();
 
   return (
-    <section>
-      <div>hello</div>
-      <BiografCard
-        title="Card "
-        description="Hej max"
-        footer={<button>Klicka här</button>}
-      >
-        <p>Ditt innehåll här</p>
-      </BiografCard>
-    </section>
+    <div className="movieCard">
+      {movies.map((movie: Movie) => (
+        <MovieCard key={movie.id} movie={movie} />
+      ))}
+    </div>
   );
 }
