@@ -8,7 +8,8 @@ export default function MovieCard({ movie }: MoveCardProps) {
   return (
     <div>
       <h2>{movie.title}</h2>
-      <p>{movie.description}</p>
+      <p>{movie.description_short}</p>
+      <p>age_rating</p>
     </div>
   );
 }
