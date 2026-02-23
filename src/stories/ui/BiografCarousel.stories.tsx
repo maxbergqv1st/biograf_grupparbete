@@ -75,13 +75,16 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+
+
 // More on writing stories with args: https://storybook.js.org/docs/writing-stories/args
 export const Dates: Story = {
   args: {
+    selectable: true,
     children: (
-      <div className='flex flex-col'>
-        <span className='justify-center'>15:e Feb</span>
-        <span className='flex justify-center text-xs'>Salong 2</span>
+      <div className="flex flex-col justify-center items-center h-full w-full rounded-xl">
+        <span>15:e Feb</span>
+        <span className="text-xs">Salong 2</span>
       </div>
     ),
   },
