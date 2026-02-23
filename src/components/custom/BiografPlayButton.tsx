@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
 
+import { Play } from 'lucide-react';
+
 // TODO: Update the interface based on requirements, and cut unnecessary props
-export type BiografButtonProps = ButtonProps;
+export type BiografPlayButtonProps = ButtonProps;
 
 const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
-  default: 'bg-indigo-500 shadow-lg shadow-indigo-500/50',
+  default: 'bg-[#141414] text-[#F3EEE4] border border-[#B69852] hover:bg-[#000000]',
   secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
   outline:
     'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
@@ -15,26 +17,31 @@ const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
   link: 'text-primary underline-offset-4 hover:underline',
   destructive:
     'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+  trailer: 'bg-[#141414] text-[#F3EEE4] border border-[#B69852] hover:bg-[#000000]',
+  playIcon: '',
 };
 
-export default function BiografButton({
-  variant = 'default',
+export default function BiografPlayButton({
+  variant = 'playIcon',
   className,
-  children = 'Button123',
-  size = 'lg',
+  children = 'playIcon',
+  size = 'icon',
   ...props
-}: BiografButtonProps) {
+}: BiografPlayButtonProps) {
   return (
     <Button
-      children={children}
+      // children={children}raderas?????
       size={size}
       variant={variant}
       className={cn(
         'cursor-pointer text-sm font-medium',
-        variantClasses[variant!],
+
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+      <Play className="h-4 w-4 text-[#F3EEE4]" />
+    </Button>
   );
 }
