@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
   type BaseCarouselProps,
+  type BaseCarouselProps,
 } from "@/components/ui/carousel"
 import type { background } from "storybook/theming"
 import { cn } from "@/lib/utils"
@@ -21,6 +22,7 @@ export default function CarouselSize({ selectable = false, ...props}: BiografCar
   
   return (
     <Carousel
+    orientation={props.orientation}
     orientation={props.orientation}
       opts={{
         align: "start",
