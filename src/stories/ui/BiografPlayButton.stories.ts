@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import BiografButton from '@/components/custom/BiografButton';
+import BiografPlayButton from '@/components/custom/BiografPlayButton';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Example/components/ui/BiografButton',
-  component: BiografButton,
+  title: 'Example/components/ui/BiografPlayButton',
+  component: BiografPlayButton,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
@@ -47,7 +48,7 @@ const meta = {
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
   args: { onClick: () => console.log('clicked') },
-} satisfies Meta<typeof BiografButton>;
+} satisfies Meta<typeof BiografPlayButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -63,13 +64,14 @@ export const Primary: Story = {
 export const Secondary: Story = {
   args: {
     children: 'Secondary Button',
+    variant: 'secondary',
   },
 };
 
 export const Large: Story = {
   args: {
 
-    children: 'Large Button',
+    children: '',
   },
 };
 
@@ -80,10 +82,8 @@ export const Small: Story = {
   },
 };
 
-export const Trailer: Story = {
+export const Empty: Story = {
   args: {
-    variant: 'trailer',
-    children: 'Se Trailer',
     size: 'sm'
   },
 };
