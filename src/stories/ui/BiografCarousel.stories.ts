@@ -56,25 +56,25 @@ export const Primary: Story = {
   args: {
     variant: 'default',
     children: 'Button',
-    },
-    };
-    
-    export const Secondary: Story = {
-      args: {
-        children: 'Button',
-        },
-        };
-        
-        export const Large: Story = {
-          args: {
-            size: 'lg',
-            children: 'Button',
-            },
-            };
-            
-            export const Small: Story = {
-              args: {
-                size: 'sm',
-                children: 'Button',
-                },
-                };
+  },
+};
+
+export const Secondary: Story = {
+  args: {
+    children: 'Button',
+  },
+};
+
+export const Large: Story = {
+  args: {
+    size: 'lg',
+    children: 'Button',
+  },
+};
+
+export const Small: Story = {
+  args: {
+    size: 'sm',
+    children: 'Button',
+  },
+};
