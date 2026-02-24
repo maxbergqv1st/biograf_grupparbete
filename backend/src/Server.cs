@@ -10,7 +10,9 @@ public static class Server
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         var connectionsString = builder.Configuration.GetConnectionString("AppDbConnectionString");
-        builder.Services.AddDbContext<DbContext>(options => options.UseMySql(connectionsString, ServerVersion.AutoDetect(connectionsString)));
+        // builder.Services.AddDbContext<DbContext>(options => options.UseMySql(connectionsString, ServerVersion.AutoDetect(connectionsString)));
+        builder.Services.AddDbContext<WebApp.Data.AppDbContext>(options =>
+            options.UseMySql(connectionsString, ServerVersion.AutoDetect(connectionsString)));
         App = builder.Build();
         if (App.Environment.IsDevelopment())
         {
