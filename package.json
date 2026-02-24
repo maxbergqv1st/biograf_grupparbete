@@ -16,7 +16,10 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "be:restore": "dotnet restore backend/",
+    "be:build": "dotnet build backend/",
+    "be:add": "dotnet add backend/ package"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
