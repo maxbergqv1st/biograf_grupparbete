@@ -1,27 +1,47 @@
 import type { HTMLAttributes } from 'react';
 
+import { type VariantProps, cva } from 'class-variance-authority';
+
 import { cn } from '@/lib/utils';
 
-interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
-  fluid?: boolean;
-}
+const containerVariants = cva('w-full', {
+  variants: {
+    variant: {
+      default: 'mx-auto max-w-[970px] px-3',
+      fluid: 'mx-auto px-3',
+      page: 'flex min-h-screen flex-col',
+    },
+    colorScheme: {
+      primary: 'bg-primary text-primary-foreground',
+      secondary: 'bg-secondary text-secondary-foreground',
+      brand: 'bg-accent text-accent-foreground',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
+
+interface ContainerProps
+  extends HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof containerVariants> {}
 
 export function BiografContainer({
-  fluid = false,
+  variant,
+  colorScheme,
   className,
   ...props
 }: ContainerProps) {
   return (
     <div
-      className={cn(
-        'mx-auto w-full px-3',
-        fluid ? 'max-w-none' : 'max-w-[970px]',
-        className,
-      )}
+      className={cn(containerVariants({ variant, colorScheme }), className)}
       {...props}
     />
   );
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { containerVariants };
 
 type RowProps = HTMLAttributes<HTMLDivElement>;
 
