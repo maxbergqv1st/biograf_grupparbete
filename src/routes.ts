@@ -4,6 +4,7 @@ import type Route from './interfaces/Route.ts';
 // page components
 import AboutPage from './pages/AboutPage.tsx';
 import DevPage from './pages/DevPage.tsx';
+import MackanPage from './pages/MackanPage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 import OurVisionPage from './pages/OurVisionPage.tsx';
 import ProductDetailsPage from './pages/ProductDetailsPage.tsx';
@@ -16,6 +17,7 @@ export default [
   ProductDetailsPage,
   ProductsPage,
   DevPage,
+  MackanPage,
 ]
   // map the route property of each page component to a Route
   .map((x) => ({ element: createElement(x), ...x.route }) as Route)

@@ -1,4 +1,6 @@
+import type Movie from '@/interfaces/Movie';
 import MovieList from '@/parts/MovieList';
+import { useLoaderData } from 'react-router-dom';
 
 import moviesLoader from '@/utils/movieLoader';
 
@@ -10,5 +12,6 @@ DevPage.route = {
 };
 
 export default function DevPage() {
-  return <MovieList />;
+  const movies = useLoaderData() as Movie[];
+  return <MovieList movies={movies} />;
 }
