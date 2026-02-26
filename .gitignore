@@ -36,3 +36,5 @@ backend/bin/
 
 *storybook.log
 storybook-static
+
+src/mocks/
