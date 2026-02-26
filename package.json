@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently -n fe,be -c cyan,magenta \"vite\" \"dotnet run --project backend -- 5001 .\"",
-    "dev:front": "vite",
-    "dev:back": "dotnet run --project backend -- 5001 .",
+    "dev:fe": "vite",
+    "dev:be": "dotnet run --project backend -- 5001 .",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "format": "prettier --write .",
