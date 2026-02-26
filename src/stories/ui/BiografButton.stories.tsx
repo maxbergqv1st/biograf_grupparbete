@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Play } from 'lucide-react';
 
 import BiografButton from '@/components/custom/BiografButton';
 
@@ -56,26 +57,50 @@ type Story = StoryObj<typeof meta>;
 export const Primary: Story = {
   args: {
     variant: 'default',
-    children: 'Button',
+    children: 'Primary Button',
   },
 };
 
 export const Secondary: Story = {
   args: {
-    children: 'Button',
+    children: 'Secondary Button',
   },
 };
 
 export const Large: Story = {
   args: {
-    size: 'lg',
-    children: 'Button',
+    children: 'Large Button',
   },
 };
 
 export const Small: Story = {
   args: {
     size: 'sm',
-    children: 'Button',
+    children: 'Small Button',
+  },
+};
+
+export const Trailer: Story = {
+  args: {
+    variant: 'trailer',
+    children: 'Se Trailer',
+    size: 'sm',
+  },
+};
+
+export const Empty: Story = {
+  args: {
+    size: 'sm',
+  },
+};
+export const Trailer2: Story = {
+  args: {
+    children: 'Primary Button',
+  },
+};
+export const playIcon: Story = {
+  args: {
+    children: <Play className="ml-1 h-4 w-4 text-[#F3EEE4]" />,
+    size: 'icon',
   },
 };
