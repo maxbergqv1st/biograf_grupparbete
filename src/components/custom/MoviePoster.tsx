@@ -24,16 +24,16 @@ export default function MoviePoster({
     >
       <div className="relative aspect-[2/3] w-full">
         {poster ? (
-  <img
-    src={poster}
-    alt={`Poster för ${title}`}
-    className="h-full w-full object-cover"
-  />
-) : (
-  <div className="flex h-72 w-full items-center justify-center bg-zinc-700">
-    <p className="text-sm text-zinc-200">Ingen bild ännu</p>
-  </div>
-)}
+          <img
+            src={poster}
+            alt={`Poster för ${title}`}
+            className="h-full w-full object-cover"
+          />
+        ) : (
+          <div className="flex h-72 w-full items-center justify-center bg-zinc-700">
+            <p className="text-sm text-zinc-200">Ingen bild ännu</p>
+          </div>
+        )}
       </div>
 
       <div className="pointer-events-none absolute inset-0 flex items-end bg-black/60 p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
