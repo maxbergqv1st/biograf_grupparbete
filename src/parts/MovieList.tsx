@@ -1,6 +1,5 @@
+import MoviePoster from '@/components/custom/MoviePoster';
 import type Movie from '@/interfaces/Movie';
-
-import BiografCard from '@/components/custom/BiografCard';
 
 type Props = {
   movies: Movie[];
@@ -8,12 +7,15 @@ type Props = {
 
 export default function MovieList({ movies }: Props) {
   return (
-    <section className="grid gap-4 md:grid-cols-2">
+    <section className="mx-auto grid w-full max-w-7xl grid-cols-1 justify-items-center gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {movies.map((movie) => (
-        <BiografCard
+        <MoviePoster
           key={movie.id}
+          id={movie.id}
           title={movie.title}
-          description={movie.director}
+          director={movie.director}
+          description={movie.description_short}
+          poster={movie.poster}
         />
       ))}
     </section>

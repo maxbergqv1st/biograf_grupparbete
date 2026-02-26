@@ -3,4 +3,5 @@ export default interface Movie {
   title: string;
   description_short: string;
   director: string;
+  poster: string | null;
 }
