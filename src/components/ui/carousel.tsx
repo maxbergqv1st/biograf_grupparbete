@@ -28,6 +28,8 @@ type CarouselContextProps = {
   canScrollNext: boolean
 } & CarouselProps
 
+export type BaseCarouselProps = React.ComponentProps<"div"> & CarouselProps
+
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
 function useCarousel() {
