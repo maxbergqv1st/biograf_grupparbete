@@ -1,5 +1,4 @@
-import * as React from "react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -23,7 +22,7 @@ export default function CarouselSize({ selectable = false, ...props}: BiografCar
     <Carousel
     orientation={props.orientation}
       opts={{
-        align: "start",
+        align: 'start',
       }}
       className="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm"
     >
@@ -49,6 +48,3 @@ export default function CarouselSize({ selectable = false, ...props}: BiografCar
     </Carousel>
   );
 }
-
-
-
