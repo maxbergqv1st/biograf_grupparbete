@@ -3,6 +3,8 @@ import { useParams } from 'react-router-dom';
 MovieDetailsPage.route = {
   path: '/movies/:id',
   parent: '/',
+  menuLabel: 'MovieDetail',
+  index: 2,
 };
 
 export default function MovieDetailsPage() {

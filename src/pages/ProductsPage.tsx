@@ -10,9 +10,9 @@ import productsLoader from '../utils/productsLoader';
 import { useStateContext } from '../utils/useStateObject';
 
 ProductsPage.route = {
-  path: '/',
+  path: '/products',
   menuLabel: 'main.navigation.products',
-  index: 1,
+  index: 2,
   parent: '/',
   loader: productsLoader,
 };
