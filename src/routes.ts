@@ -7,14 +7,12 @@ import MovieDetailsPage from './pages/MovieDetailsPage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 import OurVisionPage from './pages/OurVisionPage.tsx';
 import ProductDetailsPage from './pages/ProductDetailsPage.tsx';
-import ProductsPage from './pages/ProductsPage.tsx';
 
 export default [
   AboutPage,
   NotFoundPage,
   OurVisionPage,
   ProductDetailsPage,
-  ProductsPage,
   MovieDetailsPage,
   LandingPage,
 ]
