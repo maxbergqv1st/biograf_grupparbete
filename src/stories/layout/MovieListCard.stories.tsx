@@ -8,29 +8,29 @@ const mockMovies: Movie[] = [
     id: 1,
     title: 'Grimsby',
     description_short: 'Ep.',
-    director: 'Denis Villeneuve',
-    poster: '/images/movies/FIGHTCLUB.jpg',
+    director: 'Louis Leterrier',
+    poster: '/images/movies/Fight_Club.jpg',
   },
   {
     id: 2,
-    title: 'Oppenheimer',
+    title: 'Boondocks',
     description_short: 'Historical drama.',
-    director: 'Christopher Nolan',
-    poster: '/images/movies/BOONDOCKSAINTS.jpg',
+    director: 'Troy Duffy',
+    poster: '/images/movies/Boondocks.jpg',
   },
   {
     id: 3,
     title: 'A night at Roxburry',
-    description_short: 'Epic sci-fi.',
-    director: 'Crippa',
-    poster: '/images/movies/ANIGHTATROXBURRY.jpg',
+    description_short: 'Comp.',
+    director: 'John Fortenberry',
+    poster: '/images/movies/Roxbury.jpg',
   },
   {
     id: 4,
-    title: 'Intersteller',
+    title: 'Truman',
     description_short: 'Historical drama.',
-    director: 'Christopher ',
-    poster: '/images/movies/THEYRUMANSHOW.jpg',
+    director: 'Peter Weir ',
+    poster: '/images/movies/Truman.jpg',
   },
 ];
 
@@ -38,6 +38,7 @@ const meta = {
   title: 'Example/components/layout/MovieList',
   component: MovieList,
   parameters: { layout: 'fullscreen' },
+
   decorators: [
     (Story) => (
       <MemoryRouter>
