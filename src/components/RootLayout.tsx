@@ -37,7 +37,11 @@ export default function RootLayout() {
               className="text-foreground text-lg font-semibold tracking-tight"
               to="/"
             >
-              The Good Grocery
+              <img
+                src="/images/icons/Filmvisarna.png"
+                alt="Hem"
+                className="h-10 w-auto object-contain md:h-12"
+              />
             </Link>
             <button
               className="border-input text-foreground hover:bg-accent rounded-md border px-3 py-1.5 text-sm font-medium transition md:hidden"
