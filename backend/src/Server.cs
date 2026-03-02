@@ -7,6 +7,17 @@ public static class Server
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        var configPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "db-config.json");
+        var configJson = File.ReadAllText(configPath);
+        var config = System.Text.Json.JsonDocument.Parse(configJson).RootElement;
+        var connectionString =
+            $"Server={config.GetProperty("host").ToString()};" +
+            $"Port={config.GetProperty("port").ToString()};" +
+            $"Database={config.GetProperty("database").ToString()};" +
+            $"User={config.GetProperty("username").ToString()};" +
+            $"Password={config.GetProperty("password").ToString()};";
+        builder.Services.AddMySqlDataSource(connectionString);
+        builder.Services.AddScoped<IMovieRepository, MovieRepository>();
         App = builder.Build();
         if (App.Environment.IsDevelopment())
         {
@@ -21,6 +32,8 @@ public static class Server
         LoginRoutes.Start();
         RestApi.Start();
         Session.Start();
+
+        App.MapMovieEndpoints();
         // Start the server on port 3001
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
