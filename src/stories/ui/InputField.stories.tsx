@@ -7,7 +7,7 @@ const meta = {
   parameters: { layout: 'centered' },
   tags: ['autodocs'],
   args: {
-    placeholder: 'Sök film...',
+    placeholder: 'Sök film... ',
     disabled: false,
   },
 } satisfies Meta<typeof BiografInput>;
