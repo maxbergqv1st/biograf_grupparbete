@@ -34,7 +34,7 @@ public static class Server
         Session.Start();
 
         App.MapMovieEndpoints();
-        // Start the server on port 3001
+        // Start the server on port 5001
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
         Log("With these settings:", Globals);
