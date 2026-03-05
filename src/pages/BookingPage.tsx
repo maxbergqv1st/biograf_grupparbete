@@ -6,6 +6,7 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import Image from '../parts/Image';
 import BiografButton from '@/components/custom/BiografButton';
 import { Trailer } from '@/stories/ui/BiografButton.stories'
+import { Separator } from "@/components/ui/separator"
 
 
 
@@ -34,19 +35,22 @@ export default function DateTimeSelect() {
         </div>
       <AspectRatio className="w-full h-4/3 rounded-lg bg-[#1E1E1E] p-4">
                 <h3 className='flex justify-center p-10 text-xl'>Välj Datum & tid</h3>
-        <span className='flex justify-center p-5'>---------------------------------------------------------------------------------------</span>
-        <div className='flex justify-center'>
+        <Separator />
+        <div className='flex justify-center p-5'>
         <BiografCarousel {...argsDates} desktopTwoRows className='p-5'/>
         </div>
-        <span className='flex justify-center p-5'>---------------------------------------------------------------------------------------</span>
-        <div className='flex justify-center'>
+        <Separator className='flex justify-center'/>
+        <div className='flex justify-center p-5'>
         <BiografCarousel {...argsTime} desktopTwoRows className='p-5' />
         </div>
+        <Separator className='flex justify-center'/>
+        <span className='flex justify-center p-6'>Fler datum & tider kommer snart...</span>
       </AspectRatio>
 
-      <AspectRatio className="w-full max-h-1/3 max-w-md self-top justify-self-center rounded-lg bg-[#1E1E1E] p-4">
+      <AspectRatio className="w-full max-h-2/4 max-w-md self-top justify-self-center rounded-lg bg-[#1E1E1E] p-4">
       <h1 className='flex justify-center p-5 text-[#b69852] text-2xl'>The Brothers Grimsby</h1>
-      <span>Den engelske fotbollshuliganen Nobby har spenderat tjugoåtta år av sitt liv med att söka sin lillebror Sebastian som han inte sett sedan de var små.</span>
+      <Separator className='flex justify-center'/>
+      <span className='flex justify-center p-5'>Den engelske fotbollshuliganen Nobby har spenderat tjugoåtta år av sitt liv med att söka sin lillebror Sebastian som han inte sett sedan de var små.</span>
       </AspectRatio>
 <AspectRatio className='h-40 w-2/3 bg-[url(/images/movies/Grimsby.jpg)] border rounded-lg bg-center'>
 <div  className='absolute bottom-5 right-5'>
