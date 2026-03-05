@@ -30,14 +30,18 @@ export default function RootLayout() {
 
   return (
     <BiografContainer variant="page" colorScheme="brand">
-      <header className="bg-accent/50 sticky top-0 z-40 w-full border-b backdrop-blur-md">
+      <header className="bg-bg-dark för svart (#000000) bg-bg-primary för mörk grå (#141414) bg-bg-elevated för ljusare grå (#1e1e1e)">
         <BiografContainer>
           <div className="flex h-16 items-center justify-between">
             <Link
               className="text-foreground text-lg font-semibold tracking-tight"
               to="/"
             >
-              The Good Grocery
+              <img
+                src="\Logo\FilmvisarnalogoFinalTrans.png"
+                alt="Biograf"
+                className="h-10 w-auto"
+              />
             </Link>
             <button
               className="border-input text-foreground hover:bg-accent rounded-md border px-3 py-1.5 text-sm font-medium transition md:hidden"

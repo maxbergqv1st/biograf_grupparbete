@@ -14,7 +14,7 @@ const containerVariants = cva('w-full', {
     colorScheme: {
       primary: 'bg-primary text-primary-foreground',
       secondary: 'bg-secondary text-secondary-foreground',
-      brand: 'bg-accent text-accent-foreground',
+      brand: 'bg-bg-dark text-text primary',
     },
   },
   defaultVariants: {
@@ -23,7 +23,8 @@ const containerVariants = cva('w-full', {
 });
 
 interface ContainerProps
-  extends HTMLAttributes<HTMLDivElement>,
+  extends
+    HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof containerVariants> {}
 
 export function BiografContainer({
