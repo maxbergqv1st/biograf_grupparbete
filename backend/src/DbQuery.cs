@@ -130,38 +130,43 @@ public static class DbQuery
                 FOREIGN KEY (`type`) REFERENCES `seat_type` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE IF NOT EXISTS `movie_language` (
+            CREATE TABLE IF NOT EXISTS `movie_languages` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
-                `movie_lang_enum` ENUM ('Svenska', 'Engelska') NOT NULL,
-                `movie_lang_short_enum` ENUM ('Sv', 'En') NOT NULL
+                `name` VARCHAR(100) NOT NULL UNIQUE,
+                `code` VARCHAR(10) NOT NULL UNIQUE
             );
 
-            CREATE TABLE IF NOT EXISTS `genre` (
+            CREATE TABLE IF NOT EXISTS `genres` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
-                `name` ENUM ('Action', 'Äventyr', 'Komedi', 'Drama', 'Skräck', 'Science Fiction', 'Thriller', 'Fantasy', 'Romantik', 'Western', 'Krig', 'Musikal', 'Dokumentär', 'Animerat') NOT NULL
+                `name` VARCHAR(100) NOT NULL UNIQUE
             );
 
-            CREATE TABLE IF NOT EXISTS `movie` (
+            CREATE TABLE IF NOT EXISTS `movies` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `title` VARCHAR(255) NOT NULL,
-                `description_short` VARCHAR(255) NOT NULL,
+                `original_title` VARCHAR(255) NULL,
+                `tagline` VARCHAR(255) NOT NULL,
                 `description` text NOT NULL,
-                `duration_minutes` INT NOT NULL,
+                `duration` INT NOT NULL,
                 `age_rating` ENUM ('B', '7', '11', '15') NOT NULL,
                 `director` VARCHAR(255) NOT NULL,
                 `release_date` DATE NOT NULL,
-                `language` INT NOT NULL,
-                `poster` varchar(100),
-                FOREIGN KEY (`language`) REFERENCES `movie_language` (`id`) ON DELETE CASCADE
+                `language_id` INT NOT NULL,
+                `poster_url` VARCHAR(255),
+                `trailer_url` VARCHAR(255),
+                `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                FOREIGN KEY (`language_id`) REFERENCES `movie_languages` (`id`) ON DELETE RESTRICT
             );
 
             
-            CREATE TABLE IF NOT EXISTS `movie_genre` (
+            CREATE TABLE IF NOT EXISTS `movie_genres` (
                 `movie_id` INT NOT NULL,
                 `genre_id` INT NOT NULL,
+                `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 PRIMARY KEY (`movie_id`, `genre_id`),
-                FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE,
-                FOREIGN KEY (`genre_id`) REFERENCES `genre` (`id`) ON DELETE CASCADE
+                FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
+                FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id`) ON DELETE CASCADE
             );
 
             CREATE TABLE IF NOT EXISTS `screening` (
@@ -171,7 +176,7 @@ public static class DbQuery
                 `start_time` datetime NOT NULL,
                 `end_time` datetime NOT NULL,
                 `base_price` decimal(10,2) DEFAULT 100,
-                FOREIGN KEY (`movie_id`) REFERENCES `movie` (`id`) ON DELETE CASCADE,
+                FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
                 FOREIGN KEY (`hall_id`) REFERENCES `hall` (`id`) ON DELETE CASCADE
             );
 
@@ -271,7 +276,7 @@ public static class DbQuery
             command.ExecuteNonQuery();
         }
 
-// Seed products
+        // Seed products
         command.CommandText = "SELECT COUNT(*) FROM products";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
@@ -304,7 +309,7 @@ public static class DbQuery
                 command.ExecuteNonQuery();
             }
         }
-        
+
         command.CommandText = "SELECT COUNT(*) FROM users";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
@@ -319,8 +324,8 @@ public static class DbQuery
             command.CommandText = usersData;
             command.ExecuteNonQuery();
         }
-        
-        
+
+
         command.CommandText = "SELECT COUNT(*) FROM sound_system";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
@@ -337,7 +342,7 @@ public static class DbQuery
 
         command.CommandText = "SELECT COUNT(*) FROM hall_type";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
-        {          
+        {
             var hall_typeData = @"    
                 INSERT INTO `hall_type` (`type`, `description`) VALUES
                 ('Standard', 'Traditional cinema hall with standard seating'),
@@ -348,7 +353,7 @@ public static class DbQuery
             ";
             command.CommandText = hall_typeData;
             command.ExecuteNonQuery();
-        }   
+        }
 
         command.CommandText = "SELECT COUNT(*) FROM hall";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
@@ -362,7 +367,7 @@ public static class DbQuery
             ";
             command.CommandText = hallData;
             command.ExecuteNonQuery();
-        }   
+        }
 
         command.CommandText = "SELECT COUNT(*) FROM hall_row_config";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
@@ -399,7 +404,7 @@ public static class DbQuery
             command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM seat";
+        command.CommandText = "SELECT COUNT(*) FROM seat";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
             var seatData = @"
@@ -481,64 +486,65 @@ command.CommandText = "SELECT COUNT(*) FROM seat";
             command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM movie_language";
+        command.CommandText = "SELECT COUNT(*) FROM movie_languages";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var movie_languageData = @"
-            INSERT INTO `movie_language` (`movie_lang_enum`, `movie_lang_short_enum`) VALUES
-            ('Svenska', 'Sv'),
-            ('Engelska', 'En');
+            var movie_languageData = @"
+            INSERT INTO `movie_languages` (`name`, `code`) VALUES
+            ('Svenska', 'sv'),
+            ('Engelska', 'en');
             ";
             command.CommandText = movie_languageData;
             command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM genre";
+        command.CommandText = "SELECT COUNT(*) FROM genres";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var genreData = @"
-            INSERT INTO `genre` (`name`) VALUES
+            var genreData = @"
+            INSERT INTO `genres` (`name`) VALUES
             ('Action'), ('Äventyr'), ('Komedi'), ('Drama'), ('Skräck'),
-            ('Science Fiction'), ('Thriller'), ('Fantasy'), ('Romantik'), ('Animerat');
+            ('Science Fiction'), ('Thriller'), ('Fantasy'), ('Romantik'),
+            ('Western'), ('Krig'), ('Musikal'), ('Dokumentär'), ('Animerat');
             ";
             command.CommandText = genreData;
             command.ExecuteNonQuery();
         }
-        
-command.CommandText = "SELECT COUNT(*) FROM movie";
+
+        command.CommandText = "SELECT COUNT(*) FROM movies";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var movieData = @"
-            INSERT INTO `movie` (`title`, `description_short`, `description`, `duration_minutes`, `age_rating`, `director`, `release_date`, `language`) VALUES
-            ('Dune: Part Two', 'Episkt science fiction-äventyr', 'Paul Atreides förenas med Chani och Fremen medan han söker hämnd mot de konspirationer som förstörde hans familj. I mötet med valet mellan sitt livs kärlek och universums öde måste han förhindra en fruktansvärd framtid som bara han kan förutse.', 166, '11', 'Denis Villeneuve', '2024-02-28', 2),
-            ('Oppenheimer', 'Biografiskt drama om atombombens fader', 'Berättelsen om den amerikanske teoretiske fysikern J. Robert Oppenheimer och hans roll i utvecklingen av atombomben.', 180, '11', 'Christopher Nolan', '2023-07-21', 2),
-            ('The Super Mario Bros. Movie', 'Animerat äventyr med Mario och Luigi', 'Medan Mario och Luigi arbetar för att rädda Brooklyn måste de resa genom kungadömet av svampar för att rädda Prinsessan Peach från den elake Bowser.', 92, 'B', 'Aaron Horvath', '2023-04-05', 2),
-            ('Barbie', 'Färgglad komedi om ikonisk docka', 'Barbie och Ken har den perfekta tiden i det färgglada och till synes perfekta Barbie Land. Men när de får chansen att uppleva den verkliga världen upptäcker de både glädjen och riskerna med att leva bland människor.', 114, '7', 'Greta Gerwig', '2023-07-21', 2),
-            ('Wonka', 'Musikaliskt ursprungsäventyr', 'Berättelsen om hur en ung Willy Wonka träffade Oompa-Loompas på ett av sina tidigaste äventyr.', 116, '7', 'Paul King', '2023-12-15', 2);
+            var movieData = @"
+            INSERT INTO `movies` (`title`, `original_title`, `tagline`, `description`, `duration`, `age_rating`, `director`, `release_date`, `language_id`) VALUES
+            ('Dune: Part Two', NULL, 'Episkt science fiction-äventyr', 'Paul Atreides förenas med Chani och Fremen medan han söker hämnd mot de konspirationer som förstörde hans familj. I mötet med valet mellan sitt livs kärlek och universums öde måste han förhindra en fruktansvärd framtid som bara han kan förutse.', 166, '11', 'Denis Villeneuve', '2024-02-28', 2),
+            ('Oppenheimer', NULL, 'Biografiskt drama om atombombens fader', 'Berättelsen om den amerikanske teoretiske fysikern J. Robert Oppenheimer och hans roll i utvecklingen av atombomben.', 180, '11', 'Christopher Nolan', '2023-07-21', 2),
+            ('The Super Mario Bros. Movie', NULL, 'Animerat äventyr med Mario och Luigi', 'Medan Mario och Luigi arbetar för att rädda Brooklyn måste de resa genom kungadömet av svampar för att rädda Prinsessan Peach från den elake Bowser.', 92, 'B', 'Aaron Horvath', '2023-04-05', 2),
+            ('Barbie', NULL, 'Färgglad komedi om ikonisk docka', 'Barbie och Ken har den perfekta tiden i det färgglada och till synes perfekta Barbie Land. Men när de får chansen att uppleva den verkliga världen upptäcker de både glädjen och riskerna med att leva bland människor.', 114, '7', 'Greta Gerwig', '2023-07-21', 2),
+            ('Wonka', NULL, 'Musikaliskt ursprungsäventyr', 'Berättelsen om hur en ung Willy Wonka träffade Oompa-Loompas på ett av sina tidigaste äventyr.', 116, '7', 'Paul King', '2023-12-15', 2);
         ";
-        command.CommandText = movieData;
-        command.ExecuteNonQuery();
+            command.CommandText = movieData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM movie_genre";
+        command.CommandText = "SELECT COUNT(*) FROM movie_genres";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var movieGenreData = @"
-            INSERT INTO `movie_genre` (`movie_id`, `genre_id`) VALUES
+            var movieGenreData = @"
+            INSERT INTO `movie_genres` (`movie_id`, `genre_id`) VALUES
             (1, 1), (1, 2), (1, 6),
             (2, 4), (2, 7),
             (3, 2), (3, 3), (3, 10),
             (4, 3), (4, 8), (4, 9),
             (5, 2), (5, 3), (5, 8);
             ";
-        command.CommandText = movieGenreData;
-        command.ExecuteNonQuery();
+            command.CommandText = movieGenreData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM screening";
+        command.CommandText = "SELECT COUNT(*) FROM screening";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var screeningData = @"
+            var screeningData = @"
             INSERT INTO `screening` (`movie_id`, `hall_id`, `start_time`, `end_time`, `base_price`) VALUES
             (1, 2, '2025-02-10 14:00:00', '2025-02-10 16:46:00', 150.00),
             (1, 2, '2025-02-10 18:00:00', '2025-02-10 20:46:00', 150.00),
@@ -553,14 +559,14 @@ command.CommandText = "SELECT COUNT(*) FROM screening";
             (5, 3, '2025-02-10 17:00:00', '2025-02-10 18:56:00', 120.00),
             (5, 1, '2025-02-11 13:30:00', '2025-02-11 15:26:00', 110.00);
             ";
-        command.CommandText = screeningData;
-        command.ExecuteNonQuery();
+            command.CommandText = screeningData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM price_category_seat";
+        command.CommandText = "SELECT COUNT(*) FROM price_category_seat";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var priceCategorySeatData = @"
+            var priceCategorySeatData = @"
             INSERT INTO `price_category_seat` (`category`, `discount_modifier`) VALUES
             ('Adult', 0.00),
             ('Child', 0.50),
@@ -568,14 +574,14 @@ command.CommandText = "SELECT COUNT(*) FROM price_category_seat";
             ('Student', 0.80),
             ('Handicap', 0.70);
         ";
-        command.CommandText = priceCategorySeatData;
-        command.ExecuteNonQuery();
+            command.CommandText = priceCategorySeatData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM booking";
+        command.CommandText = "SELECT COUNT(*) FROM booking";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var bookingData = @"
+            var bookingData = @"
             INSERT INTO `booking` (`user_id`, `email`, `screening_id`, `booking_date`, `total_price`, `status`, `booking_reference`) VALUES
             (1, 'erik.andersson@email.se', 1, '2025-02-08 10:30:00', 340.00, 'accepted', 'BK-2025-001'),
             (2, 'anna.svensson@email.se', 6, '2025-02-09 14:20:00', 240.00, 'accepted', 'BK-2025-002'),
@@ -583,14 +589,14 @@ command.CommandText = "SELECT COUNT(*) FROM booking";
             (4, 'maria.karlsson@email.se', 3, '2025-02-09 18:00:00', 540.00, 'accepted', 'BK-2025-004'),
             (NULL, 'guest@email.com', 7, '2025-02-10 09:15:00', 200.00, 'accepted', 'BK-2025-005');
         ";
-        command.CommandText = bookingData;
-        command.ExecuteNonQuery();
+            command.CommandText = bookingData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM booking_seat";
+        command.CommandText = "SELECT COUNT(*) FROM booking_seat";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var booking_seatData = @"
+            var booking_seatData = @"
             INSERT INTO `booking_seat` (`booking_id`, `seat_id`, `price_category_seat_id`, `final_price`) VALUES
             (1, (SELECT id FROM seat WHERE hall_id=2 AND row_name='F' AND number_in_row=8), 1, 200.00),
             (1, (SELECT id FROM seat WHERE hall_id=2 AND row_name='F' AND number_in_row=9), 1, 200.00),
@@ -603,14 +609,14 @@ command.CommandText = "SELECT COUNT(*) FROM booking_seat";
             (5, (SELECT id FROM seat WHERE hall_id=3 AND row_name='C' AND number_in_row=5), 1, 120.00),
             (5, (SELECT id FROM seat WHERE hall_id=3 AND row_name='C' AND number_in_row=6), 2, 60.00);
         ";
-        command.CommandText = booking_seatData;
-        command.ExecuteNonQuery();
+            command.CommandText = booking_seatData;
+            command.ExecuteNonQuery();
         }
 
         command.CommandText = "SELECT COUNT(*) FROM payment";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var paymentData = @"
+            var paymentData = @"
             INSERT INTO `payment` (`booking_id`, `payment_method`, `amount`, `status`) VALUES
             (1, 'Credit Card', 340.00, 'accepted'),
             (2, 'Swish', 240.00, 'accepted'),
@@ -618,24 +624,24 @@ command.CommandText = "SELECT COUNT(*) FROM booking_seat";
             (4, 'Klarna', 270.00, 'accepted'),
             (5, 'Debit Card', 200.00, 'accepted');
         ";
-        command.CommandText = paymentData;
-        command.ExecuteNonQuery();
+            command.CommandText = paymentData;
+            command.ExecuteNonQuery();
         }
 
         command.CommandText = "SELECT COUNT(*) FROM seat_ghost";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
-        var seatGhostData = @"
+            var seatGhostData = @"
             INSERT INTO `seat_ghost` (`screening_id`, `seat_id`, `session_id`, `reserved_at`, `expires_at`) VALUES
             (6, (SELECT id FROM seat WHERE hall_id=1 AND row_name='E' AND number_in_row=7), 'sess_abc123', '2025-02-10 12:00:00', '2025-02-10 12:15:00'),
             (7, (SELECT id FROM seat WHERE hall_id=3 AND row_name='D' AND number_in_row=8), 'sess_def456', '2025-02-10 12:05:00', '2025-02-10 12:20:00'),
             (9, (SELECT id FROM seat WHERE hall_id=1 AND row_name='F' AND number_in_row=8), 'sess_ghi789', '2025-02-10 12:10:00', '2025-02-10 12:25:00');
         ";
-        command.CommandText = seatGhostData;
-        command.ExecuteNonQuery();
+            command.CommandText = seatGhostData;
+            command.ExecuteNonQuery();
         }
 
-command.CommandText = "SELECT COUNT(*) FROM snacks";
+        command.CommandText = "SELECT COUNT(*) FROM snacks";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
             var snacksData = @"

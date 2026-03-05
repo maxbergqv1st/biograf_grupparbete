@@ -3,7 +3,7 @@
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
-@plugin "@tailwindcss/typography";
+@plugin '@tailwindcss/typography';
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -36,17 +36,18 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-
 }
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0% 0 0);
-  --background-gradient: linear-gradient(to top right,
-      #000000 0%,
-      #141414 25%,
-      #141414 75%,
-      #000000 100%);
+  --background: oklch(1 0 0);
+  --background-gradient: linear-gradient(
+    to top right,
+    #000000 0%,
+    #141414 25%,
+    #141414 75%,
+    #000000 100%
+  );
   --foreground: #f3f3f3;
   --card: #141414(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -58,7 +59,7 @@
   --secondary-foreground: oklch(0.205 0 0);
   --muted: #7b6738;
   --muted-foreground: #f3eee4;
-  --accent: oklch(0.97 0 0);
+  --accent: oklch(0% 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
   --border: #7b6738;
@@ -77,7 +78,7 @@
   --color-text-primary: oklch(0.95 0.02 85);
   --color-gold: oklch(0.65 0.12 55);
   --color-gold-dark: oklch(0.4 0.1 45);
-    
+
   --shadow-gold: 0px 0px 5px 1px oklch(0.65 0.12 55);
   --shadow-gold-lg: 0px 0px 15px 1px oklch(0.65 0.12 55);
 }
@@ -90,10 +91,10 @@
   body {
     @apply bg-background text-foreground;
   }
- main {
-  @apply bg-background text-foreground;
-  background-image: var(--background-gradient);
-}
+  main {
+    @apply bg-background text-foreground;
+    background-image: var(--background-gradient);
+  }
   /* Migrated from sass/_images.scss */
   main img {
     object-fit: cover;

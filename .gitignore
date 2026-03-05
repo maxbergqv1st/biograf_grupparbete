@@ -38,3 +38,6 @@ backend/bin/
 storybook-static
 
 src/mocks/
+
+# env files
+.env*
