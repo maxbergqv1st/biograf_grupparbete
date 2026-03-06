@@ -1,14 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 
+
 import BiografCard from '@/components/custom/BiografCard';
-import BiografCarousel from '@/components/custom/BiografCarousel';
+import AspectRatioSquare from '@/components/custom/BiografAspect';
 import Image from '../../parts/Image';
 import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
 
+
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
-  title: 'Example/components/ui/BiografCarousel',
-  component: BiografCarousel,
+  title: 'Example/components/ui/BiografAspect',
+  component: AspectRatioSquare,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'centered',
@@ -33,10 +35,12 @@ const meta = {
       },
     },*/
 
+
     orientation: {
       control: { type: 'select' },
       options: ['horizontal', 'vertical'],
     },
+
 
     children: {
       description: 'In this case it is a title',
@@ -46,6 +50,7 @@ const meta = {
       },
     },
   },
+
 
   decorators: [
     (Story) => (
@@ -68,12 +73,15 @@ const meta = {
       </MemoryRouter>
     ),
   ],
-  
+ 
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
   args: { onClick: () => console.log('clicked') },
-} satisfies Meta<typeof BiografCarousel>;
+} satisfies Meta<typeof AspectRatioSquare>;
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+
+
 
 
 
@@ -83,12 +91,13 @@ export const Dates: Story = {
     selectable: true,
     children: (
       <div className="flex flex-col justify-center items-center h-full w-full rounded-xl">
-        <span>15:e</span>
-        <span>Februari </span>
+        <span>15:e Feb</span>
+        <span className="text-xs">Salong 2</span>
       </div>
     ),
   },
 };
+
 
 export const Images: Story = {
   args: {
@@ -97,17 +106,13 @@ export const Images: Story = {
   },
 };
 
-export const Time: Story = {
+
+export const Large: Story = {
   args: {
-    selectable: true,
-    children: (
-      <div className="flex flex-col justify-center items-center h-full w-full rounded-xl">
-        <span>17:30</span>
-        <span className="text-xs">Salong 2</span>
-      </div>
-    ),
+    children: 'Button',
   },
 };
+
 
 export const Small: Story = {
   args: {

@@ -14,9 +14,10 @@ import { cn } from "@/lib/utils"
 //Skapar en bool
 type BiografCarouselProps = BaseCarouselProps & {
   selectable?: boolean
+  desktopTwoRows?: boolean
 }
 //lagt till  selectable = false,
-export default function CarouselSize({ selectable = false, ...props}: BiografCarouselProps) {
+export default function CarouselSize({ selectable = false, desktopTwoRows = false, ...props}: BiografCarouselProps) {
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   
   return (
@@ -25,11 +26,11 @@ export default function CarouselSize({ selectable = false, ...props}: BiografCar
       opts={{
         align: 'start',
       }}
-      className="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm"
+      className={cn("w-full max-w-[12rem] sm:max-w-xs md:max-w-sm", props.className)}
     >
-      <CarouselContent>
+      <CarouselContent className={cn(desktopTwoRows && "md:flex-wrap")}>
         {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index} className="basis-1/2 lg:basis-1/3 bg-[#141414]">
+          <CarouselItem key={index} className={cn(desktopTwoRows ? "basis-1/2 md:basis-1/3" : "basis-1/2 lg:basis-1/3")}>
               <Card
                 onClick={selectable ? () => setSelectedIndex(index) : undefined}
                 className={cn(
