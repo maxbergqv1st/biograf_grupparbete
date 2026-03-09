@@ -34,7 +34,6 @@ export default function BiografButton({
 }: BiografButtonProps) {
   return (
     <Button
-      children={children}
       size={size}
       className={cn(
         'cursor-pointer text-sm font-medium',
@@ -42,6 +41,8 @@ export default function BiografButton({
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </Button>
   );
 }
