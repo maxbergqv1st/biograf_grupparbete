@@ -156,6 +156,8 @@ public static class DbQuery
                 `trailer_url` VARCHAR(255),
                 `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                `screening_date_start` DATE NOT NULL,
+                `screening_date_end` DATE NOT NULL,
                 FOREIGN KEY (`language_id`) REFERENCES `movie_languages` (`id`) ON DELETE RESTRICT
             );
 
@@ -169,13 +171,12 @@ public static class DbQuery
                 FOREIGN KEY (`genre_id`) REFERENCES `genres` (`id`) ON DELETE CASCADE
             );
 
-            CREATE TABLE IF NOT EXISTS `screening` (
+            CREATE TABLE IF NOT EXISTS `screenings` (
                 `id` INT PRIMARY KEY AUTO_INCREMENT,
                 `movie_id` INT NOT NULL,
                 `hall_id` INT NOT NULL,
                 `start_time` datetime NOT NULL,
                 `end_time` datetime NOT NULL,
-                `base_price` decimal(10,2) DEFAULT 100,
                 FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE,
                 FOREIGN KEY (`hall_id`) REFERENCES `hall` (`id`) ON DELETE CASCADE
             );
@@ -541,23 +542,23 @@ public static class DbQuery
             command.ExecuteNonQuery();
         }
 
-        command.CommandText = "SELECT COUNT(*) FROM screening";
+        command.CommandText = "SELECT COUNT(*) FROM screenings";
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
             var screeningData = @"
-            INSERT INTO `screening` (`movie_id`, `hall_id`, `start_time`, `end_time`, `base_price`) VALUES
-            (1, 2, '2025-02-10 14:00:00', '2025-02-10 16:46:00', 150.00),
-            (1, 2, '2025-02-10 18:00:00', '2025-02-10 20:46:00', 150.00),
-            (1, 4, '2025-02-11 19:30:00', '2025-02-11 22:16:00', 180.00),
-            (2, 4, '2025-02-10 17:00:00', '2025-02-10 20:00:00', 160.00),
-            (2, 2, '2025-02-11 16:00:00', '2025-02-11 19:00:00', 140.00),
-            (3, 1, '2025-02-10 15:00:00', '2025-02-10 16:32:00', 120.00),
-            (3, 3, '2025-02-10 13:00:00', '2025-02-10 14:32:00', 100.00),
-            (3, 1, '2025-02-11 11:00:00', '2025-02-11 12:32:00', 100.00),
-            (4, 1, '2025-02-10 18:00:00', '2025-02-10 19:54:00', 130.00),
-            (4, 3, '2025-02-11 15:30:00', '2025-02-11 17:24:00', 110.00),
-            (5, 3, '2025-02-10 17:00:00', '2025-02-10 18:56:00', 120.00),
-            (5, 1, '2025-02-11 13:30:00', '2025-02-11 15:26:00', 110.00);
+            INSERT INTO `screenings` (`movie_id`, `hall_id`, `start_time`, `end_time`) VALUES
+            (1, 2, '2025-02-10 14:00:00', '2025-02-10 16:46:00'),
+            (1, 2, '2025-02-10 18:00:00', '2025-02-10 20:46:00'),
+            (1, 4, '2025-02-11 19:30:00', '2025-02-11 22:16:00'),
+            (2, 4, '2025-02-10 17:00:00', '2025-02-10 20:00:00'),
+            (2, 2, '2025-02-11 16:00:00', '2025-02-11 19:00:00'),
+            (3, 1, '2025-02-10 15:00:00', '2025-02-10 16:32:00'),
+            (3, 3, '2025-02-10 13:00:00', '2025-02-10 14:32:00'),
+            (3, 1, '2025-02-11 11:00:00', '2025-02-11 12:32:00'),
+            (4, 1, '2025-02-10 18:00:00', '2025-02-10 19:54:00'),
+            (4, 3, '2025-02-11 15:30:00', '2025-02-11 17:24:00'),
+            (5, 3, '2025-02-10 17:00:00', '2025-02-10 18:56:00'),
+            (5, 1, '2025-02-11 13:30:00', '2025-02-11 15:26:00');
             ";
             command.CommandText = screeningData;
             command.ExecuteNonQuery();
