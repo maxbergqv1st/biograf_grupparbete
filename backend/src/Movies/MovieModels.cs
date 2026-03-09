@@ -30,4 +30,4 @@ public record MovieDto(
     List<string> Genres
 );
 
-public record MovieQuery(string? Search, string? Genre, string? AgeRating);
+public record MovieQuery(string? Search, string? Genre, string? AgeRating, DateOnly? ScreeningDate);
