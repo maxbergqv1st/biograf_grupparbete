@@ -1,9 +1,9 @@
 // This file is for describing the models for you data
-namespace WebApp.Movies;
+namespace WebApp.Screenings;
 
 public record LanguageDto(int Id, string Name, string Code);
 
-public record MovieSummaryDto(
+public record ScreeningSummaryDto(
     int Id,
     string Title,
     string Tagline,
@@ -14,7 +14,7 @@ public record MovieSummaryDto(
     List<string> Genres
 );
 
-public record MovieDto(
+public record ScreeningDto(
     int Id,
     string Title,
     string? OriginalTitle,
@@ -30,4 +30,4 @@ public record MovieDto(
     List<string> Genres
 );
 
-public record MovieQuery(string? Search, string? Genre, string? AgeRating);
+public record ScreeningQuery(string? Search, string? Genre, string? AgeRating);

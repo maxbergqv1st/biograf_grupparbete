@@ -1,8 +1,8 @@
 // This file is used for actual database calls. So it's the place where you aggregate the data from the DB
 
-namespace WebApp.Movies;
+namespace WebApp.Screenings;
 
-public class MovieRepository(MySqlDataSource db) : IMovieRepository
+public class ScreeningRepository(MySqlDataSource db) : IScreeningRepository
 {
     private static LanguageDto ReadLanguage(MySqlDataReader reader) =>
         new(
@@ -14,8 +14,8 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
     private static List<string> ReadGenres(MySqlDataReader reader) =>
         JsonSerializer.Deserialize<List<string>>(reader.GetString("genres")) ?? [];
 
-    public async Task<IEnumerable<MovieSummaryDto>> GetMoviesAsync(
-        MovieQuery query,
+    public async Task<IEnumerable<ScreeningSummaryDto>> GetScreeningsAsync(
+        ScreeningQuery query,
         CancellationToken ct
     )
     {
@@ -26,17 +26,17 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
                   m.age_rating, m.poster_url, m.trailer_url,
                   ml.id AS language_id, ml.name AS language_name, ml.code AS language_code,
                   JSON_ARRAYAGG(g.name) AS genres
-              FROM movies m
-            JOIN movie_languages ml ON m.language_id = ml.id
-            LEFT JOIN movie_genres mg ON mg.movie_id = m.id
+              FROM screenings m
+            JOIN screening_languages ml ON m.language_id = ml.id
+            LEFT JOIN screening_genres mg ON mg.screening_id = m.id
             LEFT JOIN genres g ON g.id = mg.genre_id
             WHERE
                 (@search IS NULL OR m.title LIKE @search OR m.original_title LIKE @search)
                 AND (@ageRating IS NULL OR m.age_rating = @ageRating)
                 AND (@genre IS NULL OR EXISTS (
-                    SELECT 1 FROM movie_genres mg2
+                    SELECT 1 FROM screening_genres mg2
                     JOIN genres g2 ON g2.id = mg2.genre_id
-                    WHERE mg2.movie_id = m.id AND g2.name = @genre
+                    WHERE mg2.screening_id = m.id AND g2.name = @genre
                 ))
             GROUP BY m.id
         ";
@@ -47,12 +47,12 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
         cmd.Parameters.AddWithValue("@ageRating", query.AgeRating);
         cmd.Parameters.AddWithValue("@genre", query.Genre);
 
-        var movies = new List<MovieSummaryDto>();
+        var screenings = new List<ScreeningSummaryDto>();
         await using var reader = await cmd.ExecuteReaderAsync(ct);
         while (await reader.ReadAsync(ct))
         {
-            movies.Add(
-                new MovieSummaryDto(
+            screenings.Add(
+                new ScreeningSummaryDto(
                     Id: reader.GetInt32("id"),
                     Title: reader.GetString("title"),
                     Tagline: reader.GetString("tagline"),
@@ -68,10 +68,10 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
                 )
             );
         }
-        return movies;
+        return screenings;
     }
 
-    public async Task<MovieDto> GetMovieByIdAsync(int id, CancellationToken ct)
+    public async Task<ScreeningDto> GetScreeningByIdAsync(int id, CancellationToken ct)
     {
         var sql =
             @"
@@ -81,9 +81,9 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
                   m.poster_url, m.trailer_url,
                   ml.id AS language_id, ml.name AS language_name, ml.code AS language_code,
                   JSON_ARRAYAGG(g.name) AS genres
-              FROM movies m
-              JOIN movie_languages ml ON m.language_id = ml.id
-              LEFT JOIN movie_genres mg ON mg.movie_id = m.id
+              FROM screenings m
+              JOIN screening_languages ml ON m.language_id = ml.id
+              LEFT JOIN screening_genres mg ON mg.screening_id = m.id
               LEFT JOIN genres g ON g.id = mg.genre_id
               WHERE m.id = @id
               GROUP BY m.id";
@@ -97,7 +97,7 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
         if (!await reader.ReadAsync(ct))
             return null;
 
-        return new MovieDto(
+        return new ScreeningDto(
             Id: reader.GetInt32("id"),
             Title: reader.GetString("title"),
             OriginalTitle: reader.IsDBNull(reader.GetOrdinal("original_title"))

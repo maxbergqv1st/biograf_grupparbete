@@ -3,49 +3,49 @@
 
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace WebApp.Movies;
+namespace WebApp.Screenings;
 
-public static class MovieEndpoints
+public static class ScreeningEndpoints
 {
-    public static IEndpointRouteBuilder MapMovieEndpoints(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapScreeningEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/movies").WithTags("Movies");
+        var group = app.MapGroup("/api/Screenings").WithTags("Screenings");
 
         group
             .MapGet(
                 "/",
-                async Task<Ok<IEnumerable<MovieSummaryDto>>> (
+                async Task<Ok<IEnumerable<ScreeningSummaryDto>>> (
                     string? search,
                     string? genre,
                     string? ageRating,
-                    IMovieRepository repo,
+                    IScreeningRepository repo,
                     CancellationToken ct
                 ) =>
                 {
-                    var query = new MovieQuery(search, genre, ageRating);
-                    var movies = await repo.GetMoviesAsync(query, ct);
-                    return TypedResults.Ok(movies);
+                    var query = new ScreeningQuery(search, genre, ageRating);
+                    var screenings = await repo.GetScreeningsAsync(query, ct);
+                    return TypedResults.Ok(screenings);
                 }
             )
-            .WithSummary("Get all movies")
+            .WithSummary("Get all screenings")
             .WithDescription(
-                "Returns all movies. Use query parameters to filter and search movies"
+                "Returns all screenings. Use query parameters to filter and search screenings"
             );
 
         group
             .MapGet(
                 "/{id:int}",
-                async Task<Results<Ok<MovieDto>, NotFound>> (
+                async Task<Results<Ok<ScreeningDto>, NotFound>> (
                     int id,
-                    IMovieRepository repo,
+                    IScreeningRepository repo,
                     CancellationToken ct
                 ) =>
                 {
-                    var movie = await repo.GetMovieByIdAsync(id, ct);
-                    return movie is null ? TypedResults.NotFound() : TypedResults.Ok(movie);
+                    var screening = await repo.GetScreeningByIdAsync(id, ct);
+                    return screening is null ? TypedResults.NotFound() : TypedResults.Ok(screening);
                 }
             )
-            .WithSummary("Get movie by id");
+            .WithSummary("Get screening by id");
 
         return app;
     }
