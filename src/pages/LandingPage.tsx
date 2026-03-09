@@ -7,6 +7,7 @@ import {
   BiografContainer,
   BiografRow,
 } from '@/components/custom/BiografContainer';
+import BiografFilters from '@/components/custom/BiografFilters';
 import { Skeleton } from '@/components/ui/skeleton';
 
 LandingPage.route = {
@@ -24,6 +25,7 @@ export default function LandingPage() {
 
   return (
     <BiografContainer>
+      <BiografFilters />
       <BiografRow className="justify-center gap-y-6">
         {isLoading &&
           Array.from({ length: 8 }).map((_, i) => (
