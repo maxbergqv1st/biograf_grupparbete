@@ -79,7 +79,7 @@ public static class DbQuery
                 user_id INT NOT NULL,
                 expires_at DATETIME NOT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                revoked BOOLEAN NOT NULL DEFAULT FALSE,
+                is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             )
 
