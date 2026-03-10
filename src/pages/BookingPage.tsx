@@ -1,5 +1,6 @@
 import type { ComponentProps } from 'react';
 
+import { useMovie } from '@/api/hooks/useMovies';
 import { Trailer } from '@/stories/ui/BiografButton.stories';
 import { Dates } from '@/stories/ui/BiografCarousel.stories';
 import { Time } from '@/stories/ui/BiografCarousel.stories';
@@ -22,6 +23,7 @@ DateTimeSelect.route = {
 };
 
 export default function DateTimeSelect() {
+  const {} = useMovie();
   const argsDates = (Dates.args ?? {}) as BiografCarouselProps;
   const argsTime = (Time.args ?? {}) as BiografCarouselProps;
   const argsTrailer = (Trailer.args ?? {}) as BiografButtonProps;

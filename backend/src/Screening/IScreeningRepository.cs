@@ -4,6 +4,5 @@ namespace WebApp.Screenings;
 
 public interface IScreeningRepository
 {
-    Task<IEnumerable<ScreeningSummaryDto>> GetScreeningsAsync(ScreeningQuery query, CancellationToken ct);
-    Task<ScreeningDto?> GetScreeningByIdAsync(int id, CancellationToken ct);
+    Task<IEnumerable<ScreeningDto>> GetScreeningsByMovieIdAsync(int id, CancellationToken ct);
 }

@@ -1,3 +1,5 @@
+using WebApp.Screenings;
+
 namespace WebApp;
 
 public static class Server
@@ -34,6 +36,7 @@ public static class Server
         Session.Start();
 
         App.MapMovieEndpoints();
+        App.MapScreeningEndpoints();
         // Start the server on port 5001
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);

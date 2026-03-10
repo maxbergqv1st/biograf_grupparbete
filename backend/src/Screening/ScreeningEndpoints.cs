@@ -9,44 +9,25 @@ public static class ScreeningEndpoints
 {
     public static IEndpointRouteBuilder MapScreeningEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/Screenings").WithTags("Screenings");
+        var group = app.MapGroup("/api/screenings").WithTags("Screenings");
 
         group
             .MapGet(
-                "/",
-                async Task<Ok<IEnumerable<ScreeningSummaryDto>>> (
-                    string? search,
-                    string? genre,
-                    string? ageRating,
-                    IScreeningRepository repo,
-                    CancellationToken ct
-                ) =>
-                {
-                    var query = new ScreeningQuery(search, genre, ageRating);
-                    var screenings = await repo.GetScreeningsAsync(query, ct);
-                    return TypedResults.Ok(screenings);
-                }
-            )
-            .WithSummary("Get all screenings")
-            .WithDescription(
-                "Returns all screenings. Use query parameters to filter and search screenings"
-            );
-
-        group
-            .MapGet(
-                "/{id:int}",
-                async Task<Results<Ok<ScreeningDto>, NotFound>> (
+                "/by-movie-id/{id:int}",
+                async Task<Ok<IEnumerable<ScreeningDto>>> (
                     int id,
                     IScreeningRepository repo,
                     CancellationToken ct
                 ) =>
                 {
-                    var screening = await repo.GetScreeningByIdAsync(id, ct);
-                    return screening is null ? TypedResults.NotFound() : TypedResults.Ok(screening);
+                    var screenings = await repo.GetScreeningsByMovieIdAsync(id, ct);
+                    return TypedResults.Ok(screenings);
                 }
             )
-            .WithSummary("Get screening by id");
-
+            .WithSummary("Get all screenings")
+            .WithDescription(
+                "Returns screenings by movie id"
+            );
         return app;
     }
 }
