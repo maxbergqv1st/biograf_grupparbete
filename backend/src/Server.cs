@@ -20,6 +20,7 @@ public static class Server
             $"Password={config.GetProperty("password").ToString()};";
         builder.Services.AddMySqlDataSource(connectionString);
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+        builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         App = builder.Build();
         if (App.Environment.IsDevelopment())
         {
