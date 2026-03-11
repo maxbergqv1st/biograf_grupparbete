@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useMovies } from '@/api/hooks/useMovies';
 import { useNavigate } from 'react-router-dom';
 
@@ -16,7 +18,14 @@ LandingPage.route = {
 };
 
 export default function LandingPage() {
-  const { data, isLoading, isError } = useMovies();
+  const [filters, setFilters] = useState({ date: '', ageRating: '' });
+  const handleFilter = (newFilters: { date: string; ageRating: string }) => {
+    setFilters(newFilters);
+  };
+  const { data, isLoading, isError } = useMovies({
+    screeningDate: filters.date || undefined,
+    ageRating: filters.ageRating || undefined,
+  });
   const navigate = useNavigate();
 
   console.log('data', data);
@@ -25,7 +34,7 @@ export default function LandingPage() {
 
   return (
     <BiografContainer>
-      <BiografFilters />
+      <BiografFilters onFiltersChange={handleFilter} />
       <BiografRow className="justify-center gap-y-6">
         {isLoading &&
           Array.from({ length: 8 }).map((_, i) => (
