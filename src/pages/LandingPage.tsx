@@ -18,14 +18,26 @@ LandingPage.route = {
 };
 
 export default function LandingPage() {
-  const [filters, setFilters] = useState({ date: '', ageRating: '' });
-  const handleFilter = (newFilters: { date: string; ageRating: string }) => {
+  const [filters, setFilters] = useState({
+    date: '',
+    ageRating: '',
+    search: '',
+  });
+
+  const handleFilter = (newFilters: {
+    date: string;
+    ageRating: string;
+    search: string;
+  }) => {
     setFilters(newFilters);
   };
+
   const { data, isLoading, isError } = useMovies({
     screeningDate: filters.date || undefined,
     ageRating: filters.ageRating || undefined,
+    search: filters.search || undefined, // ← Lägg till!
   });
+
   const navigate = useNavigate();
 
   console.log('data', data);
