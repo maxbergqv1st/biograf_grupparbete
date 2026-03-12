@@ -6,9 +6,8 @@ import LandingPage from './pages/LandingPage.tsx';
 import MovieDetailsPage from './pages/MovieDetailsPage.tsx';
 import NotFoundPage from './pages/NotFoundPage.tsx';
 import Seat from './pages/Seats.tsx';
-import AdminPage from './pages/AdminPage.tsx';
 
-export default [NotFoundPage, MovieDetailsPage, LandingPage, Seat, Booking, AdminPage]
+export default [NotFoundPage, MovieDetailsPage, LandingPage, Seat, Booking]
   // map the route property of each page component to a Route
   .map((x) => ({ element: createElement(x), ...x.route }) as Route)
   // sort by index (and if an item has no index, sort as index 0)
