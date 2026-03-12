@@ -9,7 +9,7 @@ public class CloudinaryRepository : ICloudinaryRepository
     public async Task<(string Url, string PublicId)> UploadPosterAsync(
         IFormFile file,
         string folder,
-        int movieId,
+        string publicId,
         CancellationToken ct
     )
     {
@@ -19,8 +19,9 @@ public class CloudinaryRepository : ICloudinaryRepository
         {
             File = new FileDescription(file.FileName, stream),
             Folder = folder,
-            PublicId = $"{movieId}/poster",
-            Overwrite = true
+            PublicId = publicId,
+            Overwrite = true,
+            Invalidate = true
         });
 
         if (upload.Error is not null)

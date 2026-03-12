@@ -7,7 +7,7 @@ public interface ICloudinaryRepository
     Task<(string Url, string PublicId)> UploadPosterAsync(
         IFormFile file,
         string folder,
-        int movieId,
+        string publicId,
         CancellationToken ct
     );
 

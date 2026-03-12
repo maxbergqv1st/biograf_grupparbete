@@ -35,7 +35,8 @@ public static class CloudinaryEndpoints
                 }
 
                 var folder = "filmer";
-                var (url, publicId) = await cloud.UploadPosterAsync(file, folder, movieId, ct);
+                var newPublicId = $"{movieId}/poster_{Guid.NewGuid():N}";
+                var (url, publicId) = await cloud.UploadPosterAsync(file, folder, newPublicId, ct);
 
                 await using var cmd = conn.CreateCommand();
                 // Store Cloudinary publicId in movies.poster_url for SDK rendering

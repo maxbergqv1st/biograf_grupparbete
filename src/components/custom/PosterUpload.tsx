@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { useMovies } from '@/api/hooks/useMovies';
+import { useQueryClient } from '@tanstack/react-query';
+import { movieKeys } from '@/api/hooks/useMovies';
 
 export default function PosterUpload() {
   const { data, isLoading, isError, refetch } = useMovies();
+  const queryClient = useQueryClient();
   const [movieId, setMovieId] = useState<number | ''>('');
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('');
@@ -41,6 +44,10 @@ export default function PosterUpload() {
     setStatus('Poster uppdaterad');
     setSubmitting(false);
     refetch();
+    await queryClient.invalidateQueries({ queryKey: movieKeys.all() });
+    if (typeof movieId === 'number') {
+      await queryClient.invalidateQueries({ queryKey: movieKeys.detail(movieId) });
+    }
   }
 
   return (
