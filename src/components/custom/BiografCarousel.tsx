@@ -15,10 +15,19 @@ import { cn } from "@/lib/utils"
 type BiografCarouselProps = BaseCarouselProps & {
   selectable?: boolean
   desktopTwoRows?: boolean
+  items?: React.ReactNode[]
+  resetSelectionKey?: string | number | null
 }
 //lagt till  selectable = false,
 export default function CarouselSize({ selectable = false, desktopTwoRows = false, ...props}: BiografCarouselProps) {
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
+  const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null)
+  React.useEffect(() => {
+    setSelectedIndex(null)
+  }, [props.resetSelectionKey])
+  const fallbackItems = props.children
+    ? Array.from({ length: 5 }, () => props.children)
+    : []
+  const items = props.items ?? fallbackItems
   
   return (
     <Carousel
@@ -29,7 +38,7 @@ export default function CarouselSize({ selectable = false, desktopTwoRows = fals
       className={cn("w-full max-w-[12rem] sm:max-w-xs md:max-w-sm", props.className)}
     >
       <CarouselContent className={cn(desktopTwoRows && "md:flex-wrap")}>
-        {Array.from({ length: 5 }).map((_, index) => (
+        {items.map((item, index) => (
           <CarouselItem key={index} className={cn(desktopTwoRows ? "basis-1/2 md:basis-1/3" : "basis-1/2 lg:basis-1/3")}>
               <Card
                 onClick={selectable ? () => setSelectedIndex(index) : undefined}
@@ -40,8 +49,7 @@ export default function CarouselSize({ selectable = false, desktopTwoRows = fals
                 : "hover:shadow-[0px_0px_15px_1px_#b69852]"
                 )}>
               <CardContent className="flex aspect-square justify-center p-0 text-sm">
-                {props.children ? props.children : <><span>{index + 15}:e Feb</span>
-                <span className="text-xs">Salong 2</span></>}
+                {item}
               </CardContent>
             </Card>
           </CarouselItem>
