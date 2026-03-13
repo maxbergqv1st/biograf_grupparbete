@@ -38,9 +38,6 @@ export default function LandingPage() {
     search: filters.search || undefined, // ← Lägg till!
   });
 
-  const navigate = useNavigate();
-  const { data, isLoading, isError } = useMovies()
-
   console.log('data', data);
   console.log('isLoading', isLoading);
   console.log('isError', isError);
