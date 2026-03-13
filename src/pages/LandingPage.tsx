@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { useMovies } from '@/api/hooks/useMovies';
-import { useNavigate } from 'react-router-dom';
+import MoviePoster from '@/components/custom/MoviePoster';
 
-import BiografCard from '@/components/custom/BiografCard';
 import {
   BiografCol,
   BiografContainer,
@@ -18,6 +17,7 @@ LandingPage.route = {
 };
 
 export default function LandingPage() {
+
   const [filters, setFilters] = useState({
     date: '',
     ageRating: '',
@@ -39,6 +39,7 @@ export default function LandingPage() {
   });
 
   const navigate = useNavigate();
+  const { data, isLoading, isError } = useMovies()
 
   console.log('data', data);
   console.log('isLoading', isLoading);
@@ -51,25 +52,26 @@ export default function LandingPage() {
         {isLoading &&
           Array.from({ length: 8 }).map((_, i) => (
             <BiografCol key={i}>
-              <BiografCard>
-                <Skeleton className="mb-2 h-5 w-3/4" />
-                <Skeleton className="h-4 w-1/2" />
-              </BiografCard>
+              <div className="mx-auto w-full max-w-xs">
+                <Skeleton className="aspect-[2/3] w-full rounded-xl" />
+              </div>
             </BiografCol>
           ))}
 
         {isError && <div>Error loading movies.</div>}
 
-        {data?.data.map((movie) => (
-          <BiografCol key={movie.id}>
-            <BiografCard
-              title={movie.title ?? 'Untitled'}
-              description={movie.genres?.join(', ')}
-              className="cursor-pointer transition-shadow hover:shadow-[var(--shadow-gold)]"
-              onClick={() => navigate(`/movies/${movie.id}`)}
-            />
-          </BiografCol>
-        ))}
+        {data?.data.map((movie) => {
+          if (!movie.id) return null;
+          return (
+            <BiografCol key={movie.id}>
+              <MoviePoster
+                id={movie.id}
+                title={movie.title ?? 'Untitled'}
+                poster={movie.posterUrl ?? undefined}
+              />
+            </BiografCol>
+          );
+        })}
       </BiografRow>
     </BiografContainer>
   );
