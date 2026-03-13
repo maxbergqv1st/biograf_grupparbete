@@ -9,4 +9,5 @@ export type GetApiMoviesParams = {
 search?: string;
 genre?: string;
 ageRating?: string;
+screeningDate?: string;
 };

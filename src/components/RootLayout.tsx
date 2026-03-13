@@ -38,9 +38,9 @@ export default function RootLayout() {
               to="/"
             >
               <img
-                src="\Logo\FilmvisarnalogoFinalTrans.png"
+                src="public\images\logo\Filmvisarnalogo.png"
                 alt="Biograf"
-                className="h-10 w-auto"
+                className="h-25 w-auto"
               />
             </Link>
             <button
