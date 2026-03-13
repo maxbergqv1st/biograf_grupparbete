@@ -40,7 +40,7 @@
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: oklch(0% 0 0);
   --background-gradient: linear-gradient(
     to top right,
     #000000 0%,
