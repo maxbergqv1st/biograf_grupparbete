@@ -13,7 +13,7 @@ public static class CloudinaryEndpoints
 
         group.MapPost("/{movieId:int}/poster", async (
                 int movieId,
-                [FromForm] IFormFile file,
+                IFormFile file,
                 ICloudinaryRepository cloud,
                 MySqlDataSource db,
                 CancellationToken ct
