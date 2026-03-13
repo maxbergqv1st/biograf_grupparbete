@@ -57,18 +57,20 @@ export default function LandingPage() {
 
         {isError && <div>Error loading movies.</div>}
 
-        {data?.data.map((movie) => {
-          if (!movie.id) return null;
-          return (
-            <BiografCol key={movie.id}>
-              <MoviePoster
-                id={movie.id}
-                title={movie.title ?? 'Untitled'}
-                poster={movie.posterUrl ?? undefined}
-              />
-            </BiografCol>
-          );
-        })}
+        <BiografCol className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {data?.data.map((movie) => {
+            if (!movie.id) return null;
+            return (
+              <BiografCol key={movie.id}>
+                <MoviePoster
+                  id={movie.id}
+                  title={movie.title ?? 'Untitled'}
+                  poster={movie.posterUrl ?? undefined}
+                />
+              </BiografCol>
+            );
+          })}
+        </BiografCol>
       </BiografRow>
     </BiografContainer>
   );
