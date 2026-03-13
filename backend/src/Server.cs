@@ -20,11 +20,8 @@ public static class Server
             $"Password={config.GetProperty("password").ToString()};";
         builder.Services.AddMySqlDataSource(connectionString);
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
-<<<<<<< HEAD
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
-=======
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
->>>>>>> origin/dev
         App = builder.Build();
         if (App.Environment.IsDevelopment())
         {
@@ -37,16 +34,13 @@ public static class Server
         ErrorHandler.Start();
         FileServer.Start();
         LoginRoutes.Start();
-        
+
         Session.Start();
 
         App.MapMovieEndpoints();
-<<<<<<< HEAD
         App.MapScreeningEndpoints();
-=======
         App.MapCloudinaryEndpoints();
         RestApi.Start();
->>>>>>> origin/dev
         // Start the server on port 5001
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
