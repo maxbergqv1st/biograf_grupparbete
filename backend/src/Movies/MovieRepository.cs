@@ -37,6 +37,9 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
                     SELECT 1 FROM movie_genres mg2
                     JOIN genres g2 ON g2.id = mg2.genre_id
                     WHERE mg2.movie_id = m.id AND g2.name = @genre
+                AND (@screeningDate IS NULL OR m.release_date >= @screeningDate)
+
+
                 ))
             GROUP BY m.id
         ";
@@ -46,6 +49,8 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
         cmd.Parameters.AddWithValue("@search", query.Search is null ? null : $"%{query.Search}%");
         cmd.Parameters.AddWithValue("@ageRating", query.AgeRating);
         cmd.Parameters.AddWithValue("@genre", query.Genre);
+        cmd.Parameters.AddWithValue("@screeningDate", query.ScreeningDate?.ToString("yyyy-MM-dd"));
+
 
         var movies = new List<MovieSummaryDto>();
         await using var reader = await cmd.ExecuteReaderAsync(ct);
