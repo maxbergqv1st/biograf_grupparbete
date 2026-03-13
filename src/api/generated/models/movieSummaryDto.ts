@@ -21,4 +21,7 @@ export interface MovieSummaryDto {
   language?: LanguageDto;
   /** @nullable */
   genres?: string[] | null;
+  description?: string | null;
+  /** @nullable */
+  director?: string | null;
 }

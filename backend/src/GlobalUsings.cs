@@ -20,3 +20,4 @@ global using static WebApp.DbQuery;
 // Movies
 
 global using WebApp.Movies;
+global using WebApp.Screenings;

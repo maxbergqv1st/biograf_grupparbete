@@ -1,3 +1,5 @@
+using WebApp.Screenings;
+
 namespace WebApp;
 
 public static class Server
@@ -18,6 +20,7 @@ public static class Server
             $"Password={config.GetProperty("password").ToString()};";
         builder.Services.AddMySqlDataSource(connectionString);
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
+        builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
         App = builder.Build();
         if (App.Environment.IsDevelopment())
@@ -31,10 +34,11 @@ public static class Server
         ErrorHandler.Start();
         FileServer.Start();
         LoginRoutes.Start();
-        
+
         Session.Start();
 
         App.MapMovieEndpoints();
+        App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
         RestApi.Start();
         // Start the server on port 5001

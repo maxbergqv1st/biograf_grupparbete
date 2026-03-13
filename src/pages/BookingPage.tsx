@@ -1,9 +1,19 @@
-Booking.route = {
-  path: '/Booking',
-  menuLabel: 'Booking',
-  index: 3,
+
+
+BookingPage.route = {
+  path: '/booking',
+  parent: '/',
+  menuLabel: 'Bookings',
+  index: 2,
 };
 
-export default function Booking() {
-  return <>Booking Page</>;
-}
+export default function BookingPage() {
+
+
+  return (
+    <section className="space-y-2">
+      <h1 className="text-2xl font-semibold">Bookings</h1>
+      <p></p>
+    </section>
+    )
+  }

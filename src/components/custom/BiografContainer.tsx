@@ -24,8 +24,8 @@ const containerVariants = cva('w-full', {
 
 interface ContainerProps
   extends
-    HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof containerVariants> {}
+  HTMLAttributes<HTMLDivElement>,
+  VariantProps<typeof containerVariants> { }
 
 export function BiografContainer({
   variant,

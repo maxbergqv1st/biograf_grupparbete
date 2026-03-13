@@ -9,3 +9,4 @@ export * from './getApiMoviesParams';
 export * from './languageDto';
 export * from './movieDto';
 export * from './movieSummaryDto';
+export * from './screeningDto';

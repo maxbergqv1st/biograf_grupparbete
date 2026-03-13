@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n fe,be -c cyan,magenta \"vite\" \"dotnet run --project backend -- 5001 .\"",
+    "dev": "concurrently -n fe,be -c cyan,magenta \"vite --host\" \"dotnet run --project backend -- 5001 .\"",
     "dev:fe": "vite",
     "dev:be": "dotnet run --project backend -- 5001 .",
     "build": "tsc -b && vite build",
@@ -26,6 +26,7 @@
     "@cloudinary/url-gen": "^1.22.0",
     "@radix-ui/react-aspect-ratio": "^1.1.8",
     "@radix-ui/react-select": "^2.2.6",
+    "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-switch": "^1.2.6",
     "@tailwindcss/postcss": "^4.1.18",
