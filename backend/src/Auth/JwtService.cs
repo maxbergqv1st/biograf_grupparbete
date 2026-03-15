@@ -63,6 +63,7 @@ public class JwtService : IJwtService
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
         };
+        handler.MapInboundClaims = false;
 
         try
         {

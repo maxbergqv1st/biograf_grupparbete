@@ -8,7 +8,11 @@ public static class Server
     {
         var builder = WebApplication.CreateBuilder();
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(option =>
+        {
+            option.SupportNonNullableReferenceTypes();
+            option.SchemaFilter<RequiredNotNullableSchemaFilter>();
+        });
         var configPath = Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "db-config.json");
         var configJson = File.ReadAllText(configPath);
         var config = System.Text.Json.JsonDocument.Parse(configJson).RootElement;
@@ -19,15 +23,29 @@ public static class Server
             $"User={config.GetProperty("username").ToString()};" +
             $"Password={config.GetProperty("password").ToString()};";
         builder.Services.AddMySqlDataSource(connectionString);
+        builder.Services.AddSingleton<IJwtService, JwtService>();
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
+        builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+        builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.WithOrigins("http://localhost:5173").AllowAnyHeader().AllowAnyMethod().AllowCredentials(); ;
+            });
+        });
+
         App = builder.Build();
+
         if (App.Environment.IsDevelopment())
         {
             App.UseSwagger();
             App.UseSwaggerUI();
         }
+        App.UseCors();
+
         Middleware();
         DebugLog.Start();
         Acl.Start();
@@ -37,6 +55,10 @@ public static class Server
 
         Session.Start();
 
+
+        App.UseJwtAuth();
+
+        App.MapAuthEndpoints();
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
@@ -47,6 +69,8 @@ public static class Server
         Log("With these settings:", Globals);
         App.Run(runUrl);
     }
+
+
 
     // Middleware that changes the server response header,
     // initiates the debug logging for the request,

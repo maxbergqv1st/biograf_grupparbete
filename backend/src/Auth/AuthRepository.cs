@@ -18,7 +18,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
             FirstName: reader.GetString("first_name"),
             LastName: reader.GetString("last_name"),
             Email: reader.GetString("email"),
-            PasswordHash: reader.GetString("password_hash"),
+            PasswordHash: reader.GetString("password"),
             Role: reader.GetString("role"),
             Phone: reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone"),
             IsActive: reader.GetBoolean("is_active")
@@ -46,7 +46,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
         cmd.CommandText = @"
             SELECT rt.token_hash, rt.user_id, rt.expires_at, rt.is_revoked,
                 u.id, u.first_name, u.last_name, u.email,
-                u.password_hash, u.role, u.phone, u.is_active
+                u.password, u.role, u.phone, u.is_active
             FROM refresh_tokens rt
             JOIN users u ON rt.user_id = u.id
             WHERE rt.token_hash = @tokenHash
@@ -72,7 +72,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
             FirstName: reader.GetString("first_name"),
             LastName: reader.GetString("last_name"),
             Email: reader.GetString("email"),
-            PasswordHash: reader.GetString("password_hash"),
+            PasswordHash: reader.GetString("password"),
             Role: reader.GetString("role"),
             Phone: reader.IsDBNull(reader.GetOrdinal("phone")) ? null : reader.GetString("phone"),
             IsActive: reader.GetBoolean("is_active")
@@ -94,7 +94,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
     {
         await using var conn = await db.OpenConnectionAsync(ct);
         await using var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM refresh_tokens WHERE expired_at < NOW() OR is_revoked = TRUE";
+        cmd.CommandText = "DELETE FROM refresh_tokens WHERE expires_at < NOW() OR is_revoked = TRUE";
         await cmd.ExecuteNonQueryAsync(ct);
     }
 }
