@@ -6,10 +6,10 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
+import '../i18n';
 import App from './App';
 import { queryClient } from './api/queryClient';
 import LoginModal from './components/auth/LoginModal';
-import './i18n';
 import './index.css';
 import BookingPage from './pages/BookingPage';
 import HomePage from './pages/HomePage';

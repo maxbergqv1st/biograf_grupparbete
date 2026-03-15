@@ -14,8 +14,8 @@ import BiografInput from '@/components/custom/BiografInput';
 import { Separator } from '@/components/ui/separator';
 
 const loginSchema = z.object({
-  email: z.string().email('Ogiltig e-postadress'),
-  password: z.string().min(1, 'Lösenord krävs'),
+  email: z.string().email(),
+  password: z.string().min(1),
 });
 type LoginFormData = z.infer<typeof loginSchema>;
 
@@ -59,7 +59,9 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           {...register('email')}
         />
         {errors.email && (
-          <p className="text-xs text-red-500">{errors.email.message}</p>
+          <p className="text-xs text-red-500">
+            {t('auth:login.validation.email')}
+          </p>
         )}
       </div>
 
@@ -79,7 +81,9 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
           </button>
         </div>
         {errors.password && (
-          <p className="text-xs text-red-500">{errors.password.message}</p>
+          <p className="text-xs text-red-500">
+            {t('auth:login.validation.password')}
+          </p>
         )}
       </div>
 
@@ -91,7 +95,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
 
       <BiografButton
         type="submit"
-        variant="primary"
+        variant="default"
         className="w-full"
         disabled={isPending}
       >

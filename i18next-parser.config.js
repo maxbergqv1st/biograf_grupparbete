@@ -3,7 +3,8 @@ export default {
   output: 'src/locales/$LOCALE/$NAMESPACE.json',
   input: 'src/**/*.{tsx,ts,jsx,js}',
   defaultNamespace: 'common',
-  namespaceSeparator: false,
+  namespaceSeparator: ':',
   keySeparator: '.',
   createOldCatalogs: false,
+  keepRemoved: true,
 };
