@@ -17,12 +17,9 @@ type BiografButtonProps = ComponentProps<typeof BiografButton>;
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const movieId = Number(id);
-  const { data, isLoading } = useMovie(movieId);
+  const { data } = useMovie(movieId);
   const { data: screeningsData, isLoading: screeningsLoading } =
     useScreenings(movieId);
-  console.log(data);
-  console.log(isLoading);
-  console.log(id);
 
   const argsTrailer = (Trailer.args ?? {}) as BiografButtonProps;
   const screenings = screeningsData?.data ?? [];
@@ -39,7 +36,7 @@ export default function MovieDetailsPage() {
     if (!selectedDate && uniqueDates.length > 0) {
       setSelectedDate(uniqueDates[0]);
     }
-  }, [selectedDate, uniqueDates]);
+  }, [selectedDate, uniqueDates, data]);
   useEffect(() => {
     setSelectedTime(null);
   }, [selectedDate]);
@@ -152,7 +149,7 @@ export default function MovieDetailsPage() {
           </div>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            {data?.data.description ? data?.data.description : 'No description'}
+            {data?.data.tagline ? data?.data.tagline : 'No description'}
           </span>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
@@ -165,6 +162,7 @@ export default function MovieDetailsPage() {
             <a
               href="https://www.youtube.com/watch?v=_YtclB_02wA"
               target="_blank"
+              rel="noreferrer"
             >
               <BiografButton {...argsTrailer} />
             </a>
