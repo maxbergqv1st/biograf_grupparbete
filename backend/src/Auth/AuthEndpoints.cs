@@ -8,7 +8,7 @@ public static class AuthEndpoints
 
     public static IEndpointRouteBuilder MapAuthEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/auth").WithTags("Auth");
+        var group = app.MapGroup("/api/v2/auth").WithTags("Auth").RequireCors("V2");
 
         group.MapPost("/login",
             async Task<Results<Ok<UserDto>, UnauthorizedHttpResult>> (
@@ -119,7 +119,7 @@ public static class AuthEndpoints
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 Secure = !isDevMode,
-                Path = "/api",
+                Path = "/api/v2",
                 Expires = DateTime.UtcNow.AddMinutes(15)
             }
         );
@@ -132,7 +132,7 @@ public static class AuthEndpoints
                 HttpOnly = true,
                 SameSite = SameSiteMode.Strict,
                 Secure = !isDevMode,
-                Path = "/api/auth",
+                Path = "/api/v2/auth",
                 Expires = DateTime.UtcNow.AddDays(RefreshTokenLifeTimeDays)
             }
         );
@@ -153,8 +153,8 @@ public static class AuthEndpoints
 
     private static void ClearAuthCookies(HttpContext context)
     {
-        context.Response.Cookies.Delete("access_token", new CookieOptions { Path = "/api" });
-        context.Response.Cookies.Delete("refresh_token", new CookieOptions { Path = "/api/auth" });
+        context.Response.Cookies.Delete("access_token", new CookieOptions { Path = "/api/v2" });
+        context.Response.Cookies.Delete("refresh_token", new CookieOptions { Path = "/api/v2/auth" });
         context.Response.Cookies.Delete("role", new CookieOptions { Path = "/" });
     }
 }
