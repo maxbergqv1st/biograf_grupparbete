@@ -66,7 +66,7 @@ public static class DbQuery
                 `first_name` VARCHAR(100) NOT NULL,
                 `last_name` VARCHAR(100) NOT NULL,
                 `email` VARCHAR(254) UNIQUE NOT NULL,
-                `password_hash` VARCHAR(255) NOT NULL,
+                `password` VARCHAR(255) NOT NULL,
                 `phone` VARCHAR(25),
                 `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
                 `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
@@ -81,7 +81,7 @@ public static class DbQuery
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-            )
+            );
 
             CREATE TABLE IF NOT EXISTS products (
                 id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -326,12 +326,12 @@ public static class DbQuery
         if (Convert.ToInt32(command.ExecuteScalar()) == 0)
         {
             var usersData = @"
-            INSERT INTO `users` (`first_name`, `last_name`, `email`, `password_hash`, `phone`, `role`, `is_active`) VALUES
-            ('Erik', 'Andersson', 'erik.andersson@email.se', '$2y$10$abcdefghijklmnopqrstuvwxyz123456', '+46701234567', 'admin', TRUE),
-            ('Anna', 'Svensson', 'anna.svensson@email.se', '$2y$10$bcdefghijklmnopqrstuvwxyz1234567', '+46702345678', 'user', TRUE),
-            ('Lars', 'Johansson', 'lars.johansson@email.se', '$2y$10$cdefghijklmnopqrstuvwxyz12345678', '+46703456789', 'user', TRUE),
-            ('Maria', 'Karlsson', 'maria.karlsson@email.se', '$2y$10$defghijklmnopqrstuvwxyz123456789', '+46704567890', 'user', TRUE),
-            ('Johan', 'Nilsson', 'johan.nilsson@email.se', '$2y$10$efghijklmnopqrstuvwxyz1234567890', '+46705678901', 'user', TRUE);
+            INSERT INTO `users` (`first_name`, `last_name`, `email`, `password`, `phone`, `role`, `is_active`) VALUES
+            ('Erik', 'Andersson', 'erik.andersson@email.se', '$2a$13$yJXeSFD1ednAYbkPhVsS.ODhdYzZsjWyd.MHvNtstjWkdXLTwQr5i', '+46701234567', 'admin', TRUE),
+            ('Anna', 'Svensson', 'anna.svensson@email.se', '$2a$13$yJXeSFD1ednAYbkPhVsS.ODhdYzZsjWyd.MHvNtstjWkdXLTwQr5i', '+46702345678', 'user', TRUE),
+            ('Lars', 'Johansson', 'lars.johansson@email.se', '$2a$13$yJXeSFD1ednAYbkPhVsS.ODhdYzZsjWyd.MHvNtstjWkdXLTwQr5i', '+46703456789', 'user', TRUE),
+            ('Maria', 'Karlsson', 'maria.karlsson@email.se', '$2a$13$yJXeSFD1ednAYbkPhVsS.ODhdYzZsjWyd.MHvNtstjWkdXLTwQr5i', '+46704567890', 'user', TRUE),
+            ('Johan', 'Nilsson', 'johan.nilsson@email.se', '$2a$13$yJXeSFD1ednAYbkPhVsS.ODhdYzZsjWyd.MHvNtstjWkdXLTwQr5i', '+46705678901', 'user', TRUE);
             ";
             command.CommandText = usersData;
             command.ExecuteNonQuery();
