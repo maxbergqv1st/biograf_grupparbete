@@ -4,154 +4,180 @@
  * Backend
  * OpenAPI spec version: 1.0
  */
+import type { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as axios from 'axios';
-import type {
-  AxiosInstance,
-  AxiosRequestConfig,
-  AxiosResponse
-} from 'axios';
 
 import type {
   GetApiMoviesParams,
+  LoginRequest,
   MovieDto,
   MovieSummaryDto,
-  ScreeningDto
+  ScreeningDto,
+  UserDto,
 } from './models';
 
+export const getBackend = (axiosInstance: AxiosInstance = axios.default) => {
+  /**
+   * @summary Login with email and password
+   */
+  const postApiAuthLogin = (
+    loginRequest: LoginRequest,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<UserDto>> => {
+    return axiosInstance.post(`/api/auth/login`, loginRequest, options);
+  };
 
+  /**
+   * @summary Refresh access token
+   */
+  const postApiAuthRefresh = (
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<UserDto>> => {
+    return axiosInstance.post(`/api/auth/refresh`, undefined, options);
+  };
 
+  /**
+   * @summary Logout and revoke refresh token
+   */
+  const deleteApiAuthLogout = (
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.delete(`/api/auth/logout`, options);
+  };
 
-  export const getBackend = (axiosInstance: AxiosInstance = axios.default) => {
-/**
- * Authenticate user with email and password.
- */
-const login = (
-    loginBody: unknown, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.post(
-      `/api/login`,
-      loginBody,options
-    );
-  }
+  /**
+   * @summary Get current authenticated user
+   */
+  const getApiAuthMe = (
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<UserDto>> => {
+    return axiosInstance.get(`/api/auth/me`, options);
+  };
 
-const getApiLogin = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    return axiosInstance.get(
-      `/api/login`,options
-    );
-  }
+  /**
+   * Authenticate user with email and password.
+   */
+  const login = (
+    loginBody: unknown,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(`/api/login`, loginBody, options);
+  };
 
-const deleteApiLogin = (
-     options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    return axiosInstance.delete(
-      `/api/login`,options
-    );
-  }
+  const getApiLogin = (
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> => {
+    return axiosInstance.get(`/api/login`, options);
+  };
 
-const getApiFilesFolder = (
-    folder: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
-    return axiosInstance.get(
-      `/api/files/${folder}`,options
-    );
-  }
+  const deleteApiLogin = (
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> => {
+    return axiosInstance.delete(`/api/login`, options);
+  };
 
-const postApiTable = (
+  const getApiFilesFolder = (
+    folder: string,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<void>> => {
+    return axiosInstance.get(`/api/files/${folder}`, options);
+  };
+
+  const postApiTable = (
     table: string,
-    postApiTableBody: unknown, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.post(
-      `/api/${table}`,
-      postApiTableBody,options
-    );
-  }
+    postApiTableBody: unknown,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(`/api/${table}`, postApiTableBody, options);
+  };
 
-const getApiTable = (
-    table: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.get(
-      `/api/${table}`,options
-    );
-  }
-
-const getApiTableId = (
+  const getApiTable = (
     table: string,
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.get(
-      `/api/${table}/${id}`,options
-    );
-  }
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.get(`/api/${table}`, options);
+  };
 
-const putApiTableId = (
+  const getApiTableId = (
     table: string,
     id: string,
-    putApiTableIdBody: unknown, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.put(
-      `/api/${table}/${id}`,
-      putApiTableIdBody,options
-    );
-  }
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.get(`/api/${table}/${id}`, options);
+  };
 
-const deleteApiTableId = (
+  const putApiTableId = (
     table: string,
-    id: string, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<unknown>> => {
-    return axiosInstance.delete(
-      `/api/${table}/${id}`,options
-    );
-  }
+    id: string,
+    putApiTableIdBody: unknown,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.put(`/api/${table}/${id}`, putApiTableIdBody, options);
+  };
 
-/**
- * Returns all movies. Use query parameters to filter and search movies
- * @summary Get all movies
- */
-const getApiMovies = (
-    params?: GetApiMoviesParams, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<MovieSummaryDto[]>> => {
-    return axiosInstance.get(
-      `/api/movies`,{
-    ...options,
-        params: {...params, ...options?.params},}
-    );
-  }
+  const deleteApiTableId = (
+    table: string,
+    id: string,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.delete(`/api/${table}/${id}`, options);
+  };
 
-/**
- * @summary Get movie by id
- */
-const getApiMoviesId = (
-    id: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<MovieDto>> => {
-    return axiosInstance.get(
-      `/api/movies/${id}`,options
-    );
-  }
+  /**
+   * Returns all movies. Use query parameters to filter and search movies \n Search works only with title
+   * @summary Get all movies
+   */
+  const getApiMovies = (
+    params?: GetApiMoviesParams,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<MovieSummaryDto[]>> => {
+    return axiosInstance.get(`/api/movies`, {
+      ...options,
+      params: { ...params, ...options?.params },
+    });
+  };
 
-/**
- * Returns screenings by movie id
- * @summary Get all screenings
- */
-const getApiScreeningsByMovieIdId = (
-    id: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ScreeningDto[]>> => {
-    return axiosInstance.get(
-      `/api/screenings/by-movie-id/${id}`,options
-    );
-  }
+  /**
+   * @summary Get movie by id
+   */
+  const getApiMoviesId = (
+    id: number,
+    options?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<MovieDto>> => {
+    return axiosInstance.get(`/api/movies/${id}`, options);
+  };
 
-return {login,getApiLogin,deleteApiLogin,getApiFilesFolder,postApiTable,getApiTable,getApiTableId,putApiTableId,deleteApiTableId,getApiMovies,getApiMoviesId,getApiScreeningsByMovieIdId}};
-export type LoginResult = AxiosResponse<unknown>
-export type GetApiLoginResult = AxiosResponse<void>
-export type DeleteApiLoginResult = AxiosResponse<void>
-export type GetApiFilesFolderResult = AxiosResponse<void>
-export type PostApiTableResult = AxiosResponse<unknown>
-export type GetApiTableResult = AxiosResponse<unknown>
-export type GetApiTableIdResult = AxiosResponse<unknown>
-export type PutApiTableIdResult = AxiosResponse<unknown>
-export type DeleteApiTableIdResult = AxiosResponse<unknown>
-export type GetApiMoviesResult = AxiosResponse<MovieSummaryDto[]>
-export type GetApiMoviesIdResult = AxiosResponse<MovieDto>
-export type GetApiScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
+  return {
+    postApiAuthLogin,
+    postApiAuthRefresh,
+    deleteApiAuthLogout,
+    getApiAuthMe,
+    login,
+    getApiLogin,
+    deleteApiLogin,
+    getApiFilesFolder,
+    postApiTable,
+    getApiTable,
+    getApiTableId,
+    putApiTableId,
+    deleteApiTableId,
+    getApiMovies,
+    getApiMoviesId,
+  };
+};
+export type PostApiAuthLoginResult = AxiosResponse<UserDto>;
+export type PostApiAuthRefreshResult = AxiosResponse<UserDto>;
+export type DeleteApiAuthLogoutResult = AxiosResponse<unknown>;
+export type GetApiAuthMeResult = AxiosResponse<UserDto>;
+export type LoginResult = AxiosResponse<unknown>;
+export type GetApiLoginResult = AxiosResponse<void>;
+export type DeleteApiLoginResult = AxiosResponse<void>;
+export type GetApiFilesFolderResult = AxiosResponse<void>;
+export type PostApiTableResult = AxiosResponse<unknown>;
+export type GetApiTableResult = AxiosResponse<unknown>;
+export type GetApiTableIdResult = AxiosResponse<unknown>;
+export type PutApiTableIdResult = AxiosResponse<unknown>;
+export type DeleteApiTableIdResult = AxiosResponse<unknown>;
+export type GetApiMoviesResult = AxiosResponse<MovieSummaryDto[]>;
+export type GetApiMoviesIdResult = AxiosResponse<MovieDto>;
+export type GetApiScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>;

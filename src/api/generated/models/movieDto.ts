@@ -7,26 +7,20 @@
 import type { LanguageDto } from './languageDto';
 
 export interface MovieDto {
-  id?: number;
-  /** @nullable */
-  title?: string | null;
+  id: number;
+  title: string;
   /** @nullable */
   originalTitle?: string | null;
-  /** @nullable */
-  tagline?: string | null;
-  /** @nullable */
-  description?: string | null;
-  duration?: number;
-  /** @nullable */
-  ageRating?: string | null;
-  /** @nullable */
-  director?: string | null;
-  releaseDate?: string;
+  tagline: string;
+  description: string;
+  duration: number;
+  ageRating: string;
+  director: string;
+  releaseDate: string;
   /** @nullable */
   posterUrl?: string | null;
   /** @nullable */
   trailerUrl?: string | null;
   language?: LanguageDto;
-  /** @nullable */
-  genres?: string[] | null;
+  genres: string[];
 }

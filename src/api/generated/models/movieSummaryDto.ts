@@ -7,21 +7,18 @@
 import type { LanguageDto } from './languageDto';
 
 export interface MovieSummaryDto {
-  id?: number;
-  /** @nullable */
-  title?: string | null;
-  /** @nullable */
-  tagline?: string | null;
-  /** @nullable */
-  ageRating?: string | null;
+  id: number;
+  title: string;
+  tagline: string;
+  ageRating: string;
   /** @nullable */
   posterUrl?: string | null;
   /** @nullable */
   trailerUrl?: string | null;
   language?: LanguageDto;
   /** @nullable */
-  genres?: string[] | null;
   description?: string | null;
   /** @nullable */
   director?: string | null;
+  genres: string[];
 }

@@ -6,9 +6,7 @@
  */
 
 export interface LanguageDto {
-  id?: number;
-  /** @nullable */
-  name?: string | null;
-  /** @nullable */
-  code?: string | null;
+  id: number;
+  name: string;
+  code: string;
 }

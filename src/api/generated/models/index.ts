@@ -7,6 +7,8 @@
 
 export * from './getApiMoviesParams';
 export * from './languageDto';
+export * from './loginRequest';
 export * from './movieDto';
 export * from './movieSummaryDto';
 export * from './screeningDto';
+export * from './userDto';
