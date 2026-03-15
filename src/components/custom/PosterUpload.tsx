@@ -57,7 +57,7 @@ export default function PosterUpload() {
     <form onSubmit={submit} className="grid max-w-520px gap-3 p-6">
       <h1 className="text-2xl font-bold text-[#F3EEE4]">Byt poster</h1>
       {isLoading && (
-        <p className="text-sm text-[color:var(--color-gold-dark)]">
+        <p className="text-sm text--color-gold-dark">
           Laddar filmer...
         </p>
       )}
