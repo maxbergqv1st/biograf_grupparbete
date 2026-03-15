@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { useMovies } from '@/api/hooks/useMovies';
-import MoviePoster from '@/components/custom/MoviePoster';
 
 import {
   BiografCol,
@@ -9,15 +8,10 @@ import {
   BiografRow,
 } from '@/components/custom/BiografContainer';
 import BiografFilters from '@/components/custom/BiografFilters';
+import MoviePoster from '@/components/custom/MoviePoster';
 import { Skeleton } from '@/components/ui/skeleton';
 
-LandingPage.route = {
-  path: '/',
-  menuLabel: 'Home',
-};
-
-export default function LandingPage() {
-
+export default function HomePage() {
   const [filters, setFilters] = useState({
     date: '',
     ageRating: '',
@@ -37,11 +31,6 @@ export default function LandingPage() {
     ageRating: filters.ageRating || undefined,
     search: filters.search || undefined, // ← Lägg till!
   });
-
-  console.log('data', data);
-  console.log('isLoading', isLoading);
-  console.log('isError', isError);
-
   return (
     <BiografContainer>
       <BiografFilters onFiltersChange={handleFilter} />
@@ -57,7 +46,7 @@ export default function LandingPage() {
 
         {isError && <div>Error loading movies.</div>}
 
-        <BiografCol className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <BiografCol className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {data?.data.map((movie) => {
             if (!movie.id) return null;
             return (

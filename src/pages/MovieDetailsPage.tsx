@@ -4,24 +4,15 @@ import { useEffect, useState } from 'react';
 import { useMovie } from '@/api/hooks/useMovies';
 import { useScreenings } from '@/api/hooks/useScreenings';
 import { Trailer } from '@/stories/ui/BiografButton.stories';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
+import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
 
-import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
-
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
-
-MovieDetailsPage.route = {
-  path: '/movies/:id',
-  parent: '/',
-  menuLabel: 'MovieDetail',
-  index: 4,
-};
 
 export default function MovieDetailsPage() {
   const { id } = useParams();
@@ -101,11 +92,10 @@ export default function MovieDetailsPage() {
   return (
     <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
       <div className="h-full w-full">
-        <MovieDetailsPagePoster  
+        <MovieDetailsPagePoster
           title={data?.data.title ?? 'Untitled'}
           poster={data?.data.posterUrl ?? undefined}
         />
-
       </div>
       <AspectRatio className="h-dvh w-full rounded-lg bg-[#1E1E1E] p-4">
         <h3 className="flex justify-center p-10 text-xl">Välj Datum & tid</h3>
