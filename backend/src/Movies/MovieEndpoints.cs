@@ -9,7 +9,7 @@ public static class MovieEndpoints
 {
     public static IEndpointRouteBuilder MapMovieEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/movies").WithTags("Movies");
+        var group = app.MapGroup("/api/v2/movies").WithTags("Movies").RequireCors("V2");
 
         group
             .MapGet(
