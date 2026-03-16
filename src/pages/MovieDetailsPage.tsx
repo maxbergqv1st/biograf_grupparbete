@@ -1,7 +1,6 @@
 import type { ComponentProps } from 'react';
 import { useEffect, useState } from 'react';
 
-import { useMovie } from '@/api/hooks/useMovies';
 import { useScreenings } from '@/api/hooks/useScreenings';
 import { Trailer } from '@/stories/ui/BiografButton.stories';
 import { Link, useParams } from 'react-router-dom';
@@ -12,12 +11,14 @@ import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
 
+import { useMovieDetails } from '@/hooks/useMovieDetails';
+
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const movieId = Number(id);
-  const { data } = useMovie(movieId);
+  const { movie } = useMovieDetails(movieId);
   const { data: screeningsData, isLoading: screeningsLoading } =
     useScreenings(movieId);
 
@@ -36,7 +37,7 @@ export default function MovieDetailsPage() {
     if (!selectedDate && uniqueDates.length > 0) {
       setSelectedDate(uniqueDates[0]);
     }
-  }, [selectedDate, uniqueDates, data]);
+  }, [selectedDate, uniqueDates, movie]);
   useEffect(() => {
     setSelectedTime(null);
   }, [selectedDate]);
@@ -90,8 +91,8 @@ export default function MovieDetailsPage() {
     <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
       <div className="h-full w-full">
         <MovieDetailsPagePoster
-          title={data?.data.title ?? 'Untitled'}
-          poster={data?.data.posterUrl ?? undefined}
+          title={movie?.title ?? 'Untitled'}
+          poster={movie?.poster}
         />
       </div>
       <AspectRatio className="h-dvh w-full rounded-lg bg-[#1E1E1E] p-4">
@@ -125,45 +126,28 @@ export default function MovieDetailsPage() {
       <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
         <AspectRatio className="self-top max-h-full w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
           <h1 className="flex justify-center p-5 text-2xl text-[#b69852]">
-            {data?.data.title ? data?.data.title : 'No title'}
+            {movie?.title ?? 'No title'}
           </h1>
           <Separator className="flex justify-center" />
           <div className="pt-0.5 pb-1.5">
             <span>
-              |{' '}
-              {data?.data.ageRating + '+'
-                ? data?.data.ageRating + '+'
-                : 'No age rating'}{' '}
-              | |{' '}
-              {data?.data.language?.code
-                ? data?.data.language.code
-                : 'No language'}{' '}
-              | |{' '}
-              {Array.isArray(data?.data.genres)
-                ? data?.data.genres.join(', ')
-                : data?.data.genres
-                  ? data?.data.genres
-                  : 'No genres'}{' '}
-              |
+              | {movie?.ageRating ? movie.ageRating + '+' : 'No age rating'} | |{' '}
+              {movie?.language ?? 'No language'} | |{' '}
+              {movie?.genres?.length ? movie.genres.join(', ') : 'No genres'} |
             </span>
           </div>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            {data?.data.tagline ? data?.data.tagline : 'No description'}
+            {movie?.tagline ?? 'No description'}
           </span>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            Director:{' '}
-            {data?.data.director ? data?.data.director : 'No director'}
+            Director: {movie?.director ?? 'No director'}
           </span>
         </AspectRatio>
         <AspectRatio className="h-40 max-h-full w-full rounded-lg border bg-[url(/images/movies/grimsby.jpg)] bg-center">
           <div className="absolute right-5 bottom-5">
-            <a
-              href="https://www.youtube.com/watch?v=_YtclB_02wA"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href={movie?.trailerUrl ?? '#'} target="_blank" rel="noreferrer">
               <BiografButton {...argsTrailer} />
             </a>
           </div>
