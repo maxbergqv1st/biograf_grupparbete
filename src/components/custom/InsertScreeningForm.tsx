@@ -1,75 +1,105 @@
-import { useMemo, useState } from 'react';
-import { InsertScreeningFormView, type ScreeningFormValues } from './InsertScreeningFormView';
-import { useMovies } from '@/api/hooks/useMovies';
+import { useMemo, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+import BiografSelect from "./BiografSelect";
+import BiografInput from "./BiografInput";
+import BiografButton from "./BiografButton";
+import { useMovies } from "@/api/hooks/useMovies";
+import { useHalls } from "@/api/hooks/useHalls";
 
 export default function InsertScreeningForm() {
-  const { data, isLoading, isError } = useMovies();
-  const [values, setValues] = useState<ScreeningFormValues>({
-    movie_id: '',
-    hall_id: '',
-    start_time: '',
-    end_time: '',
-    base_price: '',
+  const queryClient = useQueryClient();
+  const [movieId, setMovieId] = useState("");
+  const [hallId, setHallId] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [status, setStatus] = useState("");
+
+  const { data: moviesData, isLoading: moviesLoading, isError: moviesError } = useMovies();
+  const movieOptions = useMemo(() => {
+    return (moviesData?.data ?? []).map((movie) => ({
+      value: String(movie.id),
+      label: movie.title,
+    }));
+  }, [moviesData]);
+
+  const { data: hallData, isLoading: hallsLoading, isError: hallsError } = useHalls();
+  const hallOptions = useMemo(() => {
+    return (hallData?.data ?? []).map((hall) => ({
+      value: String(hall.id),
+      label: hall.name,
+    }));
+  }, [hallData]);
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (body: { movieId: number; hallId: number; screeningDate: string; screeningTime: string }) =>
+      fetch("/api/v2/screenings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body),
+      }).then((res) => {
+        if (!res.ok) throw new Error("Misslyckades");
+        return res.json();
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["screenings"] });
+      setStatus("Skapad visning!");
+    },
+    onError: () => setStatus("Misslyckades"),
   });
-  const [submitting, setSubmitting] = useState(false);
-  const [status, setStatus] = useState('');
-  const [error, setError] = useState('');
 
-  function onChange(name: string, value: string | number) {
-    setValues((prev) => ({ ...prev, [name]: value }));
-  }
-
-  const movieOptions = useMemo(
-    () =>
-      (data?.data ?? [])
-        .filter((movie) => movie.id != null)
-        .map((movie) => ({
-          value: String(movie.id),
-          label: movie.title ?? 'Untitled',
-        })),
-    [data],
-  );
-
-  function onSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setStatus('');
-    setError('');
-
-    if (!values.movie_id || !values.hall_id) {
-      setError('Fyll i film-id och salong-id.');
-      return;
-    }
-    if (!values.start_time || !values.end_time) {
-      setError('Fyll i start- och sluttid.');
-      return;
-    }
-
-    const payload = {
-      movie_id: Number(values.movie_id),
-      hall_id: Number(values.hall_id),
-      start_time: values.start_time,
-      end_time: values.end_time,
-      base_price: Number(values.base_price),
-    };
-
-    setSubmitting(true);
-    // TODO: koppla till API när det finns
-    setSubmitting(false);
-    setStatus('Sparat (demo).');
-    void payload;
+    await mutateAsync({
+      movieId: Number(movieId),
+      hallId: Number(hallId),
+      screeningDate: date,
+      screeningTime: time,
+    });
   }
 
   return (
-    <InsertScreeningFormView
-      values={values}
-      movieOptions={movieOptions}
-      moviesLoading={isLoading}
-      moviesError={isError}
-      onChange={onChange}
-      onSubmit={onSubmit}
-      submitting={submitting}
-      status={status}
-      error={error}
-    />
+    <form onSubmit={handleSubmit} className="grid max-w-520px gap-3 p-6">
+      <h1 className="text-2xl font-bold text-[#F3EEE4]">Lägg till filmvisning</h1>
+
+      <BiografSelect
+        value={movieId}
+        onValueChange={setMovieId}
+        placeholder="Välj film"
+        options={movieOptions}
+      />
+      {moviesLoading && <p className="text-sm text-color-gold-dark">Laddar filmer...</p>}
+      {moviesError && <p className="text-sm text-red-500">Kunde inte hämta filmer</p>}
+
+      <BiografSelect
+        value={hallId}
+        onValueChange={setHallId}
+        placeholder="Välj en salong"
+        options={hallOptions}
+      />
+      {hallsLoading && <p className="text-sm text-color-gold-dark">Laddar salonger...</p>}
+      {hallsError && <p className="text-sm text-red-500">Kunde inte hämta salonger</p>}
+
+      <BiografInput
+        type="date"
+        value={date}
+        onChange={(e) => setDate(e.target.value)}
+        required
+      />
+
+      <BiografInput
+        type="time"
+        value={time}
+        onChange={(e) => setTime(e.target.value)}
+        required
+      />
+
+      <BiografButton type="submit" disabled={isPending}>
+        {isPending ? "Sparar..." : "Spara"}
+      </BiografButton>
+
+      {status && <p className="text-sm text-green-500">{status}</p>}
+    </form>
   );
 }
