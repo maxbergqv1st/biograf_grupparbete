@@ -6,12 +6,11 @@
  * OpenAPI spec version: v2
  */
 
-export interface UserDto {
+export interface HallDto {
   id: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  role: string;
-  /** @nullable */
-  phone?: string | null;
+  name: string;
+  type: number;
+  rowCount: number;
+  soundSystem: number;
+  screenSize: number;
 }
