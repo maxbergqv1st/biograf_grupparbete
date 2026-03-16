@@ -9,10 +9,9 @@ import { useParams } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
+import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
-
-import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
@@ -100,12 +99,11 @@ export default function MovieDetailsPage() {
         : [<span key="select-date">Välj ett datum</span>];
   return (
     <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
-      <div className="h-full w-full">
-        <MovieDetailsPagePoster  
+      <div className="h-dvh w-full">
+        <MovieDetailsPagePoster
           title={data?.data.title ?? 'Untitled'}
           poster={data?.data.posterUrl ?? undefined}
         />
-
       </div>
       <AspectRatio className="h-dvh w-full rounded-lg bg-[#1E1E1E] p-4">
         <h3 className="flex justify-center p-10 text-xl">Välj Datum & tid</h3>
@@ -173,7 +171,9 @@ export default function MovieDetailsPage() {
         <AspectRatio className="h-40 max-h-full w-full rounded-lg border bg-[url(/images/movies/grimsby.jpg)] bg-center">
           <div className="absolute right-5 bottom-5">
             <a
-              href="https://www.youtube.com/watch?v=_YtclB_02wA"
+              href={
+                data?.data.trailerUrl ? data?.data.trailerUrl : 'No trailer'
+              }
               target="_blank"
             >
               <BiografButton {...argsTrailer} />

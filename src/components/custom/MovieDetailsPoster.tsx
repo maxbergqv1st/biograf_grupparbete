@@ -1,6 +1,6 @@
-import { Cloudinary } from '@cloudinary/url-gen';
-import { fill } from '@cloudinary/url-gen/actions/resize';
 import { AdvancedImage } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { fit } from '@cloudinary/url-gen/actions/resize';
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
 
@@ -14,12 +14,12 @@ export default function MovieDetailsPagePoster({
   poster,
 }: MoviePosterProps) {
   return (
-    <article className="h-[450px] w-[300px]">
+    <article className="h-full w-full">
       {poster ? (
         <AdvancedImage
-          cldImg={cld.image(poster).resize(fill().width(300).height(450))}
+          cldImg={cld.image(poster).resize(fit().width(300).height(450))}
           alt={`Poster för ${title}`}
-          className="h-full w-full rounded-lg border border-border object-cover shadow-sm"
+          className="border-border h-full w-full rounded-lg border object-contain shadow-sm"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center rounded-lg bg-zinc-700">
