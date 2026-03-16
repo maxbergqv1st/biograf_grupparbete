@@ -1,3 +1,4 @@
+using WebApp.Halls;
 using WebApp.Screenings;
 
 namespace WebApp;
@@ -42,6 +43,7 @@ public static class Server
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<IHallRepository, HallRepository>();
 
         builder.Services.AddCors(options =>
         {
@@ -82,6 +84,7 @@ public static class Server
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
+        App.MapHallEndpoints();
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
         Log("With these settings:", Globals);
