@@ -5,7 +5,6 @@ import { movieKeys } from '@/api/hooks/useMovies';
 import BiografButton from './BiografButton';
 import BiografInput from './BiografInput';
 import BiografSelect from './BiografSelect';
-import { idText } from 'typescript';
 
 export default function PosterUpload() {
   const { data, isLoading, isError, refetch } = useMovies();
