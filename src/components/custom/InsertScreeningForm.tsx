@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { InsertScreeningFormView, type ScreeningFormValues } from './InsertScreeningFormView';
+import { useMovies } from '@/api/hooks/useMovies';
 
 export default function InsertScreeningForm() {
+  const { data, isLoading, isError } = useMovies();
   const [values, setValues] = useState<ScreeningFormValues>({
-    movie_id: 0,
-    hall_id: 0,
+    movie_id: '',
+    hall_id: '',
     start_time: '',
     end_time: '',
-    base_price: 0,
+    base_price: '',
   });
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState('');
@@ -16,6 +18,17 @@ export default function InsertScreeningForm() {
   function onChange(name: string, value: string | number) {
     setValues((prev) => ({ ...prev, [name]: value }));
   }
+
+  const movieOptions = useMemo(
+    () =>
+      (data?.data ?? [])
+        .filter((movie) => movie.id != null)
+        .map((movie) => ({
+          value: String(movie.id),
+          label: movie.title ?? 'Untitled',
+        })),
+    [data],
+  );
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -31,15 +44,27 @@ export default function InsertScreeningForm() {
       return;
     }
 
+    const payload = {
+      movie_id: Number(values.movie_id),
+      hall_id: Number(values.hall_id),
+      start_time: values.start_time,
+      end_time: values.end_time,
+      base_price: Number(values.base_price),
+    };
+
     setSubmitting(true);
     // TODO: koppla till API när det finns
     setSubmitting(false);
     setStatus('Sparat (demo).');
+    void payload;
   }
 
   return (
     <InsertScreeningFormView
       values={values}
+      movieOptions={movieOptions}
+      moviesLoading={isLoading}
+      moviesError={isError}
       onChange={onChange}
       onSubmit={onSubmit}
       submitting={submitting}

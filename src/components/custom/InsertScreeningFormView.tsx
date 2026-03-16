@@ -1,17 +1,26 @@
 import React from 'react';
 import BiografInput from './BiografInput';
 import BiografButton from './BiografButton';
+import BiografSelect from './BiografSelect';
 
 export type ScreeningFormValues = {
-  movie_id: number;
-  hall_id: number;
+  movie_id: string;
+  hall_id: string;
   start_time: string;
   end_time: string;
-  base_price: number;
+  base_price: string;
+};
+
+type MovieOption = {
+  value: string;
+  label: string;
 };
 
 type InsertScreeningFormProps = {
   values: ScreeningFormValues;
+  movieOptions: MovieOption[];
+  moviesLoading: boolean;
+  moviesError: boolean;
   onChange: (name: string, value: string | number) => void;
   onSubmit: (e: React.FormEvent) => void;
   submitting: boolean;
@@ -22,6 +31,9 @@ type InsertScreeningFormProps = {
 
 export function InsertScreeningFormView({
   values,
+  movieOptions,
+  moviesLoading,
+  moviesError,
   onChange,
   onSubmit,
   submitting,
@@ -35,20 +47,23 @@ export function InsertScreeningFormView({
     >
       <h1 className="text-2xl font-bold text-[#F3EEE4]">Lägg till en film visning</h1>
 
-      <BiografInput
-        type="number"
-        min={1}
+      {moviesLoading && (
+        <p className="text-sm text-[color:var(--color-gold-dark)]">Laddar filmer...</p>
+      )}
+      {moviesError && <p className="text-sm text-red-500">Kunde inte hämta filmer</p>}
+
+      <BiografSelect
         value={values.movie_id}
-        onChange={(e) => onChange('movie_id', Number(e.target.value))}
-        placeholder="Film-id"
-        required
+        onValueChange={(value) => onChange('movie_id', value)}
+        placeholder="Välj film"
+        options={movieOptions}
       />
 
       <BiografInput
         type="number"
         min={1}
         value={values.hall_id}
-        onChange={(e) => onChange('hall_id', Number(e.target.value))}
+        onChange={(e) => onChange('hall_id', e.target.value)}
         placeholder="Salong-id"
         required
       />
@@ -74,7 +89,7 @@ export function InsertScreeningFormView({
         min={0}
         step="0.01"
         value={values.base_price}
-        onChange={(e) => onChange('base_price', Number(e.target.value))}
+        onChange={(e) => onChange('base_price', e.target.value)}
         placeholder="Baspris"
         required
       />
