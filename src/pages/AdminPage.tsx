@@ -1,4 +1,5 @@
 import { useState, type ReactNode } from "react";
+import { useGetMe } from "@/api/hooks/useAuth";
 
 import MovieForm from "@/components/custom/MovieFrom";
 import PosterUpload from "@/components/custom/PosterUpload";
@@ -11,7 +12,30 @@ AdminPage.route = {
 };
 
 export default function AdminPage() {
+  const { data: meData, isLoading } = useGetMe();
+  const user = meData?.data;
+  const isAdmin = user?.role?.toLowerCase() === "admin";
   const [activeTab, setActiveTab] = useState<"movies" | "posters" | "screening">("movies");
+
+  if (isLoading) {
+    return (
+      <section className="space-y-2">
+        <h1 className="text-2xl font-semibold">Admin</h1>
+        <p className="text-sm text--color-gold-dark">Laddar...</p>
+      </section>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <section className="space-y-2">
+        <h1 className="text-2xl font-semibold">Admin</h1>
+        <p className="text-sm text--color-gold-dark">
+          Admin-sidan är inte tillgänglig för din roll.
+        </p>
+      </section>
+    );
+  }
 
   const AdminMenu = (isActive: boolean) =>
     [
