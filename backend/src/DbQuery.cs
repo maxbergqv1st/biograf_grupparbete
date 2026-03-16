@@ -277,12 +277,13 @@ public static class DbQuery
                 INSERT INTO acl (userRoles, method, allow, route, `match`, comment) VALUES
                 ('visitor, user', 'GET', 'disallow', '/secret.html', 'true', 'No access to /secret.html for visitors and normal users'),
                 ('visitor,user, admin', 'GET', 'allow', '/api', 'false', 'Allow access to all routes not starting with /api'),
-                ('visitor', 'POST', 'allow', '/api/users', 'true', 'Allow registration as new user for visitors'),
-                ('visitor, user,admin', '*', 'allow', '/api/login', 'true', 'Allow access to all login routes'),
-                ('admin', '*', 'allow', '/api/users', 'true', 'Allow admins to see and edit users'),
-                ('admin', '*', 'allow', '/api/sessions', 'true', 'Allow admins to see and edit sessions'),
-                ('admin', '*', 'allow', '/api/acl', 'true', 'Allow admins to see and edit acl rules'),
-                ('visitor,user,admin', 'GET', 'allow', '/api/products', 'true', 'Allow all user roles to read products');
+                ('visitor', 'POST', 'allow', '/api/v1/users', 'true', 'Allow registration as new user for visitors'),
+                ('visitor, user,admin', '*', 'allow', '/api/v1/login', 'true', 'Allow access to all login routes'),
+                ('admin', '*', 'allow', '/api/v1/users', 'true', 'Allow admins to see and edit users'),
+                ('admin', '*', 'allow', '/api/v1/sessions', 'true', 'Allow admins to see and edit sessions'),
+                ('admin', '*', 'allow', '/api/v1/acl', 'true', 'Allow admins to see and edit acl rules'),
+                ('visitor,user,admin', 'GET', 'allow', '/api/v1/products', 'true', 'Allow all user roles to read products'),
+                ('visitor,user,admin', 'GET', 'allow', '/api/v1/movies', 'true', 'Allow all user roles to read movies');
             ";
             command.CommandText = aclData;
             command.ExecuteNonQuery();
