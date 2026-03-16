@@ -30,7 +30,7 @@ export default function PosterUpload() {
     const fd = new FormData();
     fd.append('file', file);
 
-    const res = await fetch(`/api/movies/${movieId}/poster`, {
+    const res = await fetch(`/api/v2/movies/${movieId}/poster`, {
       method: 'POST',
       body: fd,
     });

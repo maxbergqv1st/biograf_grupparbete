@@ -7,7 +7,7 @@ import {
 } from './authEvents';
 
 export const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_URL ?? '/',
+  baseURL: '/api/v2',
   withCredentials: true,
   timeout: 30000,
   headers: {
@@ -30,7 +30,7 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const skipUrls = ['/api/auth/refresh', '/api/auth/login'];
+    const skipUrls = ['/auth/refresh', '/auth/login'];
     if (skipUrls.includes(originalRequest.url)) {
       return Promise.reject(error);
     }
@@ -45,7 +45,7 @@ apiClient.interceptors.response.use(
     isRefreshing = true;
 
     try {
-      await apiClient.post('/api/auth/refresh');
+      await apiClient.post('/auth/refresh');
       failQueue.forEach(({ resolve }) => resolve());
       failQueue = [];
       return apiClient(originalRequest);

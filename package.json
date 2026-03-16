@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -n fe,be -c cyan,magenta \"vite --host\" \"dotnet run --project backend -- 5001 .\"",
-    "dev:fe": "vite",
+    "dev": "concurrently -n fe,be -c cyan,magenta \"vite --host --mode v1\" \"dotnet run --project backend -- 5001 .\"",
+    "dev:v2": "concurrently -n fe,be -c cyan,magenta \"vite --host --mode v2\" \"dotnet run --project backend -- 5001 .\"",
+    "dev:fe": "vite --host",
     "dev:be": "dotnet run --project backend -- 5001 .",
     "build": "tsc -b && vite build",
     "lint": "eslint .",

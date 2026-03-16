@@ -10,9 +10,9 @@ import type {
 export const getAllMovies = (
   params?: GetApiMoviesParams,
 ): Promise<AxiosResponse<MovieSummaryDto[]>> => {
-  return apiClient.get('/api/movies', { params });
+  return apiClient.get('/movies', { params });
 };
 
 export const getMovie = (id: number): Promise<AxiosResponse<MovieDto>> => {
-  return apiClient.get(`/api/movies/${id}`);
+  return apiClient.get(`/movies/${id}`);
 };

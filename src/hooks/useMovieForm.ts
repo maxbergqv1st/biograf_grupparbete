@@ -25,7 +25,7 @@ export function useMovieForm() {
     if (submitting) return;
     setSubmitting(true);
 
-    const createRes = await fetch('/api/movies', {
+    const createRes = await fetch('/api/v2/movies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -50,7 +50,7 @@ export function useMovieForm() {
 
     const movieId = created?.insertId;
     if (!movieId) {
-      setError('Missing insertId from /api/movies');
+      setError('Missing insertId from /api/v2/movies');
       setSubmitting(false);
       return;
     }
@@ -59,7 +59,7 @@ export function useMovieForm() {
       const fd = new FormData();
       fd.append('file', payload.file);
       fd.append('folder', 'filmer');
-      const uploadRes = await fetch(`/api/movies/${movieId}/poster`, {
+      const uploadRes = await fetch(`/api/v2/movies/${movieId}/poster`, {
         method: 'POST',
         body: fd,
       });
