@@ -18,11 +18,12 @@ public static class MovieEndpoints
                     string? search,
                     string? genre,
                     string? ageRating,
+                    DateOnly? screeningDate,
                     IMovieRepository repo,
                     CancellationToken ct
                 ) =>
                 {
-                    var query = new MovieQuery(search, genre, ageRating);
+                    var query = new MovieQuery(search, genre, ageRating, screeningDate);
                     var movies = await repo.GetMoviesAsync(query, ct);
                     return TypedResults.Ok(movies);
                 }
