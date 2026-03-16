@@ -8,8 +8,9 @@ public static class CloudinaryEndpoints
 {
     public static void MapCloudinaryEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/movies")
-            .WithTags("Cloudinary");
+        var group = app.MapGroup("/api/v2/movies")
+            .WithTags("Cloudinary")
+            .RequireCors("V2");
 
         group.MapPost("/{movieId:int}/poster", async (
                 int movieId,

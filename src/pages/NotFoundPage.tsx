@@ -2,10 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 
-NotFoundPage.route = {
-  path: '*',
-};
-
 export default function NotFoundPage() {
   return (
     <section className="bg-card flex flex-col gap-6 rounded-lg border p-8 text-center shadow-sm">

@@ -5,6 +5,7 @@ import { movieKeys } from '@/api/hooks/useMovies';
 import BiografButton from './BiografButton';
 import BiografInput from './BiografInput';
 import BiografSelect from './BiografSelect';
+import { idText } from 'typescript';
 
 export default function PosterUpload() {
   const { data, isLoading, isError, refetch } = useMovies();
@@ -32,8 +33,9 @@ export default function PosterUpload() {
     setSubmitting(true);
     const fd = new FormData();
     fd.append('file', file);
-
-    const res = await fetch(`/api/movies/${Number(movieId)}/poster`, {
+    
+    const id = Number(movieId);
+    const res = await fetch(`/api/v2/movies/${id}/poster`, {
       method: 'POST',
       body: fd,
     });

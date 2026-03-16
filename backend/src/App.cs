@@ -6,7 +6,7 @@ Globals = Obj(new
     aclOn = false,
     isSpa = true,
     port = args[0],
-    serverName = "Minimal API Backend",
+    serverName = "Filmvisarna",
     frontendPath = args[1],
     sessionLifeTimeHours = 2
 });

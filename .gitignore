@@ -31,6 +31,7 @@ dist-ssr
 *.sw?
 
 backend/db-config.json
+backend/auth-config.json
 backend/obj/
 backend/bin/
 

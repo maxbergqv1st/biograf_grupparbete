@@ -41,13 +41,11 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(0% 0 0);
-  --background-gradient: linear-gradient(
-    to top right,
-    #000000 0%,
-    #141414 25%,
-    #141414 75%,
-    #000000 100%
-  );
+  --background-gradient: linear-gradient(to top right,
+      #000000 0%,
+      #141414 25%,
+      #141414 75%,
+      #000000 100%);
   --foreground: #f3f3f3;
   --card: #141414(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -91,10 +89,12 @@
   body {
     @apply bg-background text-foreground;
   }
+
   main {
     @apply bg-background text-foreground;
     background-image: var(--background-gradient);
   }
+
   /* Migrated from sass/_images.scss */
   main img {
     object-fit: cover;
@@ -120,4 +120,23 @@
   main img.bw {
     filter: grayscale(100%) sepia(20%);
   }
+}
+
+[data-sonner-toast][data-type='success'] {
+  --normal-bg: #22c55e;
+  --normal-border: 1px solid #22c55e;
+  --normal-text: #F3EEE4;
+}
+
+[data-sonner-toast][data-type='error'] {
+  --normal-bg: #ef4444;
+  --normal-border: 1px solid #ef4444;
+  --normal-text: #F3EEE4;
+}
+
+[data-sonner-toast][data-type='info'],
+[data-sonner-toast][data-type='default'] {
+  --normal-bg: #B69852;
+  --normal-border: 1px solid #B69852;
+  --normal-text: #F3EEE4;
 }
