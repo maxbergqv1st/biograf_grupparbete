@@ -100,13 +100,13 @@ export default function MovieDetailsPage() {
         : [<span key="select-date">Välj ett datum</span>];
   return (
     <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
-      <div className="h-dvh w-full">
+      <div className="h-[97.5dvh] w-full">
         <MovieDetailsPagePoster
           title={data?.data.title ?? 'Untitled'}
           poster={data?.data.posterUrl ?? undefined}
         />
       </div>
-      <AspectRatio className="h-[97.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
+      <AspectRatio className="h-[95dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
         <h3 className="flex justify-center p-10 text-xl">Välj Datum & tid</h3>
         <Separator />
         <div className="flex justify-center p-5">
@@ -129,8 +129,8 @@ export default function MovieDetailsPage() {
         </div>
         <Separator className="flex justify-center" />
         <div className="flex justify-center p-8">
-          <BiografButton>
-            <Link to="/booking">- Välj säten -</Link>
+          <BiografButton className="w-full max-w-xs md:max-w-sm">
+            <Link to="/booking">Välj sittplats</Link>
           </BiografButton>
         </div>
       </AspectRatio>
