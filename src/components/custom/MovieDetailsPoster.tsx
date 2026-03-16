@@ -1,6 +1,6 @@
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary } from '@cloudinary/url-gen';
-import { fit } from '@cloudinary/url-gen/actions/resize';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
 
@@ -17,9 +17,9 @@ export default function MovieDetailsPagePoster({
     <article className="h-full w-full">
       {poster ? (
         <AdvancedImage
-          cldImg={cld.image(poster).resize(fit().width(300).height(450))}
+          cldImg={cld.image(poster).resize(fill().width(600).height(900))}
           alt={`Poster för ${title}`}
-          className="border-border h-full w-full rounded-lg border object-contain shadow-sm"
+          className="border-border h-[97.5%] w-full rounded-lg border object-contain shadow-sm"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center rounded-lg bg-zinc-700">

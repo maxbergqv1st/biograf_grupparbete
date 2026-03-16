@@ -12,6 +12,7 @@ import BiografCarousel from '@/components/custom/BiografCarousel';
 import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Separator } from '@/components/ui/separator';
+import { Dialog, DialogTrigger, DialogContent } from "@/components/ui/dialog";
 
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
@@ -105,7 +106,7 @@ export default function MovieDetailsPage() {
           poster={data?.data.posterUrl ?? undefined}
         />
       </div>
-      <AspectRatio className="h-dvh w-full rounded-lg bg-[#1E1E1E] p-4">
+      <AspectRatio className="h-[97.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
         <h3 className="flex justify-center p-10 text-xl">Välj Datum & tid</h3>
         <Separator />
         <div className="flex justify-center p-5">
@@ -168,18 +169,34 @@ export default function MovieDetailsPage() {
             {data?.data.director ? data?.data.director : 'No director'}
           </span>
         </AspectRatio>
-        <AspectRatio className="h-40 max-h-full w-full rounded-lg border bg-[url(/images/movies/grimsby.jpg)] bg-center">
-          <div className="absolute right-5 bottom-5">
-            <a
-              href={
-                data?.data.trailerUrl ? data?.data.trailerUrl : 'No trailer'
-              }
-              target="_blank"
-            >
-              <BiografButton {...argsTrailer} />
-            </a>
-          </div>
-        </AspectRatio>
+<AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
+ <div className="absolute inset-0 blur-sm scale-x-500 scale-100 translate-x-300">
+    <MovieDetailsPagePoster
+      title={data?.data.title ?? 'Untitled'}
+      poster={data?.data.posterUrl ?? undefined}
+    />
+  </div>
+  <div className="absolute right-5 bottom-5">
+    {data?.data.trailerUrl ? (
+      <Dialog>
+        <DialogTrigger render={ <BiografButton {...argsTrailer} />} />
+          <DialogContent className="p-0 max-w-3xl w-[90vw]">
+          <div className="aspect-video w-full">
+            <iframe
+              className="h-full w-full rounded-xl"
+              src={data.data.trailerUrl.replace("watch?v=", "embed/") + "?autoplay=0"}
+              title="Trailer"
+              allowFullScreen
+            />
+            </div>
+        </DialogContent>
+      </Dialog>
+    ) : (
+      <BiografButton {...argsTrailer} disabled />
+    )
+    }    
+  </div>
+</AspectRatio>
       </div>
     </div>
   );
