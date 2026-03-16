@@ -14,7 +14,7 @@ import BiografInput from '@/components/custom/BiografInput';
 import { Separator } from '@/components/ui/separator';
 
 const loginSchema = z.object({
-  email: z.string().email(),
+  email: z.string().refine((val) => val === 'admin' || z.string().email().safeParse(val).success),
   password: z.string().min(1),
 });
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -54,7 +54,7 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
         <BiografInput
-          type="email"
+          type="text"
           placeholder={t('auth:login.email')}
           {...register('email')}
         />
