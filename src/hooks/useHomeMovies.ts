@@ -17,6 +17,7 @@ type Filters = {
 
 export function useHomeMovies(filters?: Filters) {
   if (IS_V1) {
+    console.log("this bitch is running somehow")
     const loaderData = useLoaderData() as Record<string, unknown>[] | undefined;
 
     const movies: MovieListItem[] | undefined = (loaderData as any[])?.map(
