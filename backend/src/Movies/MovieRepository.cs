@@ -4,6 +4,9 @@ namespace WebApp.Movies;
 
 public class MovieRepository(MySqlDataSource db) : IMovieRepository
 {
+    private static readonly JsonSerializerOptions JsonOptions =
+        new() { PropertyNameCaseInsensitive = true };
+
     private static LanguageDto ReadLanguage(MySqlDataReader reader) =>
         new(
             reader.GetInt32("language_id"),
@@ -14,8 +17,17 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
     private static List<string> ReadGenres(MySqlDataReader reader) =>
         JsonSerializer.Deserialize<List<string>>(reader.GetString("genres")) ?? [];
 
-    private static List<ActorDto> ReadActors(MySqlDataReader reader) =>
-        JsonSerializer.Deserialize<List<ActorDto>>(reader.GetString("actors")) ?? [];
+    private static List<ActorDto> ReadActors(MySqlDataReader reader)
+    {
+        if (reader.IsDBNull(reader.GetOrdinal("actors")))
+            return [];
+
+        var json = reader.GetString("actors");
+        if (string.IsNullOrWhiteSpace(json))
+            return [];
+
+        return JsonSerializer.Deserialize<List<ActorDto>>(json, JsonOptions) ?? [];
+    }
 
     public async Task<IEnumerable<MovieSummaryDto>> GetMoviesAsync(
         MovieQuery query,
@@ -101,26 +113,29 @@ SELECT
     m.duration, m.age_rating, m.director, m.release_date,
     m.poster_url, m.trailer_url,
     ml.id AS language_id, ml.name AS language_name, ml.code AS language_code,
-    JSON_ARRAYAGG(g.name) AS genres,
-    JSON_ARRAYAGG(
-      CASE
-        WHEN a.id IS NOT NULL THEN JSON_OBJECT(
+    (
+      SELECT JSON_ARRAYAGG(g.name)
+      FROM movie_genres mg
+      JOIN genres g ON g.id = mg.genre_id
+      WHERE mg.movie_id = m.id
+    ) AS genres,
+    (
+      SELECT JSON_ARRAYAGG(
+        JSON_OBJECT(
           'id', a.id,
           'name', a.name,
           'image_url', a.image_url,
           'character_name', ma.character_name,
           'cast_order', ma.cast_order
         )
-      END
+      )
+      FROM movie_actors ma
+      JOIN actors a ON a.id = ma.actor_id
+      WHERE ma.movie_id = m.id
     ) AS actors
 FROM movies m
 JOIN movie_languages ml ON m.language_id = ml.id
-LEFT JOIN movie_genres mg ON mg.movie_id = m.id
-LEFT JOIN genres g ON g.id = mg.genre_id
-LEFT JOIN movie_actors ma ON ma.movie_id = m.id
-LEFT JOIN actors a ON a.id = ma.actor_id
-WHERE m.id = @id
-GROUP BY m.id";
+WHERE m.id = @id";
     
         await using var conn = await db.OpenConnectionAsync(ct);
         await using var cmd = conn.CreateCommand();

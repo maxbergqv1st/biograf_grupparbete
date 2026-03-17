@@ -9,7 +9,11 @@ import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
 import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { DialogTrailer, DialogContent, DialogTrigger } from '@/components/ui/dialog-trailer';
+import {
+  DialogContent,
+  DialogTrailer,
+  DialogTrigger,
+} from '@/components/ui/dialog-trailer';
 import { Separator } from '@/components/ui/separator';
 
 import { useMovieDetails } from '@/hooks/useMovieDetails';
@@ -57,7 +61,6 @@ export default function MovieDetailsPage() {
               {new Intl.DateTimeFormat('sv-SE', { day: 'numeric' }).format(
                 new Date(`${date}T00:00:00`),
               )}
-              :e
             </span>
             <span>
               {new Intl.DateTimeFormat('sv-SE', { month: 'long' })
@@ -96,8 +99,10 @@ export default function MovieDetailsPage() {
           poster={movie?.poster ?? undefined}
         />
       </div>
-      <AspectRatio className="h-[95dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
-        <h3 className="flex justify-center p-10 text-xl">Välj Datum & tid</h3>
+      <AspectRatio className="h-[91.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
+        <h3 className="flex justify-center p-6 text-2xl text-[#b69852]">
+          Välj Datum & tid
+        </h3>
         <Separator />
         <div className="flex justify-center p-5">
           <BiografCarousel
@@ -118,19 +123,19 @@ export default function MovieDetailsPage() {
           />
         </div>
         <Separator className="flex justify-center" />
-        <div className="flex justify-center p-8">
+        <div className="flex justify-center p-10">
           <BiografButton className="w-full max-w-xs md:max-w-sm">
             <Link to="/booking">Välj sittplats</Link>
           </BiografButton>
         </div>
       </AspectRatio>
       <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
-        <AspectRatio className="self-top max-h-full w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
-          <h1 className="flex justify-center p-5 text-2xl text-[#b69852]">
+        <AspectRatio className="self-top h-[62dvh] w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
+          <h1 className="flex justify-center p-3 text-2xl text-[#b69852]">
             {movie?.title ?? 'No title'}
           </h1>
           <Separator className="flex justify-center" />
-          <div className="pt-0.5 pb-1.5">
+          <div className="flex justify-center pt-1.5 pb-2.5">
             <span>
               | {movie?.ageRating ? movie.ageRating + '+' : 'No age rating'} | |{' '}
               {movie?.language ?? 'No language'} | |{' '}
@@ -142,11 +147,23 @@ export default function MovieDetailsPage() {
             {movie?.description ?? 'No description'}
           </span>
           <Separator className="flex justify-center" />
-          <span className="flex justify-center p-5">
-            Direktör: {movie?.director ?? 'No director'}
+          <span className="flex justify-center pt-5 text-[#b69852]">
+            Direktör:{' '}
           </span>
-          <span>
-            Skådespelare: {movie?.actors?.length ? movie.actors.map((a) => a.name).join(', ') : 'No actors'}
+          <span className="flex justify-center pt-1">
+            {movie?.director ?? 'No director'}
+          </span>
+          <span className="flex justify-center pt-5 text-[#b69852]">
+            Skådespelare:
+          </span>
+          <span className="flex justify-center pt-1 pl-10">
+            {' '}
+            {movie?.actors?.some((a) => a.name)
+              ? movie.actors
+                  .map((a) => a.name)
+                  .filter(Boolean)
+                  .join(', ')
+              : 'No actors'}
           </span>
         </AspectRatio>
         <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
