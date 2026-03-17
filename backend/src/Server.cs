@@ -1,9 +1,6 @@
 using WebApp.Screenings;
-<<<<<<< HEAD
 using WebApp.Bookings;
-=======
 using WebApp.Seats;
->>>>>>> origin/dev
 
 namespace WebApp;
 
@@ -46,9 +43,7 @@ public static class Server
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
-<<<<<<< HEAD
         builder.Services.AddScoped<IBookingRepository, BookingRepository>();
-=======
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
         builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
         builder.Services.AddCors(options =>
@@ -59,7 +54,6 @@ public static class Server
             });
         });
 
->>>>>>> origin/dev
         App = builder.Build();
 
         if (App.Environment.IsDevelopment())
@@ -91,13 +85,10 @@ public static class Server
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
-<<<<<<< HEAD
         App.MapBookingEndpoints();
         RestApi.Start();
         // Start the server on port 5001
-=======
         App.MapSeatsEndpoints();
->>>>>>> origin/dev
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
         Log("With these settings:", Globals);
