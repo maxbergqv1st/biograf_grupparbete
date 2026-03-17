@@ -6,12 +6,10 @@
  * OpenAPI spec version: v2
  */
 
-export interface UserDto {
+export interface BookingDto {
   id: number;
-  firstName: string;
-  lastName: string;
   email: string;
-  role: string;
-  /** @nullable */
-  phone?: string | null;
+  screeningId: number;
+  total_price: number;
+  user_Id: number;
 }
