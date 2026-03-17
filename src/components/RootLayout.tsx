@@ -1,26 +1,29 @@
 import { useState } from 'react';
 
-import { LANGUAGES } from '@/i18n';
-import routes from '@/routes';
+import { useGetMe } from '@/api/hooks/useAuth';
+import { navLinks } from '@/config/navigation';
+import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import BiografButton from '@/components/custom/BiografButton';
 import { BiografContainer } from '@/components/custom/BiografContainer';
 import BiografSelect from '@/components/custom/BiografSelect';
 
 import { useStateObject } from '@/utils/useStateObject';
 
+import { LANGUAGES } from '../../i18n';
+
 export default function RootLayout() {
   const [expanded, setExpanded] = useState(false);
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const { data: meData } = useGetMe();
+  const user = meData?.data;
 
   const pathName = useLocation().pathname;
-  const currentRoute = routes
-    .slice()
-    .sort((a, b) => (a.path.length > b.path.length ? -1 : 1))
-    .find((x) => pathName.indexOf(x.path.split(':')[0]) === 0);
-  const isActive = (path: string) =>
-    path === currentRoute?.path || path === currentRoute?.parent;
+
+  const isActive = (path: string) => path === pathName;
 
   const stateAndSetter = useStateObject({
     categoryChoice: 'All',
@@ -55,56 +58,59 @@ export default function RootLayout() {
             </button>
             <nav className="hidden md:flex" id="primary-navigation">
               <ul className="flex items-center gap-6 text-sm font-medium">
-                {routes
-                  .filter((x) => x.menuLabel)
-                  .map(({ menuLabel, path }) => (
-                    <li key={path}>
-                      <Link
-                        to={path}
-                        className={
-                          isActive(path)
-                            ? 'text-foreground'
-                            : 'text-muted-foreground hover:text-foreground transition'
-                        }
-                        onClick={() =>
-                          setTimeout(() => setExpanded(false), 200)
-                        }
-                      >
-                        {t(menuLabel as string)}
-                      </Link>
-                    </li>
-                  ))}
+                {navLinks.map(({ label, path }) => (
+                  <li key={path}>
+                    <Link
+                      to={path}
+                      className={
+                        isActive(path)
+                          ? 'text-foreground'
+                          : 'text-muted-foreground hover:text-foreground transition'
+                      }
+                      onClick={() => setTimeout(() => setExpanded(false), 200)}
+                    >
+                      {t(label as string)}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
-            <BiografSelect
-              className="max-w-25"
-              options={LANGUAGES.map((x) => ({ value: x }))}
-              onValueChange={(lang) => i18n.changeLanguage(lang)}
-              value={i18n.language}
-            />
+            <div className="flex items-center gap-3">
+              <BiografSelect
+                className="max-w-25"
+                options={LANGUAGES.map((x) => ({ value: x }))}
+                onValueChange={(lang) => i18n.changeLanguage(lang)}
+                value={i18n.language}
+              />
+              <BiografButton
+                variant="default"
+                size="icon"
+                className="shrink-0 rounded-full"
+                aria-label={user ? 'Profile' : 'Login'}
+                onClick={() => navigate(user ? '/profile' : '/login')}
+              >
+                <User className="h-8 w-8" />
+              </BiografButton>
+            </div>
           </div>
           {expanded && (
             <nav className="md:hidden" id="primary-navigation">
               <ul className="flex flex-col gap-3 pb-5 text-sm font-medium">
-                {routes
-                  .filter((x) => x.menuLabel)
-                  .map(({ menuLabel, path }) => (
-                    <li key={path}>
-                      <Link
-                        to={path}
-                        className={
-                          isActive(path)
-                            ? 'text-foreground'
-                            : 'text-muted-foreground hover:text-foreground transition'
-                        }
-                        onClick={() =>
-                          setTimeout(() => setExpanded(false), 200)
-                        }
-                      >
-                        {t(menuLabel as string)}
-                      </Link>
-                    </li>
-                  ))}
+                {navLinks.map(({ label, path }) => (
+                  <li key={path}>
+                    <Link
+                      to={path}
+                      className={
+                        isActive(path)
+                          ? 'text-foreground'
+                          : 'text-muted-foreground hover:text-foreground transition'
+                      }
+                      onClick={() => setTimeout(() => setExpanded(false), 200)}
+                    >
+                      {t(label as string)}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </nav>
           )}

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 // TODO: Update the interface based on requirements, and cut unnecessary props
-type BiografButtonVariants = ButtonProps['variant'] | 'trailer' | 'playIcon';
+type BiografButtonVariants = ButtonProps['variant'] | 'trailer' | 'playIcon' | 'primary';
 export type BiografButtonProps = Omit<ButtonProps, 'variant'> & {
   variant?: BiografButtonVariants;
 };
@@ -23,18 +23,19 @@ const variantClasses: Record<NonNullable<BiografButtonVariants>, string> = {
     'bg-[#141414] text-[#F3EEE4]  shadow-[0px_0px_5px_1px_#b69852] hover:shadow-[0px_0px_15px_1px_#b69852]',
   playIcon:
     'bg-[#141414] text-[#F3EEE4] border-2 border-[#B69852] hover:bg-[#000000] !rounded-full',
+  primary:
+    'bg-[#B69852] text-black font-semibold hover:bg-[#A0833F]',
 };
 
 export default function BiografButton({
-  variant = 'trailer',
+  variant = 'primary',
   className,
-  children = 'Se Trailer',
+  children,
   size = 'lg',
   ...props
 }: BiografButtonProps) {
   return (
     <Button
-      children={children}
       size={size}
       className={cn(
         'cursor-pointer text-sm font-medium',
@@ -42,6 +43,8 @@ export default function BiografButton({
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </Button>
   );
 }

@@ -24,5 +24,12 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "src/**/*.test.tsx", "src/test/**/*"]
+  "include": [
+    "src",
+    "src/**/*.test.tsx",
+    "src/test/**/*",
+    "i18n.ts",
+    "src/locales",
+    "i18next-parser.config.js"
+  ]
 }

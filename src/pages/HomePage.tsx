@@ -1,23 +1,18 @@
 import { useState } from 'react';
 
-import { useMovies } from '@/api/hooks/useMovies';
-import MoviePoster from '@/components/custom/MoviePoster';
-
 import {
   BiografCol,
   BiografContainer,
   BiografRow,
 } from '@/components/custom/BiografContainer';
 import BiografFilters from '@/components/custom/BiografFilters';
+import MoviePoster from '@/components/custom/MoviePoster';
+import { useHomeMovies } from '@/hooks/useHomeMovies';
 import { Skeleton } from '@/components/ui/skeleton';
 
-LandingPage.route = {
-  path: '/',
-  menuLabel: 'Home',
-};
+const IS_V1 = import.meta.env.VITE_API_VERSION !== 'v2';
 
-export default function LandingPage() {
-
+export default function HomePage() {
   const [filters, setFilters] = useState({
     date: '',
     ageRating: '',
@@ -32,19 +27,19 @@ export default function LandingPage() {
     setFilters(newFilters);
   };
 
-  const { data, isLoading, isError } = useMovies({
-    screeningDate: filters.date || undefined,
-    ageRating: filters.ageRating || undefined,
-    search: filters.search || undefined, // ← Lägg till!
-  });
-
-  console.log('data', data);
-  console.log('isLoading', isLoading);
-  console.log('isError', isError);
+  const { movies, isLoading, isError } = useHomeMovies(
+    IS_V1
+      ? undefined
+      : {
+          screeningDate: filters.date || undefined,
+          ageRating: filters.ageRating || undefined,
+          search: filters.search || undefined,
+        },
+  );
 
   return (
     <BiografContainer>
-      <BiografFilters onFiltersChange={handleFilter} />
+      {!IS_V1 && <BiografFilters onFiltersChange={handleFilter} />}
       <BiografRow className="justify-center gap-y-6">
         {isLoading &&
           Array.from({ length: 8 }).map((_, i) => (
@@ -57,18 +52,17 @@ export default function LandingPage() {
 
         {isError && <div>Error loading movies.</div>}
 
-        {data?.data.map((movie) => {
-          if (!movie.id) return null;
-          return (
+        <BiografCol className="grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {movies?.map((movie) => (
             <BiografCol key={movie.id}>
               <MoviePoster
                 id={movie.id}
-                title={movie.title ?? 'Untitled'}
-                poster={movie.posterUrl ?? undefined}
+                title={movie.title}
+                poster={movie.poster}
               />
             </BiografCol>
-          );
-        })}
+          ))}
+        </BiografCol>
       </BiografRow>
     </BiografContainer>
   );

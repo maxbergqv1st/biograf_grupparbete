@@ -1,9 +1,27 @@
 namespace WebApp;
 public static class RestApi
 {
+    private static readonly HashSet<string> BlockedTables = new() { "refresh_tokens" };
+
     public static void Start()
     {
-        App.MapPost("/api/{table}", (
+        App.Use(async (context, next) =>
+        {
+            var path = context.Request.Path.Value ?? "";
+            if (path.StartsWith("/api/v1/"))
+            {
+                var segments = path.Split('/', StringSplitOptions.RemoveEmptyEntries);
+                if (segments.Length >= 3 && BlockedTables.Contains(segments[2]))
+                {
+                    context.Response.StatusCode = 403;
+                    await context.Response.WriteAsJsonAsync(new { error = "Access denied" });
+                    return;
+                }
+            }
+            await next(context);
+        });
+
+        App.MapPost("/api/v1/{table}", (
             HttpContext context, string table, JsonElement bodyJson
         ) =>
         {
@@ -25,7 +43,7 @@ public static class RestApi
             return RestResult.Parse(context, result);
         });
 
-        App.MapGet("/api/{table}", (
+        App.MapGet("/api/v1/{table}", (
             HttpContext context, string table
         ) =>
         {
@@ -38,7 +56,7 @@ public static class RestApi
             return RestResult.Parse(context, SQLQuery(sql, query.parameters, context));
         });
 
-        App.MapGet("/api/{table}/{id}", (
+        App.MapGet("/api/v1/{table}/{id}", (
             HttpContext context, string table, string id
         ) =>
             RestResult.Parse(context, SQLQueryOne(
@@ -48,7 +66,7 @@ public static class RestApi
             ))
         );
 
-        App.MapPut("/api/{table}/{id}", (
+        App.MapPut("/api/v1/{table}/{id}", (
             HttpContext context, string table, string id, JsonElement bodyJson
         ) =>
         {
@@ -61,7 +79,7 @@ public static class RestApi
             return RestResult.Parse(context, result);
         });
 
-        App.MapDelete("/api/{table}/{id}", (
+        App.MapDelete("/api/v1/{table}/{id}", (
              HttpContext context, string table, string id
         ) =>
             RestResult.Parse(context, SQLQueryOne(

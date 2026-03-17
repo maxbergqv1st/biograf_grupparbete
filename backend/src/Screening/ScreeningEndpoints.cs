@@ -9,7 +9,7 @@ public static class ScreeningEndpoints
 {
     public static IEndpointRouteBuilder MapScreeningEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/screenings").WithTags("Screenings");
+        var group = app.MapGroup("/api/v2/screenings").WithTags("Screenings").RequireCors("V2");
 
         group
             .MapGet(
