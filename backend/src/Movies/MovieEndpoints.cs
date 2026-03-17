@@ -9,7 +9,7 @@ public static class MovieEndpoints
 {
     public static IEndpointRouteBuilder MapMovieEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/movies").WithTags("Movies");
+        var group = app.MapGroup("/api/v2/movies").WithTags("Movies").RequireCors("V2");
 
         group
             .MapGet(
@@ -28,6 +28,8 @@ public static class MovieEndpoints
                     return TypedResults.Ok(movies);
                 }
             )
+            .RequireAuth()
+            .RequireRole("admin")
             .WithSummary("Get all movies")
             .WithDescription(
                 "Returns all movies. Use query parameters to filter and search movies"
@@ -46,6 +48,7 @@ public static class MovieEndpoints
                     return movie is null ? TypedResults.NotFound() : TypedResults.Ok(movie);
                 }
             )
+            .RequireRole("admin")
             .WithSummary("Get movie by id");
 
         return app;

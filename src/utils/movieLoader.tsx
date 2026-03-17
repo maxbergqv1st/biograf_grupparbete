@@ -3,8 +3,10 @@ export default async function moviesLoader({
 }: {
   params: Record<string, string | undefined>;
 }) {
-  let url = '/api/movie';
-  if (params.slug) {
+  let url = '/api/v1/movies';
+  if (params.id) {
+    url += '/' + params.id;
+  } else if (params.slug) {
     url += '?slug=' + params.slug;
   }
 
@@ -12,6 +14,5 @@ export default async function moviesLoader({
   if (!res.ok) {
     throw new Error(`failed to fetch movies from database: ${res.status}`);
   }
-  const resultToReturn = await res.json();
-  return resultToReturn;
+  return await res.json();
 }

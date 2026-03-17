@@ -47,7 +47,7 @@ export function MovieFormView({
   return (
     <form
       onSubmit={onSubmit}
-      className="grid max-w-[520px] gap-3 p-6"
+      className="grid max-w-520px gap-3 p-6"
     >
       <h1 className="text-2xl font-bold text-[#F3EEE4]">Lägg till filmer</h1>
       <BiografInput
@@ -72,7 +72,7 @@ export function MovieFormView({
         onChange={(e) => onChange('description', e.target.value)}
         placeholder="Beskrivning"
         required
-        className="bg-[var(--card-foreground)] text-[var(--color-gold)] border-[var(--border)] placeholder:text-[var(--muted)] focus-visible:ring-[var(--gold)] min-h-[80px] rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
+        className="bg--card-foreground text--color-gold border--border placeholder:text--muted focus-visible:ring--gold min-h-80px rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
       />
       <BiografInput
         type="number"
