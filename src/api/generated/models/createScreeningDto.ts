@@ -6,8 +6,9 @@
  * OpenAPI spec version: v2
  */
 
-export interface LanguageDto {
-  id: number;
-  name: string;
-  code: string;
+export interface CreateScreeningDto {
+  movieId: number;
+  hallId: number;
+  screeningDate: string;
+  screeningTime: string;
 }

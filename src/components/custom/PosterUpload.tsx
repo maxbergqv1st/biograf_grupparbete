@@ -2,11 +2,14 @@ import { useState } from 'react';
 import { useMovies } from '@/api/hooks/useMovies';
 import { useQueryClient } from '@tanstack/react-query';
 import { movieKeys } from '@/api/hooks/useMovies';
+import BiografButton from './BiografButton';
+import BiografInput from './BiografInput';
+import BiografSelect from './BiografSelect';
 
 export default function PosterUpload() {
   const { data, isLoading, isError, refetch } = useMovies();
   const queryClient = useQueryClient();
-  const [movieId, setMovieId] = useState<number | ''>('');
+  const [movieId, setMovieId] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState('');
   const [error, setError] = useState('');
@@ -29,8 +32,9 @@ export default function PosterUpload() {
     setSubmitting(true);
     const fd = new FormData();
     fd.append('file', file);
-
-    const res = await fetch(`/api/v2/movies/${movieId}/poster`, {
+    
+    const id = Number(movieId);
+    const res = await fetch(`/api/v2/movies/${id}/poster`, {
       method: 'POST',
       body: fd,
     });
@@ -45,43 +49,45 @@ export default function PosterUpload() {
     setSubmitting(false);
     refetch();
     await queryClient.invalidateQueries({ queryKey: movieKeys.all() });
-    if (typeof movieId === 'number') {
-      await queryClient.invalidateQueries({ queryKey: movieKeys.detail(movieId) });
-    }
+    await queryClient.invalidateQueries({
+      queryKey: movieKeys.detail(Number(movieId)),
+    });
   }
 
   return (
-    <form onSubmit={submit} style={{ padding: 24, maxWidth: 520 }}>
-      <h2>Byt poster</h2>
-      {isLoading && <p>Laddar filmer...</p>}
-      {isError && <p style={{ color: 'crimson' }}>Kunde inte hämta filmer</p>}
+    <form onSubmit={submit} className="grid max-w-520px gap-3 p-6">
+      <h1 className="text-2xl font-bold text-[#F3EEE4]">Byt poster</h1>
+      {isLoading && (
+        <p className="text-sm text--color-gold-dark">
+          Laddar filmer...
+        </p>
+      )}
+      {isError && <p className="text-sm text-red-500">Kunde inte hämta filmer</p>}
 
-      <select
+      <BiografSelect
         value={movieId}
-        onChange={(e) => setMovieId(e.target.value ? Number(e.target.value) : '')}
-        disabled={isLoading}
-        style={{ display: 'block', marginBottom: 12, width: '100%' }}
-      >
-        <option value="">Välj film</option>
-        {data?.data.map((movie) => (
-          <option key={movie.id} value={movie.id ?? ''}>
-            {movie.title ?? 'Untitled'} (id: {movie.id})
-          </option>
-        ))}
-      </select>
-
-      <input
-        type="file"
-        accept="image/*"
-        onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+        onValueChange={setMovieId}
+        placeholder="Välj film"
+        options={(data?.data ?? [])
+          .filter((movie) => movie.id != null)
+          .map((movie) => ({
+            value: String(movie.id),
+            label: `${movie.title ?? 'Untitled'} (id: ${movie.id})`,
+          }))}
       />
 
-      <button type="submit" disabled={submitting} style={{ display: 'block', marginTop: 12 }}>
-        {submitting ? 'Laddar upp...' : 'Ladda upp poster'}
-      </button>
+      <BiografInput
+        type="file"
+        accept="image/*"
+        onChange={(e) => setFile((e.target as HTMLInputElement).files?.[0] ?? null)}
+      />
 
-      {status && <p style={{ color: 'green' }}>{status}</p>}
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
+      <BiografButton type="submit" disabled={submitting}>
+        {submitting ? 'Laddar upp...' : 'Ladda upp poster'}
+      </BiografButton>
+
+      {status && <p className="text-sm text-green-500">{status}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </form>
   );
 }

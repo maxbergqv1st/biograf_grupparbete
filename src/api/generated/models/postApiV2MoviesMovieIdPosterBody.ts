@@ -6,8 +6,6 @@
  * OpenAPI spec version: v2
  */
 
-export interface LanguageDto {
-  id: number;
-  name: string;
-  code: string;
-}
+export type PostApiV2MoviesMovieIdPosterBody = {
+  file: Blob;
+};
