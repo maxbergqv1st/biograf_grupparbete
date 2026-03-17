@@ -15,6 +15,9 @@ import type {
 import type {
   BookingDto,
   GetApiV2MoviesParams,
+  CreateScreeningDto,
+  GetApiV2MoviesParams,
+  HallDto,
   LoginRequest,
   MovieDto,
   MovieSummaryDto,
@@ -81,6 +84,18 @@ const getApiV2BookingsByMovieIdId = (
  ): Promise<AxiosResponse<BookingDto[]>> => {
     return axiosInstance.get(
       `/api/v2/bookings/by-movie-id/${id}`,options
+ * Uploads a poster to Cloudinary and stores the publicId in movies.poster_url
+ * @summary Upload movie poster
+ */
+const postApiV2MoviesMovieIdPoster = (
+    movieId: number,
+    postApiV2MoviesMovieIdPosterBody: PostApiV2MoviesMovieIdPosterBody, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {const formData = new FormData();
+formData.append(`file`, postApiV2MoviesMovieIdPosterBody.file);
+
+    return axiosInstance.post(
+      `/api/v2/movies/${movieId}/poster`,
+      formData,options
     );
   }
 
@@ -122,6 +137,18 @@ const deleteApiV2MoviesMovieIdPoster = (
  ): Promise<AxiosResponse<void>> => {
     return axiosInstance.delete(
       `/api/v2/movies/${movieId}/poster`,options
+    );
+  }
+
+/**
+ * Return all halls
+ * @summary Get all halls
+ */
+const getApiV2Halls = (
+     options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<HallDto[]>> => {
+    return axiosInstance.get(
+      `/api/v2/halls`,options
     );
   }
 
@@ -179,6 +206,20 @@ const getApiV2SeatsScreeningScreeningId = (
   }
 
 return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,getApiV2BookingsByMovieIdId,postApiV2BookingsApiV2Bookings,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
+/**
+ * Insert new screening
+ * @summary Create screening
+ */
+const postApiV2ScreeningsApiV2Screenings = (
+    createScreeningDto: CreateScreeningDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ScreeningDto>> => {
+    return axiosInstance.post(
+      `/api/v2/screenings/api/v2/screenings`,
+      createScreeningDto,options
+    );
+  }
+
+return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings}};
 export type PostApiV2AuthLoginResult = AxiosResponse<UserDto>
 export type PostApiV2AuthRefreshResult = AxiosResponse<UserDto>
 export type DeleteApiV2AuthLogoutResult = AxiosResponse<unknown>
@@ -192,3 +233,10 @@ export type GetApiV2MoviesIdResult = AxiosResponse<MovieDto>
 export type GetApiV2ScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
 export type GetApiV2SeatsHallHallIdResult = AxiosResponse<void>
 export type GetApiV2SeatsScreeningScreeningIdResult = AxiosResponse<void>
+export type PostApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
+export type DeleteApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
+export type GetApiV2HallsResult = AxiosResponse<HallDto[]>
+export type GetApiV2MoviesResult = AxiosResponse<MovieSummaryDto[]>
+export type GetApiV2MoviesIdResult = AxiosResponse<MovieDto>
+export type GetApiV2ScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
+export type PostApiV2ScreeningsApiV2ScreeningsResult = AxiosResponse<ScreeningDto>

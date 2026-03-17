@@ -10,3 +10,10 @@ public record ScreeningDto(
     DateOnly ScreeningDate,
     TimeOnly ScreeningTime
 );
+
+public record CreateScreeningDto(
+    int MovieId,
+    int HallId,
+    DateOnly ScreeningDate,
+    TimeOnly ScreeningTime
+);

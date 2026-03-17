@@ -28,6 +28,8 @@ public static class MovieEndpoints
                     return TypedResults.Ok(movies);
                 }
             )
+            .RequireAuth()
+            .RequireRole("admin")
             .WithSummary("Get all movies")
             .WithDescription(
                 "Returns all movies. Use query parameters to filter and search movies"
@@ -46,6 +48,7 @@ public static class MovieEndpoints
                     return movie is null ? TypedResults.NotFound() : TypedResults.Ok(movie);
                 }
             )
+            .RequireRole("admin")
             .WithSummary("Get movie by id");
 
         return app;
