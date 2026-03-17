@@ -6,6 +6,9 @@
  * OpenAPI spec version: v2
  */
 
+export * from './bookingDto';
+export * from './getApiMoviesParams';
+export * from './getApiV2MoviesParams';
 export * from './createScreeningDto';
 export * from './getApiMoviesParams';
 export * from './getApiV2MoviesParams';
