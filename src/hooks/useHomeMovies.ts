@@ -36,5 +36,5 @@ export function useHomeMovies(filters?: Filters) {
     poster: m.posterUrl ?? undefined,
   }));
 
-  return { movies, isLoading: query.isLoading, isError: query.isError };
+  return { movies, isLoading: query.isLoading, isError: query.isError,error:query.error };
 }

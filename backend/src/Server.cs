@@ -44,12 +44,9 @@ public static class Server
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
-<<<<<<< feature-pick-seat-after-picking-date-and-time
         builder.Services.AddScoped<IHallRepository, HallRepository>();
 
-=======
         builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
->>>>>>> dev
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("V2", policy =>
@@ -89,11 +86,8 @@ public static class Server
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
-<<<<<<< feature-pick-seat-after-picking-date-and-time
         App.MapHallEndpoints();
-=======
         App.MapSeatsEndpoints();
->>>>>>> dev
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);
         Log("With these settings:", Globals);
