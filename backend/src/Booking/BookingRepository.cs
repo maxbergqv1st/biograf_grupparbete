@@ -10,7 +10,7 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
         @"
         SELECT * 
         FROM bookings
-        WHERE movie_id = @id
+        WHERE id = @id
         ";
         await using var connection = await db.OpenConnectionAsync(ct);
         await using var cmd = connection.CreateCommand();
