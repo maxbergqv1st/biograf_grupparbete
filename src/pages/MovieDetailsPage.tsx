@@ -9,7 +9,7 @@ import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
 import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { DialogTrailer, DialogContent, DialogTrigger } from '@/components/ui/dialog-trailer';
 import { Separator } from '@/components/ui/separator';
 
 import { useMovieDetails } from '@/hooks/useMovieDetails';
@@ -139,11 +139,14 @@ export default function MovieDetailsPage() {
           </div>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            {movie?.tagline ?? 'No description'}
+            {movie?.description ?? 'No description'}
           </span>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            Director: {movie?.director ?? 'No director'}
+            Direktör: {movie?.director ?? 'No director'}
+          </span>
+          <span>
+            Skådespelare: {movie?.actors?.length ? movie.actors.map((a) => a.name).join(', ') : 'No actors'}
           </span>
         </AspectRatio>
         <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
@@ -155,7 +158,7 @@ export default function MovieDetailsPage() {
           </div>
           <div className="absolute right-5 bottom-5">
             {movie?.trailerUrl ? (
-              <Dialog>
+              <DialogTrailer>
                 <DialogTrigger render={<BiografButton {...argsTrailer} />} />
                 <DialogContent className="w-[90vw] max-w-3xl p-0">
                   <div className="aspect-video w-full">
@@ -170,7 +173,7 @@ export default function MovieDetailsPage() {
                     />
                   </div>
                 </DialogContent>
-              </Dialog>
+              </DialogTrailer>
             ) : (
               <BiografButton {...argsTrailer} disabled />
             )}

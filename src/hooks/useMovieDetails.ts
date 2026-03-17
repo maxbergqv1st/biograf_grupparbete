@@ -16,6 +16,7 @@ export type MovieDetail = {
   trailerUrl: string | undefined;
   language: string | undefined;
   genres: string[];
+  actors: { id: number; name: string }[];
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,6 +34,7 @@ function mapV1(raw: Record<string, any>): MovieDetail {
     trailerUrl: raw.trailer_url ?? undefined,
     language: raw.language ? String(raw.language) : undefined,
     genres: [],
+    actors: [],
   };
 }
 
@@ -61,6 +63,7 @@ export function useMovieDetails(id: number) {
         trailerUrl: v2.trailerUrl ?? undefined,
         language: v2.language?.code ?? undefined,
         genres: v2.genres ?? [],
+        actors: v2.actors?.map((a) => ({ id: a.id, name: a.name })) ?? [],
       }
     : undefined;
 

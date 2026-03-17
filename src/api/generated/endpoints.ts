@@ -163,7 +163,23 @@ const postApiV2ScreeningsApiV2Screenings = (
     );
   }
 
-return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings}};
+const getApiV2SeatsHallHallId = (
+    hallId: number, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axiosInstance.get(
+      `/api/v2/seats/hall/${hallId}`,options
+    );
+  }
+
+const getApiV2SeatsScreeningScreeningId = (
+    screeningId: number, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<void>> => {
+    return axiosInstance.get(
+      `/api/v2/seats/screening/${screeningId}`,options
+    );
+  }
+
+return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
 export type PostApiV2AuthLoginResult = AxiosResponse<UserDto>
 export type PostApiV2AuthRefreshResult = AxiosResponse<UserDto>
 export type DeleteApiV2AuthLogoutResult = AxiosResponse<unknown>
@@ -175,3 +191,5 @@ export type GetApiV2MoviesResult = AxiosResponse<MovieSummaryDto[]>
 export type GetApiV2MoviesIdResult = AxiosResponse<MovieDto>
 export type GetApiV2ScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
 export type PostApiV2ScreeningsApiV2ScreeningsResult = AxiosResponse<ScreeningDto>
+export type GetApiV2SeatsHallHallIdResult = AxiosResponse<void>
+export type GetApiV2SeatsScreeningScreeningIdResult = AxiosResponse<void>

@@ -6,6 +6,7 @@
  * OpenAPI spec version: v2
  */
 
+export * from './actorDto';
 export * from './createScreeningDto';
 export * from './getApiMoviesParams';
 export * from './getApiV2MoviesParams';

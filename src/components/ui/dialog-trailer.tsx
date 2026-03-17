@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 
 import { cn } from '@/lib/utils';
 
-function Dialog({ ...props }: DialogPrimitive.Root.Props) {
+function DialogTrailer({ ...props }: DialogPrimitive.Root.Props) {
   return <DialogPrimitive.Root data-slot="dialog" {...props} />;
 }
 
@@ -143,7 +143,7 @@ function DialogDescription({
 }
 
 export {
-  Dialog,
+  DialogTrailer,
   DialogClose,
   DialogContent,
   DialogDescription,
