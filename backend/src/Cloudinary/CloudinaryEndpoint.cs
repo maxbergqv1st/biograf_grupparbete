@@ -61,6 +61,7 @@ public static class CloudinaryEndpoints
 
                 return Results.Ok(new { movieId, publicId });
             })
+            .RequireAuth()
             .RequireRole("admin")
             .WithSummary("Upload movie poster")
             .WithDescription("Uploads a poster to Cloudinary and stores the publicId in movies.poster_url")

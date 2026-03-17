@@ -28,6 +28,7 @@ public static class MovieEndpoints
                     return TypedResults.Ok(movies);
                 }
             )
+            .RequireAuth()
             .RequireRole("admin")
             .WithSummary("Get all movies")
             .WithDescription(

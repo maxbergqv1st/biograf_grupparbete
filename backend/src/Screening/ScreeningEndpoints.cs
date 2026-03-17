@@ -42,6 +42,7 @@ public static class ScreeningEndpoints
                     var created = await repo.CreateScreeningAsync(dto, ct);
                     return TypedResults.Ok(created);
                 })
+                .RequireAuth()
                 .RequireRole("admin")
                 .WithSummary("Create screening")
                 .WithDescription(

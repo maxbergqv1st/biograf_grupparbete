@@ -22,6 +22,7 @@ public static class HallEndpoints
                     return TypedResults.Ok(halls);
                 }
             )
+            .RequireAuth()
             .RequireRole("admin")
             .WithSummary("Get all halls")
             .WithDescription("Return all halls");
