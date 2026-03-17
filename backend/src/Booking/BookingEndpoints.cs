@@ -15,7 +15,7 @@ public static class BookingEndpoints
 
         group
             .MapGet(
-                "/by-movie-id/{id:int}",
+                "/api/v2/bookings/{id:int}",
                 async Task<Ok<IEnumerable<BookingDto>>> (
                     int id,
                     IBookingRepository repo,
@@ -28,28 +28,27 @@ public static class BookingEndpoints
             )
             //.RequireAuth()
             //.RequireRole("admin")
-            .WithSummary("Get all bookings")
+            .WithSummary("Get booking by id")
             .WithDescription(
-                "Returns bookings by movie id"
+                "Returns booking by id"
             );
+
         group
             .MapPost(
-                "/api/v2/bookings",
-                async Task<Results<Ok, BadRequest>> (
-                    BookingDto bookingDto,
+                "/",
+                async Task<Results<Ok<int>, BadRequest>> (
+                    CreateBookingDto dto,
                     IBookingRepository repo,
                     CancellationToken ct
                 ) =>
                 {
-                    // Here you would call a method in your repository to add the booking to the database
-                    // For example: await repo.AddBookingAsync(bookingDto, ct);
-                    return TypedResults.Ok();
+                    var insertId = await repo.AddBookingAsync(dto, ct);
+                    return TypedResults.Ok(insertId);
                 }
             )
             .WithSummary("Create a new booking")
-            .WithDescription(
-                "Creates a new booking with the provided booking data"
-            );
+            .WithDescription("Creates a new booking");
+
         return app;
     }
 }
