@@ -1,4 +1,5 @@
 using WebApp.Screenings;
+using WebApp.Bookings;
 
 namespace WebApp;
 
@@ -22,6 +23,7 @@ public static class Server
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
+        builder.Services.AddScoped<IBookingRepository, BookingRepository>();
         App = builder.Build();
         if (App.Environment.IsDevelopment())
         {
@@ -40,6 +42,7 @@ public static class Server
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
+        App.MapBookingEndpoints();
         RestApi.Start();
         // Start the server on port 5001
         var runUrl = "http://localhost:" + Globals.port;
