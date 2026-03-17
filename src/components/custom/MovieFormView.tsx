@@ -1,4 +1,8 @@
 import React from 'react';
+import BiografInput from './BiografInput';
+import BiografSelect from './BiografSelect';
+import BiografButton from './BiografButton';
+import BiografDatePicker from './BiografDatePicker';
 
 type FormValues = {
   title: string;
@@ -24,9 +28,15 @@ type MovieFormViewProps = {
   error: string;
 };
 
+const ageRatingOptions = [
+  { value: 'B', label: 'B' },
+  { value: '7', label: '7' },
+  { value: '11', label: '11' },
+  { value: '15', label: '15' },
+];
+
 export function MovieFormView({
   values,
-  file,
   onChange,
   onFileChange,
   onSubmit,
@@ -37,27 +47,21 @@ export function MovieFormView({
   return (
     <form
       onSubmit={onSubmit}
-      style={{
-        padding: 24,
-        display: 'grid',
-        gridTemplateColumns: '1fr',
-        rowGap: 12,
-        maxWidth: 520,
-      }}
+      className="grid max-w-520px gap-3 p-6"
     >
-      <h1>Lägg till filmer</h1>
-      <input
+      <h1 className="text-2xl font-bold text-[#F3EEE4]">Lägg till filmer</h1>
+      <BiografInput
         value={values.title}
         onChange={(e) => onChange('title', e.target.value)}
         placeholder="Titel"
         required
       />
-      <input
+      <BiografInput
         value={values.originalTitle}
         onChange={(e) => onChange('originalTitle', e.target.value)}
         placeholder="Originaltitel (valfritt)"
       />
-      <input
+      <BiografInput
         value={values.tagline}
         onChange={(e) => onChange('tagline', e.target.value)}
         placeholder="Tagline / kort beskrivning"
@@ -68,8 +72,9 @@ export function MovieFormView({
         onChange={(e) => onChange('description', e.target.value)}
         placeholder="Beskrivning"
         required
+        className="bg--card-foreground text--color-gold border--border placeholder:text--muted focus-visible:ring--gold min-h-80px rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
       />
-      <input
+      <BiografInput
         type="number"
         min={1}
         value={values.durationMinutes}
@@ -77,29 +82,24 @@ export function MovieFormView({
         placeholder="Längd i minuter"
         required
       />
-      <select
+      <BiografSelect
         value={values.ageRating}
-        onChange={(e) => onChange('ageRating', e.target.value)}
-        required
-      >
-        <option value="B">B</option>
-        <option value="7">7</option>
-        <option value="11">11</option>
-        <option value="15">15</option>
-      </select>
-      <input
+        onValueChange={(value) => onChange('ageRating', value)}
+        options={ageRatingOptions}
+        placeholder="Åldersgräns"
+      />
+      <BiografInput
         value={values.director}
         onChange={(e) => onChange('director', e.target.value)}
         placeholder="Regissör"
         required
       />
-      <input
-        type="date"
+      <BiografDatePicker
         value={values.releaseDate}
-        onChange={(e) => onChange('releaseDate', e.target.value)}
-        required
+        onValueChange={(value) => onChange('releaseDate', value)}
+        placeholder="Välj datum"
       />
-      <input
+      <BiografInput
         type="number"
         min={1}
         value={values.language}
@@ -107,22 +107,22 @@ export function MovieFormView({
         placeholder="Språk-id"
         required
       />
-      <input
+      <BiografInput
         value={values.trailerUrl}
         onChange={(e) => onChange('trailerUrl', e.target.value)}
         placeholder="Trailer URL"
         required
       />
-      <input
+      <BiografInput
         type="file"
         accept="image/*"
-        onChange={(e) => onFileChange(e.target.files?.[0] ?? null)}
+        onChange={(e) => onFileChange((e.target as HTMLInputElement).files?.[0] ?? null)}
       />
-      <button type="submit" disabled={submitting}>
-        {submitting ? 'Sparar...' : 'Save'}
-      </button>
-      {status && <p style={{ color: 'green' }}>{status}</p>}
-      {error && <p style={{ color: 'crimson' }}>{error}</p>}
+      <BiografButton type="submit" disabled={submitting}>
+        {submitting ? 'Sparar...' : 'Spara'}
+      </BiografButton>
+      {status && <p className="text-sm text-green-500">{status}</p>}
+      {error && <p className="text-sm text-red-500">{error}</p>}
     </form>
   );
 }

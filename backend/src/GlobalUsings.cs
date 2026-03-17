@@ -21,3 +21,4 @@ global using static WebApp.DbQuery;
 
 global using WebApp.Movies;
 global using WebApp.Screenings;
+global using WebApp.Auth;

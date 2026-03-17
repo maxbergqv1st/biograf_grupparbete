@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Auth;
 
 namespace WebApp;
 
@@ -8,12 +9,13 @@ public static class CloudinaryEndpoints
 {
     public static void MapCloudinaryEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/movies")
-            .WithTags("Cloudinary");
+        var group = app.MapGroup("/api/v2/movies")
+            .WithTags("Cloudinary")
+            .RequireCors("V2");
 
         group.MapPost("/{movieId:int}/poster", async (
                 int movieId,
-                [FromForm] IFormFile file,
+                IFormFile file,
                 ICloudinaryRepository cloud,
                 MySqlDataSource db,
                 CancellationToken ct
@@ -59,6 +61,8 @@ public static class CloudinaryEndpoints
 
                 return Results.Ok(new { movieId, publicId });
             })
+            .RequireAuth()
+            .RequireRole("admin")
             .WithSummary("Upload movie poster")
             .WithDescription("Uploads a poster to Cloudinary and stores the publicId in movies.poster_url")
             .Accepts<IFormFile>("multipart/form-data")
@@ -66,6 +70,7 @@ public static class CloudinaryEndpoints
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
+            
 
         group.MapDelete("/{movieId:int}/poster", async (
                 int movieId,

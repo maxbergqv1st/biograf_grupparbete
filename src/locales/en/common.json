@@ -1,0 +1,10 @@
+{
+  "or": "Or",
+  "title": "Welcome to Biograf",
+  "cancel": "Cancel",
+  "navigation": {
+    "about": "About us",
+    "products": "Products",
+    "vision": "Our vision"
+  }
+}

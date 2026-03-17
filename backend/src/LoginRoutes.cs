@@ -11,7 +11,7 @@ public static class LoginRoutes
 
     public static void Start()
     {
-        App.MapPost("/api/login", (HttpContext context, JsonElement bodyJson) =>
+        App.MapPost("/api/v1/login", (HttpContext context, JsonElement bodyJson) =>
         {
             var user = GetUser(context);
             var body = JSON.Parse(bodyJson.ToString());
@@ -54,14 +54,14 @@ public static class LoginRoutes
         .WithTags("Authentication")
         .WithDescription("Authenticate user with email and password.");
 
-        App.MapGet("/api/login", (HttpContext context) =>
+        App.MapGet("/api/v1/login", (HttpContext context) =>
         {
             var user = GetUser(context);
             return RestResult.Parse(context, user != null ?
                 user : new { error = "No user is logged in." });
         });
 
-        App.MapDelete("/api/login", (HttpContext context) =>
+        App.MapDelete("/api/v1/login", (HttpContext context) =>
         {
             var user = GetUser(context);
 

@@ -1,11 +1,9 @@
 import type { ComponentProps } from 'react';
 import { useEffect, useState } from 'react';
 
-import { useMovie } from '@/api/hooks/useMovies';
 import { useScreenings } from '@/api/hooks/useScreenings';
 import { Trailer } from '@/stories/ui/BiografButton.stories';
-import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
@@ -14,24 +12,16 @@ import { AspectRatio } from '@/components/ui/aspect-ratio';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 
-type BiografButtonProps = ComponentProps<typeof BiografButton>;
+import { useMovieDetails } from '@/hooks/useMovieDetails';
 
-MovieDetailsPage.route = {
-  path: '/movies/:id',
-  parent: '/',
-  menuLabel: 'MovieDetail',
-  index: 4,
-};
+type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
 export default function MovieDetailsPage() {
   const { id } = useParams();
   const movieId = Number(id);
-  const { data, isLoading } = useMovie(movieId);
+  const { movie } = useMovieDetails(movieId);
   const { data: screeningsData, isLoading: screeningsLoading } =
     useScreenings(movieId);
-  console.log(data);
-  console.log(isLoading);
-  console.log(id);
 
   const argsTrailer = (Trailer.args ?? {}) as BiografButtonProps;
   const screenings = screeningsData?.data ?? [];
@@ -48,7 +38,7 @@ export default function MovieDetailsPage() {
     if (!selectedDate && uniqueDates.length > 0) {
       setSelectedDate(uniqueDates[0]);
     }
-  }, [selectedDate, uniqueDates]);
+  }, [selectedDate, uniqueDates, movie]);
   useEffect(() => {
     setSelectedTime(null);
   }, [selectedDate]);
@@ -102,8 +92,8 @@ export default function MovieDetailsPage() {
     <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
       <div className="h-[91.5dvh] w-full">
         <MovieDetailsPagePoster
-          title={data?.data.title ?? 'Untitled'}
-          poster={data?.data.posterUrl ?? undefined}
+          title={movie?.title ?? 'Untitled'}
+          poster={movie?.poster ?? undefined}
         />
       </div>
       <AspectRatio className="h-[95dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
@@ -137,47 +127,34 @@ export default function MovieDetailsPage() {
       <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
         <AspectRatio className="self-top max-h-full w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
           <h1 className="flex justify-center p-5 text-2xl text-[#b69852]">
-            {data?.data.title ? data?.data.title : 'No title'}
+            {movie?.title ?? 'No title'}
           </h1>
           <Separator className="flex justify-center" />
           <div className="pt-0.5 pb-1.5">
             <span>
-              |{' '}
-              {data?.data.ageRating + '+'
-                ? data?.data.ageRating + '+'
-                : 'No age rating'}{' '}
-              | |{' '}
-              {data?.data.language?.code
-                ? data?.data.language.code
-                : 'No language'}{' '}
-              | |{' '}
-              {Array.isArray(data?.data.genres)
-                ? data?.data.genres.join(', ')
-                : data?.data.genres
-                  ? data?.data.genres
-                  : 'No genres'}{' '}
-              |
+              | {movie?.ageRating ? movie.ageRating + '+' : 'No age rating'} | |{' '}
+              {movie?.language ?? 'No language'} | |{' '}
+              {movie?.genres?.length ? movie.genres.join(', ') : 'No genres'} |
             </span>
           </div>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            {data?.data.description ? data?.data.description : 'No description'}
+            {movie?.tagline ?? 'No description'}
           </span>
           <Separator className="flex justify-center" />
           <span className="flex justify-center p-5">
-            Director:{' '}
-            {data?.data.director ? data?.data.director : 'No director'}
+            Director: {movie?.director ?? 'No director'}
           </span>
         </AspectRatio>
         <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
           <div className="absolute inset-0 translate-x-300 scale-100 scale-x-550 blur-sm">
             <MovieDetailsPagePoster
-              title={data?.data.title ?? 'Untitled'}
-              poster={data?.data.posterUrl ?? undefined}
+              title={movie?.title ?? 'Untitled'}
+              poster={movie?.poster ?? undefined}
             />
           </div>
           <div className="absolute right-5 bottom-5">
-            {data?.data.trailerUrl ? (
+            {movie?.trailerUrl ? (
               <Dialog>
                 <DialogTrigger render={<BiografButton {...argsTrailer} />} />
                 <DialogContent className="w-[90vw] max-w-3xl p-0">
@@ -185,7 +162,7 @@ export default function MovieDetailsPage() {
                     <iframe
                       className="h-full w-full rounded-xl"
                       src={
-                        data.data.trailerUrl.replace('watch?v=', 'embed/') +
+                        movie.trailerUrl.replace('watch?v=', 'embed/') +
                         '?autoplay=0'
                       }
                       title="Trailer"
