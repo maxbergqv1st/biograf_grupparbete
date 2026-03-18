@@ -112,11 +112,13 @@ public static class AuthEndpoints
             ) =>
             {
                 if (await repo.EmailExistsAsync(req.Email, ct))
+                    // TODO: Investigate in the the following issue
                     // According to OWASP it should be 200 
                     // ref: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#account-creation
                     // And I think we should send an email with something like: "Someone trying to use your email to register a new account"
                     return TypedResults.Conflict(new { message = "Registration failed" } as object);
 
+                // TODO: Validate request
                 var passwordHash = Password.Encrypt(req.Password);
                 var userId = await repo.CreateUserAsync(req.FirstName, req.LastName, req.Email, passwordHash, req.Phone, ct);
 
@@ -211,6 +213,7 @@ public static class AuthEndpoints
                 CancellationToken ct
             ) =>
             {
+                // TODO: Validate request
                 var tokenHash = jwtService.HashToken(req.Token);
                 var (resetToken, user) = await repo.GetPasswordResetTokenAsync(tokenHash, ct);
 
