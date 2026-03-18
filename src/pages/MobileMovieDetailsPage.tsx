@@ -33,7 +33,7 @@ export default function MobileMovieDetailsPage() {
   const { movie } = useMovieDetails(movieId);
   const { data: screeningsData, isLoading: screeningsLoading } =
     useScreenings(movieId);
-
+  console.log('mobilepage');
   const argsTrailer = (Trailer.args ?? {}) as BiografButtonProps;
   const screenings = screeningsData?.data ?? [];
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
