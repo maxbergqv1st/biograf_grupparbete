@@ -1,6 +1,0 @@
-{
-    "secret": "YourSuperSecretKeyHere_MustBe32CharsOrMore!",
-    "issuer": "biograf-app",
-    "accessTokenLifetimeMinutes": 15,
-    "refreshTokenLifetimeDays": 7
-}

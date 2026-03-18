@@ -32,7 +32,8 @@ public static class AuthMiddleware
             LastName: principal.FindFirstValue("last_name")!,
             Email: principal.FindFirstValue("email")!,
             Role: principal.FindFirstValue("role")!,
-            Phone: null
+            Phone: null,
+            IsEmailVerified: bool.Parse(principal.FindFirstValue("email_verified") ?? "false")
         );
     }
 

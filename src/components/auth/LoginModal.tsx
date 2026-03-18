@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { onAuthRequired } from '@/api/authEvents';
-import { Dialog, DialogContent, DialogTitle } from '@radix-ui/react-dialog';
 import { useTranslation } from 'react-i18next';
 
-import { DialogHeader } from '../ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../ui/dialog';
 import LoginForm from './LoginForm';
 
 export default function LoginModal() {
