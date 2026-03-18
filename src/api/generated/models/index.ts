@@ -6,6 +6,7 @@
  * OpenAPI spec version: v2
  */
 
+export * from './actorDto';
 export * from './bookingDto';
 export * from './bookingResult';
 export * from './bookingSeatDto';

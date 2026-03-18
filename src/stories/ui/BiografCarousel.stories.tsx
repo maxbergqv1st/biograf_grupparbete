@@ -1,11 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
-
-import { QueryClientProvider } from '@tanstack/react-query';
 import { useScreenings } from '@/api/hooks/useScreenings';
 import { queryClient } from '@/api/queryClient';
-import BiografCarousel from '@/components/custom/BiografCarousel';
-import Image from '../../parts/Image';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { MemoryRouter, Outlet, Route, Routes } from 'react-router-dom';
+
+import BiografCarousel from '@/components/custom/BiografCarousel';
+
+import Image from '../../parts/Image';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
@@ -98,12 +99,20 @@ function ScreeningsDatesCarousel() {
 
   if (isLoading) {
     return (
-      <BiografCarousel selectable items={[<span key="loading">Hämtar datum...</span>]} />
+      <BiografCarousel
+        selectable
+        items={[<span key="loading">Hämtar datum...</span>]}
+      />
     );
   }
 
   if (isError || screenings.length === 0) {
-    return <BiografCarousel selectable items={[<span key="empty">Inga datum</span>]} />;
+    return (
+      <BiografCarousel
+        selectable
+        items={[<span key="empty">Inga datum</span>]}
+      />
+    );
   }
 
   const items = screenings.map((screening) => {
@@ -112,9 +121,9 @@ function ScreeningsDatesCarousel() {
     return (
       <div
         key={screening.id ?? `${date ?? 'date'}-${time ?? 'time'}`}
-        className="flex flex-col justify-center items-center h-full w-full rounded-xl"
+        className="flex h-full w-full flex-col items-center justify-center rounded-xl"
       >
-        <span>{date ? `${formatDay(date)}:e` : '-'}</span>
+        <span>{date ? `${formatDay(date)}` : '-'}</span>
         <span>{date ? formatMonth(date) : ''}</span>
         {time ? <span className="text-xs">{formatTime(time)}</span> : null}
       </div>
@@ -132,7 +141,7 @@ export const Dates: Story = {
 export const Images: Story = {
   args: {
     children: (
-      <div className=" h-45 rounded-xl m-0 border-0">
+      <div className="m-0 h-45 rounded-xl border-0">
         <Image
           className="h-45"
           src="images/products/1.jpg"
@@ -147,7 +156,7 @@ export const Time: Story = {
   args: {
     selectable: true,
     children: (
-      <div className="flex flex-col justify-center items-center h-full w-full rounded-xl">
+      <div className="flex h-full w-full flex-col items-center justify-center rounded-xl">
         <span>17:30</span>
         <span className="text-xs">Salong 2</span>
       </div>
