@@ -42,7 +42,7 @@ function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
     poster: m.posterUrl ?? undefined,
   }));
 
-  return { movies, isLoading: query.isLoading, isError: query.isError };
+  return { movies, isLoading: query.isLoading, isError: query.isError,error:query.error };
 }
 
 export const useHomeMovies = IS_V1 ? useHomeMoviesV1 : useHomeMoviesV2;

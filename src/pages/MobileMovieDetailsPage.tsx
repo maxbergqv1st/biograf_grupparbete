@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
-import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
+import MobileMovieDetailsPagePoster from '@/components/custom/MobileMovieDetailsPoster';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
   DialogContent,
@@ -20,7 +20,14 @@ import { useMovieDetails } from '@/hooks/useMovieDetails';
 
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
-export default function MovieDetailsPage() {
+MobileMovieDetailsPage.route = {
+  path: '/mmovies/:id',
+  parent: '/',
+  menuLabel: 'MobileMovieDetail',
+  index: 4,
+};
+
+export default function MobileMovieDetailsPage() {
   const { id } = useParams();
   const movieId = Number(id);
   const { movie } = useMovieDetails(movieId);
@@ -92,45 +99,48 @@ export default function MovieDetailsPage() {
             ))
         : [<span key="select-date">Välj ett datum</span>];
   return (
-    <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
-      <div className="h-[91.5dvh] w-full">
-        <MovieDetailsPagePoster
+    <div className="relative left-1/2 grid h-full w-screen -translate-x-1/2 grid-cols-1 px-4 pb-24">
+      <div className="h-[66dvh] w-full">
+        <MobileMovieDetailsPagePoster
           title={movie?.title ?? 'Untitled'}
           poster={movie?.poster ?? undefined}
         />
       </div>
-      <AspectRatio className="h-[91.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
-        <h3 className="flex justify-center p-6 text-2xl text-[#b69852]">
-          Välj Datum & tid
-        </h3>
-        <Separator />
-        <div className="flex justify-center p-5">
-          <BiografCarousel
-            selectable
-            desktopTwoRows
-            className="p-5"
-            items={dateItems}
-          />
-        </div>
-        <Separator className="flex justify-center" />
-        <div className="flex justify-center p-5">
-          <BiografCarousel
-            selectable
-            desktopTwoRows
-            className="p-5"
-            items={timeItems}
-            resetSelectionKey={selectedDate}
-          />
-        </div>
-        <Separator className="flex justify-center" />
-        <div className="flex justify-center p-10">
-          <BiografButton className="w-full max-w-xs md:max-w-sm">
-            <Link to="/booking">Välj sittplats</Link>
-          </BiografButton>
-        </div>
-      </AspectRatio>
-      <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
-        <AspectRatio className="self-top h-[62dvh] w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
+      <div className="h-[21dvh]">
+        <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
+          <div className="blur-sm">
+            <MobileMovieDetailsPagePoster
+              title={movie?.title ?? 'Untitled'}
+              poster={movie?.poster ?? undefined}
+            />
+          </div>
+          <div className="absolute right-5 bottom-5">
+            {movie?.trailerUrl ? (
+              <DialogTrailer>
+                <DialogTrigger render={<BiografButton {...argsTrailer} />} />
+                <DialogContent className="w-[90vw] max-w-3xl p-0">
+                  <div className="aspect-video w-full">
+                    <iframe
+                      className="h-full w-full rounded-xl"
+                      src={
+                        movie.trailerUrl.replace('watch?v=', 'embed/') +
+                        '?autoplay=0'
+                      }
+                      title="Trailer"
+                      allowFullScreen
+                    />
+                  </div>
+                </DialogContent>
+              </DialogTrailer>
+            ) : (
+              <BiografButton {...argsTrailer} disabled />
+            )}
+          </div>
+        </AspectRatio>
+      </div>
+
+      <div className="h-[62dvh]">
+        <AspectRatio className="h-[60dvh] w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
           <h1 className="flex justify-center p-3 text-2xl text-[#b69852]">
             {movie?.title ?? 'No title'}
           </h1>
@@ -166,37 +176,37 @@ export default function MovieDetailsPage() {
               : 'No actors'}
           </span>
         </AspectRatio>
-        <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
-          <div className="absolute inset-0 translate-x-300 scale-100 scale-x-550 blur-sm">
-            <MovieDetailsPagePoster
-              title={movie?.title ?? 'Untitled'}
-              poster={movie?.poster ?? undefined}
-            />
-          </div>
-          <div className="absolute right-5 bottom-5">
-            {movie?.trailerUrl ? (
-              <DialogTrailer>
-                <DialogTrigger render={<BiografButton {...argsTrailer} />} />
-                <DialogContent className="w-[90vw] max-w-3xl p-0">
-                  <div className="aspect-video w-full">
-                    <iframe
-                      className="h-full w-full rounded-xl"
-                      src={
-                        movie.trailerUrl.replace('watch?v=', 'embed/') +
-                        '?autoplay=0'
-                      }
-                      title="Trailer"
-                      allowFullScreen
-                    />
-                  </div>
-                </DialogContent>
-              </DialogTrailer>
-            ) : (
-              <BiografButton {...argsTrailer} disabled />
-            )}
-          </div>
-        </AspectRatio>
       </div>
+      <AspectRatio className="h-[55dvh] w-full overflow-hidden rounded-lg bg-[#1E1E1E] p-4">
+        <h3 className="flex justify-center p-6 text-2xl text-[#b69852]">
+          Välj Datum & tid
+        </h3>
+        <Separator />
+        <div className="flex justify-start p-5">
+          <BiografCarousel
+            selectable
+            desktopTwoRows
+            className="p-1"
+            items={dateItems}
+          />
+        </div>
+        <Separator className="flex justify-center" />
+        <div className="flex justify-start p-5">
+          <BiografCarousel
+            selectable
+            desktopTwoRows
+            className="p-1"
+            items={timeItems}
+            resetSelectionKey={selectedDate}
+          />
+        </div>
+        <Separator className="flex justify-center" />
+        <div className="flex justify-center p-10">
+          <BiografButton className="w-full max-w-xs md:max-w-sm">
+            <Link to="/booking">Välj sittplats</Link>
+          </BiografButton>
+        </div>
+      </AspectRatio>
     </div>
   );
 }
