@@ -15,20 +15,26 @@ type Filters = {
   search?: string;
 };
 
-export function useHomeMovies(filters?: Filters) {
-  if (IS_V1) {
-    const loaderData = useLoaderData() as Record<string, unknown>[] | undefined;
+type HomeMoviesResult = {
+  movies: MovieListItem[] | undefined;
+  isLoading: boolean;
+  isError: boolean;
+};
 
-    const movies: MovieListItem[] | undefined = (loaderData as any[])?.map(
-      (m) => ({
-        id: m.id,
-        title: m.title ?? 'Untitled',
-        poster: m.poster ?? m.poster_url,
-      }),
-    );
-    return { movies, isLoading: false, isError: false };
-  }
-  const query = useMovies(IS_V1 ? undefined : filters);
+function useHomeMoviesV1(_filters?: Filters): HomeMoviesResult {
+  const loaderData = useLoaderData() as Record<string, unknown>[] | undefined;
+
+  const movies: MovieListItem[] | undefined = loaderData?.map((m) => ({
+    id: m.id as number,
+    title: (m.title as string) ?? 'Untitled',
+    poster: (m.poster as string) ?? (m.poster_url as string),
+  }));
+
+  return { movies, isLoading: false, isError: false };
+}
+
+function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
+  const query = useMovies(filters);
 
   const movies: MovieListItem[] | undefined = query.data?.data.map((m) => ({
     id: m.id,
@@ -36,5 +42,7 @@ export function useHomeMovies(filters?: Filters) {
     poster: m.posterUrl ?? undefined,
   }));
 
-  return { movies, isLoading: query.isLoading, isError: query.isError };
+  return { movies, isLoading: query.isLoading, isError: query.isError,error:query.error };
 }
+
+export const useHomeMovies = IS_V1 ? useHomeMoviesV1 : useHomeMoviesV2;

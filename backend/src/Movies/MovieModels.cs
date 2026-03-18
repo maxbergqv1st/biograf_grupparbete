@@ -3,6 +3,13 @@ namespace WebApp.Movies;
 
 public record LanguageDto(int Id, string Name, string Code);
 
+public record ActorDto(
+    int Id,
+    string Name,
+    string? ImageUrl,
+    int? CastOrder
+    );
+
 public record MovieSummaryDto(
     int Id,
     string Title,
@@ -27,7 +34,8 @@ public record MovieDto(
     string? PosterUrl,
     string? TrailerUrl,
     LanguageDto Language,
-    List<string> Genres
+    List<string> Genres,
+    List<ActorDto> Actors
 );
 
 public record MovieQuery(string? Search, string? Genre, string? AgeRating, DateOnly? ScreeningDate);

@@ -5,6 +5,7 @@
  * JWT based API
  * OpenAPI spec version: v2
  */
+import type { ActorDto } from './actorDto';
 import type { LanguageDto } from './languageDto';
 
 export interface MovieDto {
@@ -24,4 +25,5 @@ export interface MovieDto {
   trailerUrl?: string | null;
   language?: LanguageDto;
   genres: string[];
+  actors: ActorDto[];
 }

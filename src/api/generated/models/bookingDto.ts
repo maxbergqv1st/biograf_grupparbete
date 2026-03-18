@@ -11,5 +11,8 @@ export interface BookingDto {
   email: string;
   screeningId: number;
   total_price: number;
-  user_Id: number;
+  /** @nullable */
+  user_Id?: number | null;
+  bookingReference: string;
+  status: string;
 }

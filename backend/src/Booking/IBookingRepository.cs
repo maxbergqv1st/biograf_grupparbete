@@ -4,5 +4,6 @@ namespace WebApp.Bookings;
 public interface IBookingRepository
 {
     Task<IEnumerable<BookingDto>> GetBookingDtosAsync(int id, CancellationToken ct);
-    Task<int> AddBookingAsync(CreateBookingDto dto, CancellationToken ct);
+    Task<BookingResult> AddBookingAsync(CreateBookingDto dto, CancellationToken ct);
+    Task<bool> CancelBookingAsync(string bookingReference, CancellationToken ct);
 }
