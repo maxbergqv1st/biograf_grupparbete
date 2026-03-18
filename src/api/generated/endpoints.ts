@@ -13,15 +13,22 @@ import type {
 } from 'axios';
 
 import type {
+  BookingDto,
+  BookingResult,
+  CreateBookingDto,
   CreateScreeningDto,
+  ForgotPasswordRequest,
   GetApiV2MoviesParams,
   HallDto,
   LoginRequest,
   MovieDto,
   MovieSummaryDto,
   PostApiV2MoviesMovieIdPosterBody,
+  RegisterRequest,
+  ResetPasswordRequest,
   ScreeningDto,
-  UserDto
+  UserDto,
+  VerifyEmailRequest
 } from './models';
 
 
@@ -70,6 +77,79 @@ const getApiV2AuthMe = (
  ): Promise<AxiosResponse<UserDto>> => {
     return axiosInstance.get(
       `/api/v2/auth/me`,options
+    );
+  }
+
+/**
+ * @summary Register a new user account
+ */
+const postApiV2AuthRegister = (
+    registerRequest: RegisterRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<UserDto>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/register`,
+      registerRequest,options
+    );
+  }
+
+/**
+ * @summary Verify email address with token
+ */
+const postApiV2AuthVerifyEmail = (
+    verifyEmailRequest: VerifyEmailRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/verify-email`,
+      verifyEmailRequest,options
+    );
+  }
+
+/**
+ * @summary Request password reset email
+ */
+const postApiV2AuthForgotPassword = (
+    forgotPasswordRequest: ForgotPasswordRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/forgot-password`,
+      forgotPasswordRequest,options
+    );
+  }
+
+/**
+ * @summary Reset password with token
+ */
+const postApiV2AuthResetPassword = (
+    resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/reset-password`,
+      resetPasswordRequest,options
+    );
+  }
+
+/**
+ * Returns booking by id
+ * @summary Get booking by id
+ */
+const getApiV2BookingsId = (
+    id: number, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<BookingDto[]>> => {
+    return axiosInstance.get(
+      `/api/v2/bookings/${id}`,options
+    );
+  }
+
+/**
+ * Creates a new booking and sends a confirmation email
+ * @summary Create a new booking
+ */
+const postApiV2Bookings = (
+    createBookingDto: CreateBookingDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<BookingResult>> => {
+    return axiosInstance.post(
+      `/api/v2/bookings`,
+      createBookingDto,options
     );
   }
 
@@ -179,11 +259,17 @@ const getApiV2SeatsScreeningScreeningId = (
     );
   }
 
-return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
+return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2AuthRegister,postApiV2AuthVerifyEmail,postApiV2AuthForgotPassword,postApiV2AuthResetPassword,getApiV2BookingsId,postApiV2Bookings,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
 export type PostApiV2AuthLoginResult = AxiosResponse<UserDto>
 export type PostApiV2AuthRefreshResult = AxiosResponse<UserDto>
 export type DeleteApiV2AuthLogoutResult = AxiosResponse<unknown>
 export type GetApiV2AuthMeResult = AxiosResponse<UserDto>
+export type PostApiV2AuthRegisterResult = AxiosResponse<UserDto>
+export type PostApiV2AuthVerifyEmailResult = AxiosResponse<unknown>
+export type PostApiV2AuthForgotPasswordResult = AxiosResponse<unknown>
+export type PostApiV2AuthResetPasswordResult = AxiosResponse<unknown>
+export type GetApiV2BookingsIdResult = AxiosResponse<BookingDto[]>
+export type PostApiV2BookingsResult = AxiosResponse<BookingResult>
 export type PostApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
 export type DeleteApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
 export type GetApiV2HallsResult = AxiosResponse<HallDto[]>

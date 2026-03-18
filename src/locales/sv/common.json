@@ -6,5 +6,10 @@
     "about": "Om oss",
     "products": "Produkter",
     "vision": "Vår vision"
+  },
+  "underDevelopment": {
+    "title": "Funktion under utveckling",
+    "message": "Den här funktionen kommer snart.",
+    "goBack": "Gå tillbaka"
   }
 }

@@ -14,4 +14,5 @@ export interface UserDto {
   role: string;
   /** @nullable */
   phone?: string | null;
+  isEmailVerified: boolean;
 }

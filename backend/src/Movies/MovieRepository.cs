@@ -136,7 +136,7 @@ SELECT
 FROM movies m
 JOIN movie_languages ml ON m.language_id = ml.id
 WHERE m.id = @id";
-    
+
         await using var conn = await db.OpenConnectionAsync(ct);
         await using var cmd = conn.CreateCommand();
         cmd.CommandText = sql;
