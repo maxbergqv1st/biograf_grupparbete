@@ -19,7 +19,7 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
         var bookings = new List<BookingDto>();
         await using var reader = await cmd.ExecuteReaderAsync(ct);
         while (await reader.ReadAsync(ct))
-       {
+        {
             bookings.Add(new BookingDto(
                 Id: reader.GetInt32("id"),
                 Email: reader.GetString("email"),
@@ -84,6 +84,36 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
         cmd.Parameters.AddWithValue("@ref", bookingReference);
         var rows = await cmd.ExecuteNonQueryAsync(ct);
         return rows > 0;
+    }
+    public async Task<List<BookingDto>> GetBookingsByUserIdAsync(int userId, CancellationToken ct)
+    {
+        var sql = @"
+SELECT b.id, b.email, b.screening_id, b.total_price, b.status, b.booking_reference AS reference, b.user_id
+FROM bookings b WHERE b.user_id = @userId ORDER BY b.id DESC
+
+    ";
+        await using var connection = await db.OpenConnectionAsync(ct);
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.Parameters.AddWithValue("@userId", userId);
+
+
+        var bookings = new List<BookingDto>();
+        await using var reader = await cmd.ExecuteReaderAsync(ct);
+        while (await reader.ReadAsync(ct))
+        {
+            bookings.Add(new BookingDto(
+                Id: reader.GetInt32("id"),
+                Email: reader.GetString("email"),
+                ScreeningId: reader.GetInt32("screening_id"),
+                //reader.GetDateTime("screening_date").ToString(),
+                Total_price: reader.GetDecimal("total_price"),
+                Status: reader.GetString("status"),
+                BookingReference: reader.GetString("reference"),
+                User_Id: reader.GetInt32("user_id")
+            ));
+        }
+        return bookings;
     }
 }
 

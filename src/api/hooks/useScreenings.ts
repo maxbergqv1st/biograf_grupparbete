@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getScreening, getScreeningsByMovieId, getMyBookings } from '@/api/services/screenings';
+import { getScreening, getScreeningsByMovieId } from '@/api/services/screenings';
 
 
 export const screeningKeys = {
@@ -26,12 +26,6 @@ export function useScreening(id: number) {
   });
   return query;
 }
-export function useMyBookings() {
-  const query = useQuery({
-    queryKey: screeningKeys.myBookings(),
-    queryFn: () => getMyBookings(),
-  });
-  return query;
-}
+
 
 

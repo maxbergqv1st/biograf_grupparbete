@@ -1,7 +1,4 @@
-using WebApp.Halls;
-using WebApp.Screenings;
-using WebApp.Bookings;
-using WebApp.Seats;
+
 
 namespace WebApp;
 
@@ -86,15 +83,12 @@ public static class Server
 
         // V2
         App.UseJwtAuth();
-        App.UseAuthorization();
         App.MapAuthEndpoints();
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
         App.MapHallEndpoints();
         App.MapBookingEndpoints();
-        RestApi.Start();
-        // Start the server on port 5001
         App.MapSeatsEndpoints();
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);

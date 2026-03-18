@@ -1,6 +1,5 @@
 import { useGetMe, useLogout } from '@/api/hooks/useAuth';
-import { useMyBookings } from '@/api/hooks/useScreenings';
-import type { BookingDto } from '@/api/services/screenings';
+import { useMyBookings } from '@/api/hooks/useBookings';
 import { User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

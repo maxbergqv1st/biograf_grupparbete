@@ -23,3 +23,6 @@ global using WebApp.Movies;
 global using WebApp.Screenings;
 global using WebApp.Auth;
 global using WebApp.Email;
+global using WebApp.Halls;
+global using WebApp.Bookings;
+global using WebApp.Seats;

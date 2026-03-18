@@ -10,6 +10,7 @@ public record ScreeningDto(
     DateOnly ScreeningDate,
     TimeOnly ScreeningTime
 );
+/*
 public record BookingDto(
     int Id,
     string Email,
@@ -20,7 +21,7 @@ public record BookingDto(
     string Reference,
     int UserId
 );
-
+*/
 
 
 public record CreateScreeningDto(
