@@ -1,9 +1,9 @@
 import { useGetMe } from '@/api/hooks/useAuth';
-import { mobileNavItems } from '@/config/mobileNavigation';
+import { getMobileNavItems } from '@/config/mobileNavigation';
 import { navLinks } from '@/config/navigation';
 import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 
 import { CookieConsent } from '@/components/CookieConsent';
 import BiografButton from '@/components/custom/BiografButton';
@@ -26,7 +26,7 @@ export default function RootLayout() {
   const user = meData?.data;
 
   const isMobile = useIsMobile();
-  const pathName = useLocation().pathname;
+  const pathName = location.pathname;
 
   const isActive = (path: string) => path === pathName;
 
@@ -107,7 +107,16 @@ export default function RootLayout() {
         </BiografContainer>
       </footer>
       <CookieConsent />
-      {isMobile && <MobileFooterNav items={mobileNavItems} />}
+      {isMobile && (
+        <MobileFooterNav
+          items={getMobileNavItems({ isLoggedIn: !!user })}
+          languagePicker={{
+            languages: LANGUAGES,
+            currentLanguage: i18n.language,
+            onChangeLanguage: (lang) => i18n.changeLanguage(lang),
+          }}
+        />
+      )}
     </BiografContainer>
   );
 }
