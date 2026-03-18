@@ -6,13 +6,11 @@
  * OpenAPI spec version: v2
  */
 
-export interface UserDto {
-  id: number;
+export interface RegisterRequest {
   firstName: string;
   lastName: string;
   email: string;
-  role: string;
+  password: string;
   /** @nullable */
   phone?: string | null;
-  isEmailVerified: boolean;
 }

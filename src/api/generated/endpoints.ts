@@ -14,16 +14,21 @@ import type {
 
 import type {
   BookingDto,
-  GetApiV2MoviesParams,
+  BookingResult,
+  CreateBookingDto,
   CreateScreeningDto,
+  ForgotPasswordRequest,
   GetApiV2MoviesParams,
   HallDto,
   LoginRequest,
   MovieDto,
   MovieSummaryDto,
   PostApiV2MoviesMovieIdPosterBody,
+  RegisterRequest,
+  ResetPasswordRequest,
   ScreeningDto,
-  UserDto
+  UserDto,
+  VerifyEmailRequest
 } from './models';
 
 
@@ -76,39 +81,75 @@ const getApiV2AuthMe = (
   }
 
 /**
- * Returns bookings by movie id
- * @summary Get all bookings
+ * @summary Register a new user account
  */
-const getApiV2BookingsByMovieIdId = (
-    id: number, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<BookingDto[]>> => {
-    return axiosInstance.get(
-      `/api/v2/bookings/by-movie-id/${id}`,options
- * Uploads a poster to Cloudinary and stores the publicId in movies.poster_url
- * @summary Upload movie poster
- */
-const postApiV2MoviesMovieIdPoster = (
-    movieId: number,
-    postApiV2MoviesMovieIdPosterBody: PostApiV2MoviesMovieIdPosterBody, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {const formData = new FormData();
-formData.append(`file`, postApiV2MoviesMovieIdPosterBody.file);
-
+const postApiV2AuthRegister = (
+    registerRequest: RegisterRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<UserDto>> => {
     return axiosInstance.post(
-      `/api/v2/movies/${movieId}/poster`,
-      formData,options
+      `/api/v2/auth/register`,
+      registerRequest,options
     );
   }
 
 /**
- * Creates a new booking with the provided booking data
+ * @summary Verify email address with token
+ */
+const postApiV2AuthVerifyEmail = (
+    verifyEmailRequest: VerifyEmailRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/verify-email`,
+      verifyEmailRequest,options
+    );
+  }
+
+/**
+ * @summary Request password reset email
+ */
+const postApiV2AuthForgotPassword = (
+    forgotPasswordRequest: ForgotPasswordRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/forgot-password`,
+      forgotPasswordRequest,options
+    );
+  }
+
+/**
+ * @summary Reset password with token
+ */
+const postApiV2AuthResetPassword = (
+    resetPasswordRequest: ResetPasswordRequest, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<unknown>> => {
+    return axiosInstance.post(
+      `/api/v2/auth/reset-password`,
+      resetPasswordRequest,options
+    );
+  }
+
+/**
+ * Returns booking by id
+ * @summary Get booking by id
+ */
+const getApiV2BookingsId = (
+    id: number, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<BookingDto[]>> => {
+    return axiosInstance.get(
+      `/api/v2/bookings/${id}`,options
+    );
+  }
+
+/**
+ * Creates a new booking and sends a confirmation email
  * @summary Create a new booking
  */
-const postApiV2BookingsApiV2Bookings = (
-    bookingDto: BookingDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<void>> => {
+const postApiV2Bookings = (
+    createBookingDto: CreateBookingDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<BookingResult>> => {
     return axiosInstance.post(
-      `/api/v2/bookings/api/v2/bookings`,
-      bookingDto,options
+      `/api/v2/bookings`,
+      createBookingDto,options
     );
   }
 
@@ -189,6 +230,19 @@ const getApiV2ScreeningsByMovieIdId = (
     );
   }
 
+/**
+ * Insert new screening
+ * @summary Create screening
+ */
+const postApiV2ScreeningsApiV2Screenings = (
+    createScreeningDto: CreateScreeningDto, options?: AxiosRequestConfig
+ ): Promise<AxiosResponse<ScreeningDto>> => {
+    return axiosInstance.post(
+      `/api/v2/screenings/api/v2/screenings`,
+      createScreeningDto,options
+    );
+  }
+
 const getApiV2SeatsHallHallId = (
     hallId: number, options?: AxiosRequestConfig
  ): Promise<AxiosResponse<void>> => {
@@ -205,34 +259,17 @@ const getApiV2SeatsScreeningScreeningId = (
     );
   }
 
-return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,getApiV2BookingsByMovieIdId,postApiV2BookingsApiV2Bookings,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
-/**
- * Insert new screening
- * @summary Create screening
- */
-const postApiV2ScreeningsApiV2Screenings = (
-    createScreeningDto: CreateScreeningDto, options?: AxiosRequestConfig
- ): Promise<AxiosResponse<ScreeningDto>> => {
-    return axiosInstance.post(
-      `/api/v2/screenings/api/v2/screenings`,
-      createScreeningDto,options
-    );
-  }
-
-return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings}};
+return {postApiV2AuthLogin,postApiV2AuthRefresh,deleteApiV2AuthLogout,getApiV2AuthMe,postApiV2AuthRegister,postApiV2AuthVerifyEmail,postApiV2AuthForgotPassword,postApiV2AuthResetPassword,getApiV2BookingsId,postApiV2Bookings,postApiV2MoviesMovieIdPoster,deleteApiV2MoviesMovieIdPoster,getApiV2Halls,getApiV2Movies,getApiV2MoviesId,getApiV2ScreeningsByMovieIdId,postApiV2ScreeningsApiV2Screenings,getApiV2SeatsHallHallId,getApiV2SeatsScreeningScreeningId}};
 export type PostApiV2AuthLoginResult = AxiosResponse<UserDto>
 export type PostApiV2AuthRefreshResult = AxiosResponse<UserDto>
 export type DeleteApiV2AuthLogoutResult = AxiosResponse<unknown>
 export type GetApiV2AuthMeResult = AxiosResponse<UserDto>
-export type GetApiV2BookingsByMovieIdIdResult = AxiosResponse<BookingDto[]>
-export type PostApiV2BookingsApiV2BookingsResult = AxiosResponse<void>
-export type PostApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
-export type DeleteApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
-export type GetApiV2MoviesResult = AxiosResponse<MovieSummaryDto[]>
-export type GetApiV2MoviesIdResult = AxiosResponse<MovieDto>
-export type GetApiV2ScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
-export type GetApiV2SeatsHallHallIdResult = AxiosResponse<void>
-export type GetApiV2SeatsScreeningScreeningIdResult = AxiosResponse<void>
+export type PostApiV2AuthRegisterResult = AxiosResponse<UserDto>
+export type PostApiV2AuthVerifyEmailResult = AxiosResponse<unknown>
+export type PostApiV2AuthForgotPasswordResult = AxiosResponse<unknown>
+export type PostApiV2AuthResetPasswordResult = AxiosResponse<unknown>
+export type GetApiV2BookingsIdResult = AxiosResponse<BookingDto[]>
+export type PostApiV2BookingsResult = AxiosResponse<BookingResult>
 export type PostApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
 export type DeleteApiV2MoviesMovieIdPosterResult = AxiosResponse<void>
 export type GetApiV2HallsResult = AxiosResponse<HallDto[]>
@@ -240,3 +277,5 @@ export type GetApiV2MoviesResult = AxiosResponse<MovieSummaryDto[]>
 export type GetApiV2MoviesIdResult = AxiosResponse<MovieDto>
 export type GetApiV2ScreeningsByMovieIdIdResult = AxiosResponse<ScreeningDto[]>
 export type PostApiV2ScreeningsApiV2ScreeningsResult = AxiosResponse<ScreeningDto>
+export type GetApiV2SeatsHallHallIdResult = AxiosResponse<void>
+export type GetApiV2SeatsScreeningScreeningIdResult = AxiosResponse<void>
