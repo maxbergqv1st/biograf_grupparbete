@@ -4,6 +4,36 @@ namespace WebApp.Screenings;
 
 public class ScreeningRepository(MySqlDataSource db) : IScreeningRepository
 {
+    public async Task<ScreeningDto?> GetScreeningByIdAsync(int id, CancellationToken ct)
+    {
+        const string sql = @"
+        SELECT *
+        FROM screenings_by_movie_id
+        WHERE id = @id
+        LIMIT 1
+        ";
+        await using var connection = await db.OpenConnectionAsync(ct);
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.Parameters.AddWithValue("@id", id);
+
+        await using var reader = await cmd.ExecuteReaderAsync(ct);
+        if (!await reader.ReadAsync(ct))
+        {
+            return null;
+        }
+
+        return new ScreeningDto
+        (
+            Id: reader.GetInt32("id"),
+            MovieId: reader.GetInt32("movie_id"),
+            HallId: reader.GetInt32("hall_id"),
+            HallName: reader.GetString("hall_name"),
+            ScreeningDate: reader.GetDateOnly("screening_date"),
+            ScreeningTime: reader.GetTimeOnly("screening_time")
+        );
+    }
+
     public async Task<IEnumerable<ScreeningDto>> GetScreeningsByMovieIdAsync(int id, CancellationToken ct)
     {
         var sql =
