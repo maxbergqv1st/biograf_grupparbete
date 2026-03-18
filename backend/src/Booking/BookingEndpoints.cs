@@ -14,6 +14,22 @@ public static class BookingEndpoints
         var group = app.MapGroup("/api/v2/bookings").WithTags("Bookings").RequireCors("V2");
 
         group
+            .MapPost(
+                "/cancel",
+                async Task<Results<Ok, NotFound>> (
+                    CancelBookingRequest request,
+                    IBookingRepository repo,
+                    CancellationToken ct
+                ) =>
+                {
+                    var cancelled = await repo.CancelBookingAsync(request.BookingReference, ct);
+                    return cancelled ? TypedResults.Ok() : TypedResults.NotFound();
+                }
+            )
+            .WithSummary("Cancel a booking")
+            .WithDescription("Cancels a booking by its reference number");
+
+        group
             .MapGet(
                 "/{id:int}",
                 async Task<Ok<IEnumerable<BookingDto>>> (
@@ -40,10 +56,12 @@ public static class BookingEndpoints
                     CreateBookingDto dto,
                     IBookingRepository repo,
                     IEmailService emailService,
+                    EmailConfig emailConfig,
                     CancellationToken ct
                 ) =>
                 {
                     var result = await repo.AddBookingAsync(dto, ct);
+                    var cancelUrl = $"{emailConfig.FrontendUrl}/cancel-booking?ref={result.BookingReference}";
 
                     try
                     {
@@ -55,6 +73,8 @@ public static class BookingEndpoints
                             <p>Thank you for your booking at Filmvisarna.</p>
                             <p>Your booking reference: <strong>{result.BookingReference}</strong></p>
                             <p>Please save this reference for your records.</p>
+                            <br/>
+                            <p>Need to cancel? <a href="{cancelUrl}">Click here to cancel your booking</a></p>
                             """
                         );
                     }

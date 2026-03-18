@@ -72,6 +72,19 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
 
         return new BookingResult(bookingId, bookingReference);
     }
+
+    public async Task<bool> CancelBookingAsync(string bookingReference, CancellationToken ct)
+    {
+        await using var connection = await db.OpenConnectionAsync(ct);
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = @"
+            UPDATE bookings SET status = 'cancelled'
+            WHERE booking_reference = @ref AND status != 'cancelled'
+        ";
+        cmd.Parameters.AddWithValue("@ref", bookingReference);
+        var rows = await cmd.ExecuteNonQueryAsync(ct);
+        return rows > 0;
+    }
 }
 
 

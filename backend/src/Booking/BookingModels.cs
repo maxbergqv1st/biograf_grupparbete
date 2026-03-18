@@ -28,3 +28,7 @@ public record BookingResult(
     int Id,
     string BookingReference
 );
+
+public record CancelBookingRequest(
+    string BookingReference
+);
