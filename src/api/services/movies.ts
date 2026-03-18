@@ -2,13 +2,13 @@ import type { AxiosResponse } from 'axios';
 
 import { apiClient } from '../apiClient';
 import type {
-  GetApiMoviesParams,
+  GetApiV2MoviesParams,
   MovieDto,
   MovieSummaryDto,
 } from '../generated/models';
 
 export const getAllMovies = (
-  params?: GetApiMoviesParams,
+  params?: GetApiV2MoviesParams,
 ): Promise<AxiosResponse<MovieSummaryDto[]>> => {
   return apiClient.get('/movies', { params });
 };

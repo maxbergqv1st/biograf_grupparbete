@@ -49,7 +49,11 @@ export function useLogout() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: logoutUser,
+    mutationFn: async () => {
+      queryClient.cancelQueries({ queryKey: authKeys.me });
+      queryClient.setQueryData([...authKeys.me], null);
+      await logoutUser();
+    },
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: [...authKeys.me] });
     },
