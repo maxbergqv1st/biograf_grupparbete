@@ -6,5 +6,10 @@
     "about": "About us",
     "products": "Products",
     "vision": "Our vision"
+  },
+  "underDevelopment": {
+    "title": "Feature under development",
+    "message": "This feature is coming soon.",
+    "goBack": "Go back"
   }
 }

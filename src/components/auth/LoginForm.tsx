@@ -87,12 +87,6 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
         )}
       </div>
 
-      <div className="flex justify-end">
-        <span className="cursor-pointer text-sm text-[#F3EEE4]">
-          {t('auth:login.forgotPassword')}
-        </span>
-      </div>
-
       <BiografButton
         type="submit"
         variant="default"
