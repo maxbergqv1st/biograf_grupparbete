@@ -42,7 +42,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
             JOIN users u ON rt.user_id = u.id
             WHERE rt.token_hash = @tokenHash
                 AND rt.is_revoked = FALSE
-                AND rt.expires_at > NOW()
+                AND rt.expires_at > UTC_TIMESTAMP()
                 AND u.is_active = TRUE
         ";
         cmd.Parameters.AddWithValue("@tokenHash", HashToken);
@@ -76,7 +76,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
     {
         await using var conn = await db.OpenConnectionAsync(ct);
         await using var cmd = conn.CreateCommand();
-        cmd.CommandText = "DELETE FROM refresh_tokens WHERE expires_at < NOW() OR is_revoked = TRUE";
+        cmd.CommandText = "DELETE FROM refresh_tokens WHERE expires_at < UTC_TIMESTAMP() OR is_revoked = TRUE";
         await cmd.ExecuteNonQueryAsync(ct);
     }
 
@@ -132,7 +132,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
                 u.password, u.role, u.phone, u.is_active, u.email_verified
             FROM email_verifications ev
             JOIN users u ON ev.user_id = u.id
-            WHERE ev.token = @token AND ev.expires_at > NOW()
+            WHERE ev.token = @token AND ev.expires_at > UTC_TIMESTAMP()
         ";
         cmd.Parameters.AddWithValue("@token", tokenHash);
 
@@ -192,7 +192,7 @@ public class AuthRepository(MySqlDataSource db) : IAuthRepository
                 u.password, u.role, u.phone, u.is_active, u.email_verified
             FROM password_reset_tokens prt
             JOIN users u ON prt.user_id = u.id
-            WHERE prt.token = @token AND prt.expires_at > NOW() AND prt.is_used = FALSE
+            WHERE prt.token = @token AND prt.expires_at > UTC_TIMESTAMP() AND prt.is_used = FALSE
         ";
         cmd.Parameters.AddWithValue("@token", tokenHash);
 
