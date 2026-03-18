@@ -10,6 +10,7 @@ import { AdvancedImage } from '@cloudinary/react';
 import { useBookingForm } from "@/api/hooks/useBookingForm";
 import type { BookingSeat } from "@/api/hooks/useBookingForm";
 import { seatsService } from '@/api/services/seats';
+import { useGetMe } from '@/api/hooks/useAuth';
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
 //import { start } from 'repl';
@@ -55,6 +56,8 @@ export default function BookingPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const { submit, submitting, error } = useBookingForm();
+  const { data: meData } = useGetMe();
+  const user = meData?.data;
   const bookingState = location.state as
     | {
         screening?: ScreeningInfo;
@@ -94,6 +97,12 @@ export default function BookingPage() {
 
   //Calculates the total price of the booking by summing up the final price of each seat. This is done using the reduce method on the seats array, which iterates through each seat and adds its finalPrice to a running total (sum). The initial value of sum is set to 0.
   const totalPrice = seats.reduce((sum, seat) => sum + seat.finalPrice, 0);
+  
+  useEffect(() => {
+  if (user?.email) {
+    setEmail(user.email);
+  }
+}, [user]);
 
 async function handleBetala() {
     const result = await submit({
