@@ -19,6 +19,10 @@ import MovieDetailsPage from './pages/MovieDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProfilePage from './pages/ProfilePage';
 import SeatsPage from './pages/SeatsPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import SignUpPage from './pages/SignUpPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
 import moviesLoader from './utils/movieLoader';
 
 const IS_V1 = import.meta.env.VITE_API_VERSION !== 'v2';
@@ -42,6 +46,10 @@ const router = createBrowserRouter([
       { path: 'booking', element: <BookingPage /> },
       { path: 'seats', element: <SeatsPage /> },
       { path: 'login', element: <LoginPage /> },
+      { path: 'signup', element: <SignUpPage /> },
+      { path: 'verify-email', element: <VerifyEmailPage /> },
+      { path: 'forgot-password', element: <ForgotPasswordPage /> },
+      { path: 'reset-password', element: <ResetPasswordPage /> },
       { path: 'profile', element: <ProfilePage /> },
     ],
   },
