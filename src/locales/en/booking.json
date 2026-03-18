@@ -1,0 +1,14 @@
+{
+  "cancel": {
+    "title": "Cancel Booking",
+    "confirmMessage": "Are you sure you want to cancel booking {{ref}}?",
+    "confirmButton": "Yes, cancel booking",
+    "cancelling": "Cancelling...",
+    "successTitle": "Booking Cancelled",
+    "successMessage": "Your booking has been successfully cancelled.",
+    "errorTitle": "Error",
+    "errorMessage": "Could not cancel this booking. It may have already been cancelled.",
+    "missingRef": "No booking reference provided.",
+    "goHome": "Go to homepage"
+  }
+}

@@ -47,8 +47,15 @@ public static class Server
         builder.Services.AddScoped<IBookingRepository, BookingRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
         builder.Services.AddScoped<IHallRepository, HallRepository>();
+<<<<<<< HEAD
 
         builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
+=======
+        builder.Services.AddSingleton<IEmailService, EmailService>();
+        builder.Services.AddSingleton<EmailConfig>();
+        builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
+
+>>>>>>> 86140d766bced390974cd84787cc1dc72f5819eb
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("V2", policy =>

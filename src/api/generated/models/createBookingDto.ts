@@ -5,14 +5,13 @@
  * JWT based API
  * OpenAPI spec version: v2
  */
+import type { BookingSeatDto } from './bookingSeatDto';
 
-export interface BookingDto {
-  id: number;
+export interface CreateBookingDto {
   email: string;
   screeningId: number;
   total_price: number;
   /** @nullable */
   user_Id?: number | null;
-  bookingReference: string;
-  status: string;
+  seats: BookingSeatDto[];
 }

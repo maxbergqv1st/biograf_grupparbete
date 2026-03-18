@@ -37,10 +37,8 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
                     SELECT 1 FROM movie_genres mg2
                     JOIN genres g2 ON g2.id = mg2.genre_id
                     WHERE mg2.movie_id = m.id AND g2.name = @genre
-                AND (@screeningDate IS NULL OR m.release_date >= @screeningDate)
-
-
                 ))
+                AND (@screeningDate IS NULL OR m.release_date >= @screeningDate)
             GROUP BY m.id
         ";
         await using var connection = await db.OpenConnectionAsync(ct);

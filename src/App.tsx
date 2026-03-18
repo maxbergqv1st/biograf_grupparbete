@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import RootLayout from '@/components/RootLayout';
+// import LoginModal from '@/components/auth/LoginModal';
 
 export default function App() {
   const { pathname } = useLocation();
@@ -12,5 +13,10 @@ export default function App() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, [pathname]);
 
-  return <RootLayout />;
+  return (
+    <>
+      <RootLayout />
+      {/* <LoginModal /> */}
+    </>
+  );
 }

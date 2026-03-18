@@ -6,13 +6,7 @@
  * OpenAPI spec version: v2
  */
 
-export interface BookingDto {
+export interface BookingResult {
   id: number;
-  email: string;
-  screeningId: number;
-  total_price: number;
-  /** @nullable */
-  user_Id?: number | null;
   bookingReference: string;
-  status: string;
 }
