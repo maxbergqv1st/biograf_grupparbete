@@ -23,3 +23,8 @@ public record BookingSeatDto(
     int PriceCategorySeatId,
     decimal FinalPrice
 );
+
+public record BookingResult(
+    int Id,
+    string BookingReference
+);
