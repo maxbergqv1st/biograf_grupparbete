@@ -4,6 +4,7 @@ public record BookingDto(
     int Id,
     string Email,
     int ScreeningId,
+    string ScreeningDate,
     decimal Total_price,
     int? User_Id,
     string BookingReference,

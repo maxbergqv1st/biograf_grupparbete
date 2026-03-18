@@ -24,6 +24,7 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
                 Id: reader.GetInt32("id"),
                 Email: reader.GetString("email"),
                 ScreeningId: reader.GetInt32("screening_id"),
+                ScreeningDate: null,
                 Total_price: reader.GetDecimal("total_price"),
                 User_Id: reader.IsDBNull(reader.GetOrdinal("user_id")) ? null : reader.GetInt32("user_id"),
                 BookingReference: reader.GetString("booking_reference"),
@@ -88,10 +89,14 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
     public async Task<List<BookingDto>> GetBookingsByUserIdAsync(int userId, CancellationToken ct)
     {
         var sql = @"
-SELECT b.id, b.email, b.screening_id, b.total_price, b.status, b.booking_reference AS reference, b.user_id
-FROM bookings b WHERE b.user_id = @userId ORDER BY b.id DESC
+            SELECT b.id, b.email, b.screening_id, s.start_time AS screening_date, b.total_price, b.status, b.booking_reference AS reference, b.user_id
+            FROM bookings b
+            JOIN screenings s ON b.screening_id = s.id
+            WHERE b.user_id = @userId
+            ORDER BY s.start_time DESC
+            ";
 
-    ";
+
         await using var connection = await db.OpenConnectionAsync(ct);
         await using var cmd = connection.CreateCommand();
         cmd.CommandText = sql;
@@ -106,7 +111,7 @@ FROM bookings b WHERE b.user_id = @userId ORDER BY b.id DESC
                 Id: reader.GetInt32("id"),
                 Email: reader.GetString("email"),
                 ScreeningId: reader.GetInt32("screening_id"),
-                //reader.GetDateTime("screening_date").ToString(),
+                ScreeningDate: reader.GetDateTime("screening_date").ToString("yyyy-MM-dd HH:mm"),
                 Total_price: reader.GetDecimal("total_price"),
                 Status: reader.GetString("status"),
                 BookingReference: reader.GetString("reference"),

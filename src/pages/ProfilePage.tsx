@@ -82,8 +82,8 @@ export default function ProfilePage() {
         {(bookings as any)?.data?.map((b: any) => (
           <div key={b.id}>
             <p>
-              Screening: {b.ScreeningId}, Datum: {b.ScreeningDate}, Pris:{' '}
-              {b.TotalPrice} kr, Status: {b.Status}, Ref: {b.Reference}
+              Screening: {b.screeningId}, Datum: {b.screeningDate}, Pris:{' '}
+              {b.total_price} kr, Status: {b.status}, Ref: {b.bookingReference}
             </p>
           </div>
         ))}
