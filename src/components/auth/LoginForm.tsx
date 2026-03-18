@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Apple, Eye, EyeOff, Facebook } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { toast } from 'sonner';
 import { z } from 'zod';
 
@@ -14,7 +15,11 @@ import BiografInput from '@/components/custom/BiografInput';
 import { Separator } from '@/components/ui/separator';
 
 const loginSchema = z.object({
-  email: z.string().refine((val) => val === 'admin' || z.string().email().safeParse(val).success),
+  email: z
+    .string()
+    .refine(
+      (val) => val === 'admin' || z.string().email().safeParse(val).success,
+    ),
   password: z.string().min(1),
 });
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -103,15 +108,21 @@ export default function LoginForm({ onSuccess }: LoginFormProps) {
       </div>
 
       <div className="flex gap-3">
-        <BiografButton variant="default" className="flex-1">
-          <Facebook size={20} />
-        </BiografButton>
-        <BiografButton variant="default" className="flex-1">
-          <span className="text-lg font-bold">G</span>
-        </BiografButton>
-        <BiografButton variant="default" className="flex-1">
-          <Apple size={20} />
-        </BiografButton>
+        <Link to="/social-login" className="flex-1">
+          <BiografButton variant="default" className="w-full" type="button">
+            <Facebook size={20} />
+          </BiografButton>
+        </Link>
+        <Link to="/social-login" className="flex-1">
+          <BiografButton variant="default" className="w-full" type="button">
+            <span className="text-lg font-bold">G</span>
+          </BiografButton>
+        </Link>
+        <Link to="/social-login" className="flex-1">
+          <BiografButton variant="default" className="w-full" type="button">
+            <Apple size={20} />
+          </BiografButton>
+        </Link>
       </div>
     </form>
   );
