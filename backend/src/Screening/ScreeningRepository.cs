@@ -33,4 +33,34 @@ public class ScreeningRepository(MySqlDataSource db) : IScreeningRepository
         }
         return screenings;
     }
+    public async Task<List<BookingDto>> GetBookingsByUserIdAsync(int userId, CancellationToken ct)
+    {
+        var sql = @"
+        SELECT b.id, b.email, b.screening_id, b.screening_date, b.total_price, b.status, b.reference, 
+        b.user_id FROM bookings b WHERE b.user_id = @userId ORDER BY b.screening_date DESC
+    ";
+        await using var connection = await db.OpenConnectionAsync(ct);
+        await using var cmd = connection.CreateCommand();
+        cmd.CommandText = sql;
+        cmd.Parameters.AddWithValue("@userId", userId);
+
+
+        var bookings = new List<BookingDto>();
+        await using var reader = await cmd.ExecuteReaderAsync(ct);
+        while (await reader.ReadAsync(ct))
+        {
+            bookings.Add(new BookingDto(
+                reader.GetInt32("id"),
+                reader.GetString("email"),
+                reader.GetInt32("screening_id"),
+                reader.GetDateTime("screening_date").ToString(),
+                reader.GetDecimal("total_price"),
+                reader.GetString("status"),
+                reader.GetString("reference"),
+                reader.GetInt32("user_id")
+            ));
+        }
+        return bookings;
+    }
+
 }

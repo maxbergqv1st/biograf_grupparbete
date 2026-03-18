@@ -28,6 +28,14 @@ public static class ScreeningEndpoints
             .WithDescription(
                 "Returns screenings by movie id"
             );
+
+        group.MapGet("/my-bookings", async (IScreeningRepository repo, HttpContext ctx, CancellationToken ct) =>
+        {
+            var userId = (int)ctx.Items["userId"]!;
+            var bookings = await repo.GetBookingsByUserIdAsync(userId, ct);
+            return TypedResults.Ok(bookings);
+        }).RequireAuthorization();
+
         return app;
     }
 }

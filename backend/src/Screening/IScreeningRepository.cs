@@ -5,4 +5,5 @@ namespace WebApp.Screenings;
 public interface IScreeningRepository
 {
     Task<IEnumerable<ScreeningDto>> GetScreeningsByMovieIdAsync(int id, CancellationToken ct);
+    Task<List<BookingDto>> GetBookingsByUserIdAsync(int userId, CancellationToken ct);
 }

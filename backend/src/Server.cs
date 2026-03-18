@@ -79,6 +79,7 @@ public static class Server
 
         // V2
         App.UseJwtAuth();
+        App.UseAuthorization();
         App.MapAuthEndpoints();
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();

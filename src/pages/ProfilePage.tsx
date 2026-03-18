@@ -1,4 +1,6 @@
 import { useGetMe, useLogout } from '@/api/hooks/useAuth';
+import { useMyBookings } from '@/api/hooks/useScreenings';
+import type { BookingDto } from '@/api/services/screenings';
 import { User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +17,7 @@ export default function ProfilePage() {
   const logout = useLogout();
   const navigate = useNavigate();
   const user = meData?.data;
+  const { data: bookings } = useMyBookings();
 
   if (isLoading) {
     return (
@@ -75,7 +78,17 @@ export default function ProfilePage() {
           )}
         </BiografCol>
       </BiografRow>
-
+      <div>
+        <h2>Mina bokningar</h2>
+        {(bookings as any)?.data?.map((b: any) => (
+          <div key={b.id}>
+            <p>
+              Screening: {b.ScreeningId}, Datum: {b.ScreeningDate}, Pris:{' '}
+              {b.TotalPrice} kr, Status: {b.Status}, Ref: {b.Reference}
+            </p>
+          </div>
+        ))}
+      </div>
       <Separator className="bg-[#B69852]/30" />
 
       <BiografButton
