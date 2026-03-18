@@ -21,6 +21,10 @@ import MovieDetailsPage from './pages/MovieDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProfilePage from './pages/ProfilePage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
+import AboutPage from './pages/AboutPage';
+import OffersPage from './pages/OffersPage';
+import MyBookingsPage from './pages/MyBookingsPage';
+import MyTicketsPage from './pages/MyTicketsPage';
 import SeatsPage from './pages/SeatsPage';
 import SignUpPage from './pages/SignUpPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
@@ -51,6 +55,10 @@ const router = createBrowserRouter([
       { path: 'admin', element: <AdminPage /> },
       { path: 'booking', element: <BookingPage /> },
       { path: 'seats', element: <SeatsPage /> },
+      { path: 'offers', element: <OffersPage /> },
+      { path: 'about', element: <AboutPage /> },
+      { path: 'my-bookings', element: <MyBookingsPage /> },
+      { path: 'my-tickets', element: <MyTicketsPage /> },
       { path: 'login', element: <LoginPage /> },
       { path: 'signup', element: <SignUpPage /> },
       { path: 'verify-email', element: <VerifyEmailPage /> },
