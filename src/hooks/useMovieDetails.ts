@@ -16,8 +16,10 @@ export type MovieDetail = {
   trailerUrl: string | undefined;
   language: string | undefined;
   genres: string[];
+  actors: { id: number; name: string }[];
 };
 
+// Replace any with unknown and cast it... maybe
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function mapV1(raw: Record<string, any>): MovieDetail {
   return {
@@ -33,20 +35,26 @@ function mapV1(raw: Record<string, any>): MovieDetail {
     trailerUrl: raw.trailer_url ?? undefined,
     language: raw.language ? String(raw.language) : undefined,
     genres: [],
+    actors: [],
   };
 }
 
-export function useMovieDetails(id: number) {
-  if (IS_V1) {
-    const loaderData = useLoaderData() as Record<string, unknown> | undefined;
-    const movie = loaderData ? mapV1(loaderData) : undefined;
-    console.log('movie', movie);
-    return { movie, isLoading: false, isError: false };
-  }
+type MovieDetailsResult = {
+  movie: MovieDetail | undefined;
+  isLoading: boolean;
+  isError: boolean;
+};
 
+function useMovieDetailsV1(_id?: number): MovieDetailsResult {
+  const loaderData = useLoaderData() as Record<string, unknown> | undefined;
+  const movie = loaderData ? mapV1(loaderData) : undefined;
+  return { movie, isLoading: false, isError: false };
+}
+
+function useMovieDetailsV2(id: number): MovieDetailsResult {
   const v2Query = useMovie(id);
-
   const v2 = v2Query.data?.data;
+
   const movie: MovieDetail | undefined = v2
     ? {
         id: v2.id,
@@ -61,8 +69,11 @@ export function useMovieDetails(id: number) {
         trailerUrl: v2.trailerUrl ?? undefined,
         language: v2.language?.code ?? undefined,
         genres: v2.genres ?? [],
+        actors: v2.actors?.map((a) => ({ id: a.id, name: a.name })) ?? [],
       }
     : undefined;
 
   return { movie, isLoading: v2Query.isLoading, isError: v2Query.isError };
 }
+
+export const useMovieDetails = IS_V1 ? useMovieDetailsV1 : useMovieDetailsV2;

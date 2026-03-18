@@ -2,6 +2,7 @@
 // getting the response and send it back to the frontend. Also, we connect swagger here
 
 using Microsoft.AspNetCore.Http.HttpResults;
+using WebApp.Auth;
 
 namespace WebApp.Screenings;
 
@@ -36,6 +37,24 @@ public static class ScreeningEndpoints
             return TypedResults.Ok(bookings);
         }).RequireAuthorization();
 
+        group
+            .MapPost(
+                "/",
+                async Task<Ok<ScreeningDto>> (
+                    CreateScreeningDto dto,
+                    IScreeningRepository repo,
+                    CancellationToken ct
+                ) =>
+                {
+                    var created = await repo.CreateScreeningAsync(dto, ct);
+                    return TypedResults.Ok(created);
+                })
+                .RequireAuth()
+                .RequireRole("admin")
+                .WithSummary("Create screening")
+                .WithDescription(
+                "Insert new screening"
+            );
         return app;
     }
 }

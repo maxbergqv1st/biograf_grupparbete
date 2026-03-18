@@ -29,10 +29,10 @@ export default function MoviePoster({
         <AdvancedImage
           cldImg={cld.image(poster).resize(fill().width(300).height(450))}
           alt={`Poster för ${title}`}
-          className="aspect-[2/3] w-full object-cover"
+          className="aspect-2/3 w-full object-cover"
         />
       ) : (
-        <div className="flex aspect-[2/3] w-full items-center justify-center bg-zinc-700">
+        <div className="flex aspect-2/3 w-full items-center justify-center bg-zinc-700">
           <p className="text-sm text-zinc-200">Ingen bild ännu</p>
         </div>
       )}

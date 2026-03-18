@@ -32,7 +32,8 @@ public class JwtService : IJwtService
             new(JwtRegisteredClaimNames.Email, user.Email),
             new("role", user.Role),
             new("first_name", user.FirstName),
-            new("last_name", user.LastName)
+            new("last_name", user.LastName),
+            new("email_verified", user.IsEmailVerified.ToString().ToLower())
         };
 
         var credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);

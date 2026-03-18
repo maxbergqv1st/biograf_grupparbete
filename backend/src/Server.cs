@@ -1,4 +1,6 @@
+using WebApp.Halls;
 using WebApp.Screenings;
+using WebApp.Bookings;
 using WebApp.Seats;
 
 namespace WebApp;
@@ -42,8 +44,13 @@ public static class Server
         builder.Services.AddScoped<IMovieRepository, MovieRepository>();
         builder.Services.AddScoped<IScreeningRepository, ScreeningRepository>();
         builder.Services.AddScoped<ICloudinaryRepository, CloudinaryRepository>();
+        builder.Services.AddScoped<IBookingRepository, BookingRepository>();
         builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+        builder.Services.AddScoped<IHallRepository, HallRepository>();
+        builder.Services.AddSingleton<IEmailService, EmailService>();
+        builder.Services.AddSingleton<EmailConfig>();
         builder.Services.AddScoped<ISeatsRepository, SeatsRepository>();
+
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("V2", policy =>
@@ -84,6 +91,10 @@ public static class Server
         App.MapMovieEndpoints();
         App.MapScreeningEndpoints();
         App.MapCloudinaryEndpoints();
+        App.MapHallEndpoints();
+        App.MapBookingEndpoints();
+        RestApi.Start();
+        // Start the server on port 5001
         App.MapSeatsEndpoints();
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);

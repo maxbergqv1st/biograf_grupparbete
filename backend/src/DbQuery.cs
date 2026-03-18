@@ -70,6 +70,7 @@ public static class DbQuery
                 `phone` VARCHAR(25),
                 `role` ENUM('user', 'admin') NOT NULL DEFAULT 'user',
                 `is_active` BOOLEAN NOT NULL DEFAULT TRUE,
+                `email_verified` BOOLEAN NOT NULL DEFAULT FALSE,
                 `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
             );
@@ -80,6 +81,23 @@ public static class DbQuery
                 expires_at DATETIME NOT NULL,
                 created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
                 is_revoked BOOLEAN NOT NULL DEFAULT FALSE,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS email_verifications (
+                token VARCHAR(64) PRIMARY KEY NOT NULL,
+                user_id INT NOT NULL,
+                expires_at DATETIME NOT NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+
+            CREATE TABLE IF NOT EXISTS password_reset_tokens (
+                token VARCHAR(64) PRIMARY KEY NOT NULL,
+                user_id INT NOT NULL,
+                expires_at DATETIME NOT NULL,
+                created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                is_used BOOLEAN NOT NULL DEFAULT FALSE,
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             );
 
@@ -201,7 +219,7 @@ public static class DbQuery
                 `total_price` decimal(10,2) DEFAULT 0,
                 `status` ENUM ('pending', 'accepted', 'cancelled') NOT NULL default 'pending',
                 `booking_reference` VARCHAR(50) UNIQUE NOT NULL,
-                FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`),
+                FOREIGN KEY (`screening_id`) REFERENCES `screenings` (`id`),
                 FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)  ON DELETE CASCADE
             );
 
@@ -239,7 +257,7 @@ public static class DbQuery
                 `session_id` VARCHAR(255) NOT NULL, /* ?? session id för vem som reserverat ?? */
                 `reserved_at` datetime DEFAULT current_timestamp,
                 `expires_at` datetime NOT NULL,
-                FOREIGN KEY (`screening_id`) REFERENCES `screening` (`id`) ON DELETE CASCADE,
+                FOREIGN KEY (`screening_id`) REFERENCES `screenings` (`id`) ON DELETE CASCADE,
                 FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`) ON DELETE CASCADE
             );
 
