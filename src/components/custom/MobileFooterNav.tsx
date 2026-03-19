@@ -172,7 +172,7 @@ export default function MobileFooterNav({
   );
 
   return (
-    <nav className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2">
+    <nav className="fixed bottom-0 left-1/2 z-50 -translate-x-1/2">
       <BiografContainer className="flex items-center justify-around gap-2 rounded-[20px] bg-[#1E1E1E] p-3">
         {visibleItems.map((item) => (
           <MobileFooterNavItem

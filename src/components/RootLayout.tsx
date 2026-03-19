@@ -93,7 +93,7 @@ export default function RootLayout() {
       )}
 
       <main className={cn('flex-1 py-10', isMobile && 'pb-28')}>
-        <BiografContainer className="space-y-10">
+        <BiografContainer className={cn('space-y-10', isMobile && 'px-1')}>
           <Outlet context={stateAndSetter} />
         </BiografContainer>
       </main>
