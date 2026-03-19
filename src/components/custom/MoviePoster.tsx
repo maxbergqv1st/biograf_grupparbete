@@ -11,12 +11,16 @@ type MoviePosterProps = {
   id: number;
   title: string;
   poster?: string | null; // publicId
+  director?: string | null;
+  description?: string | null;
 };
 
 export default function MoviePoster({
   id,
   title,
   poster,
+  director: _director,
+  description: _description,
 }: MoviePosterProps) {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
