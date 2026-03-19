@@ -17,7 +17,7 @@ type Props = {
 
 export default function BiografFilters({ onFiltersChange }: Props) {
   const [date, setDate] = useState<string>('');
-  const [ageRating, setAgeRating] = useState<string>('');
+  const [ageRating, setAgeRating] = useState<string>('all');
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchFocused, setSearchFocused] = useState(false);
   const [search, setSearch] = useState<string>('');
@@ -29,7 +29,7 @@ export default function BiografFilters({ onFiltersChange }: Props) {
     { value: '11', label: 'Från 11 år' },
     { value: '15', label: 'Från 15 år' },
   ];
-  console.log(ageRating, 'Age Rating');
+  console.log(ageRating, 'Alla åldrar');
   const handleFilter = () => {
     onFiltersChange({ date, ageRating, search });
   };
