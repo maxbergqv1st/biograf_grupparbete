@@ -10,6 +10,7 @@ export * from './actorDto';
 export * from './bookingDto';
 export * from './bookingResult';
 export * from './bookingSeatDto';
+export * from './cancelBookingRequest';
 export * from './createBookingDto';
 export * from './createScreeningDto';
 export * from './forgotPasswordRequest';
