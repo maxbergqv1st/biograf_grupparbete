@@ -11,6 +11,8 @@ import { useBookingForm } from "@/api/hooks/useBookingForm";
 import type { BookingSeat } from "@/api/hooks/useBookingForm";
 import { seatsService } from '@/api/services/seats';
 import { useGetMe } from '@/api/hooks/useAuth';
+import { useIsMobile } from '@/hooks/common/useIsMobile';
+import MobileBookingPage from './MobileBookingPage';
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
 //import { start } from 'repl';
@@ -23,13 +25,7 @@ BookingPage.route = {
   index: 2,
 };
 
-//export default function BookingPage() {
-  // Here is where you maniupulate data ALt-shift-f
-  // const { data } = useBookingData() ;
-  //After card {/* <h1 className="text-2xl font-semibold">Bookings</h1> */}
-  //<BiografCard title='Title' description='Description'> Before map
-
-type ScreeningInfo = {
+export type ScreeningInfo = {
   id: number;
   movieName: string;
   date: string;
@@ -58,6 +54,8 @@ export default function BookingPage() {
   const { submit, submitting, error } = useBookingForm();
   const { data: meData } = useGetMe();
   const user = meData?.data;
+  const isMobile = useIsMobile();
+  console.log('isMobile', isMobile);
   const bookingState = location.state as
     | {
         screening?: ScreeningInfo;
@@ -214,6 +212,22 @@ async function handleBetala() {
   }
 
   return (
+  <>
+    {isMobile ? (
+          <MobileBookingPage
+        screening={screening}
+        seats={seats}
+        totalPrice={totalPrice}
+        email={email}
+        setEmail={setEmail}
+        error={error}
+        submitting={submitting}
+        handleBetala={handleBetala}
+        handleCancel={handleCancel}
+        formattedTimeLeft={formattedTimeLeft}
+        bookingState={bookingState}
+      />
+    ) : (
     <section className="flex justify-center items-start mt-8 gap-6">
 
       {/* Poster for the movie selected for the screening for this booking */}
@@ -308,5 +322,6 @@ async function handleBetala() {
         </div>
       ) : null}
     </section>
-  );
-}
+    )}
+  </>
+)};

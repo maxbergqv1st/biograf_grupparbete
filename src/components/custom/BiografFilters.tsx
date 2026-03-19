@@ -23,7 +23,7 @@ export default function BiografFilters({ onFiltersChange }: Props) {
   const [search, setSearch] = useState<string>('');
 
   const ageOptions = [
-    { value: ' ', label: 'Alla åldrar' },
+    { value: 'all', label: 'Alla åldrar' },
     { value: 'B', label: 'Barn (B)' },
     { value: '7', label: 'Från 7 år' },
     { value: '11', label: 'Från 11 år' },
@@ -35,10 +35,10 @@ export default function BiografFilters({ onFiltersChange }: Props) {
   };
 
   const handleReset = () => {
-    setDate('');
-    setAgeRating('');
-    setSearch('');
-    onFiltersChange({ date: '', ageRating: '', search: '' });
+  setDate('');
+  setAgeRating('all');
+  setSearch('');
+  onFiltersChange({ date: '', ageRating: '', search: '' });
   };
 
   return (
@@ -126,10 +126,13 @@ export default function BiografFilters({ onFiltersChange }: Props) {
               Åldersgräns
             </label>
             <BiografSelect
-              placeholder="Alla åldrar"
+              placeholder="Age Rating"
               value={ageRating}
               options={ageOptions}
-              onValueChange={(e) => setAgeRating(e)}
+              onValueChange={(e) => {
+              setAgeRating(e);
+              onFiltersChange({ date, search, ageRating: e === 'all' ? '' : e });
+            }}
               className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
             />
           </BiografCol>
@@ -183,10 +186,13 @@ export default function BiografFilters({ onFiltersChange }: Props) {
               Åldersgräns
             </label>
             <BiografSelect
-              placeholder="Alla åldrar"
+              placeholder="Age Rating"
               value={ageRating}
               options={ageOptions}
-              onValueChange={(e) => setAgeRating(e)}
+              onValueChange={(e) => {
+                setAgeRating(e);
+                onFiltersChange({ date, search, ageRating: e === 'all' ? '' : e });
+              }}
               className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
             />
           </BiografCol>
