@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { useGetMe } from '@/api/hooks/useAuth';
 import { getMobileNavItems } from '@/config/mobileNavigation';
 import { navLinks } from '@/config/navigation';
