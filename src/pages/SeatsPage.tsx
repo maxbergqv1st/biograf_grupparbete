@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { BookingSeat } from '@/api/hooks/useBookingForm';
 import { seatsService } from '@/api/services/seats';
@@ -11,6 +11,8 @@ import BiografSelect from '@/components/custom/BiografSelect';
 import { useScreening } from '../api/hooks/useScreenings';
 import { useHallConfig, useSeatStatuses } from '../api/hooks/useSeats';
 import { Seat, type SeatVariants } from '../components/Seat';
+
+const BASE_TICKET_PRICE = 140;
 
 const PRICE_CATEGORIES = {
   Adult: { priceCategorySeatId: 1, discountModifier: 1.0, label: 'Vuxen' },
@@ -33,6 +35,7 @@ export default function SeatsPage() {
   const locationState = location.state as {
     movieTitle?: string;
     posterUrl?: string;
+    ageRating?: number;
   } | null;
   const screeningId = parseInt(searchParams.get('screeningId') || '0');
   const { data: screeningData, isLoading: screeningLoading } =
@@ -41,6 +44,8 @@ export default function SeatsPage() {
   const hallId = screening?.hallId ?? 0;
   const movieTitle = locationState?.movieTitle ?? 'Vald film';
   const posterUrl = locationState?.posterUrl ?? '';
+  const ageRating = locationState?.ageRating ?? 0;
+  const childTicketsAllowed = ageRating < 15;
 
   const { data: hallConfig, isLoading: hallLoading } = useHallConfig(hallId);
   const { data: seatStatuses, isLoading: seatsLoading } =
@@ -54,6 +59,25 @@ export default function SeatsPage() {
   const [seatCategories, setSeatCategories] = useState<
     Record<number, keyof typeof PRICE_CATEGORIES | undefined>
   >({});
+  useEffect(() => {
+    if (childTicketsAllowed) {
+      return;
+    }
+
+    setSeatCategories((current) => {
+      const next = { ...current };
+      let changed = false;
+
+      Object.entries(next).forEach(([seatId, category]) => {
+        if (category === 'Child') {
+          next[Number(seatId)] = undefined;
+          changed = true;
+        }
+      });
+
+      return changed ? next : current;
+    });
+  }, [childTicketsAllowed]);
   const toggleSeat = (seatId: number) => {
     setSelectedSeats((prev) => {
       if (prev.includes(seatId)) {
@@ -64,6 +88,11 @@ export default function SeatsPage() {
         });
         return prev.filter((id) => id !== seatId);
       }
+
+      setSeatCategories((current) => ({
+        ...current,
+        [seatId]: current[seatId] ?? 'Adult',
+      }));
 
       return [...prev, seatId];
     });
@@ -89,7 +118,7 @@ export default function SeatsPage() {
       priceCategorySeatId: config.priceCategorySeatId,
       category,
       discountModifier: config.discountModifier,
-      finalPrice: 140 * config.discountModifier,
+      finalPrice: BASE_TICKET_PRICE * config.discountModifier,
     };
 
     return [bookingSeat];
@@ -98,6 +127,8 @@ export default function SeatsPage() {
     (sum, seat) => sum + seat.finalPrice,
     0,
   );
+  const getCategoryPrice = (category: keyof typeof PRICE_CATEGORIES) =>
+    BASE_TICKET_PRICE * PRICE_CATEGORIES[category].discountModifier;
   const allSelectedSeatsCategorized =
     selectedSeats.length > 0 &&
     selectedSeatDetails.length === selectedSeats.length;
@@ -120,9 +151,10 @@ export default function SeatsPage() {
           <p>Datum: {screening?.screeningDate ?? '-'}</p>
           <p>Tid: {screening?.screeningTime?.slice(0, 5) ?? '-'}</p>
           <p>Totalpris: {totalPrice} kr</p>
-          {/* {ageRestriction && (
-            <p>Åldersgräns för att se filmen: {movieAgeRestriction} år</p>
-          )} */}
+          <p>
+            Åldersgräns:{' '}
+            {ageRating > 0 ? `${ageRating}+ år` : 'Barntillåten'}
+          </p>
         </div>
       </div>
 
@@ -180,6 +212,11 @@ export default function SeatsPage() {
             ))}
           </div>
         </div>
+        {!childTicketsAllowed ? (
+          <p className="mt-4 text-center text-sm text-[#b69852]">
+            Barnbiljett är inte tillgänglig för filmer med åldersgräns 15+.
+          </p>
+        ) : null}
       </div>
 
       <div className="mt-6 flex flex-wrap justify-center gap-4 text-sm">
@@ -231,6 +268,12 @@ export default function SeatsPage() {
                     <p className="text-sm text-gray-300">
                       Säte ID: {seat.seatId}
                     </p>
+                    <p className="text-sm text-gray-300">
+                      Pris:{' '}
+                      {seatCategories[seatId]
+                        ? `${getCategoryPrice(seatCategories[seatId] as keyof typeof PRICE_CATEGORIES)} kr`
+                        : 'Välj biljettyp'}
+                    </p>
                   </div>
                   <BiografSelect
                     value={seatCategories[seatId] ?? ''}
@@ -241,9 +284,19 @@ export default function SeatsPage() {
                       }))
                     }
                     options={[
-                      { value: 'Adult', label: 'Vuxen' },
-                      { value: 'Child', label: 'Barn' },
-                      { value: 'Senior', label: 'Pensionär' },
+                      { value: 'Adult', label: `Vuxen - ${getCategoryPrice('Adult')} kr` },
+                      ...(childTicketsAllowed
+                        ? [
+                            {
+                              value: 'Child',
+                              label: `Barn - ${getCategoryPrice('Child')} kr`,
+                            },
+                          ]
+                        : []),
+                      {
+                        value: 'Senior',
+                        label: `Pensionär - ${getCategoryPrice('Senior')} kr`,
+                      },
                     ]}
                     placeholder="Välj biljettkategori"
                   />
@@ -281,7 +334,7 @@ export default function SeatsPage() {
                   movieName: movieTitle,
                   date: screening.screeningDate,
                   time: screening.screeningTime,
-                  basePrice: 140,
+                  basePrice: BASE_TICKET_PRICE,
                   posterUrl,
                 },
                 seats: selectedSeatDetails,
