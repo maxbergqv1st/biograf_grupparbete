@@ -89,6 +89,17 @@ public static class BookingEndpoints
             .WithSummary("Create a new booking")
             .WithDescription("Creates a new booking and sends a confirmation email");
 
+        group.MapGet("/my-bookings", async (IBookingRepository repo, HttpContext ctx, CancellationToken ct) =>
+{
+    var user = ctx.Items["auth_user"] as UserDto;
+    var userId = user!.Id;
+    var bookings = await repo.GetBookingsByUserIdAsync(userId, ct);
+    return TypedResults.Ok(bookings);
+})
+.RequireAuth();
+
+
+
         return app;
     }
 }
