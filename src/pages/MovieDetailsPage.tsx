@@ -8,7 +8,6 @@ import { Link, useParams } from 'react-router-dom';
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
 import MovieDetailsPagePoster from '@/components/custom/MovieDetailsPoster';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
   DialogContent,
   DialogTrailer,
@@ -119,14 +118,49 @@ export default function MovieDetailsPage() {
       {isMobile ? (
         <MobileMovieDetailsPage />
       ) : (
-        <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
-          <div className="h-[91.5dvh] w-full">
-            <MovieDetailsPagePoster
-              title={movie?.title ?? 'Untitled'}
-              poster={movie?.poster ?? undefined}
-            />
+        <div className="relative left-1/2 grid w-screen -translate-x-1/2 grid-cols-1 gap-6 px-16 md:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] lg:px-8">
+          <div className="flex flex-col gap-4">
+            <div className="h-[60dvh] w-full">
+              <MovieDetailsPagePoster
+                title={movie?.title ?? 'Untitled'}
+                poster={movie?.poster ?? undefined}
+              />
+            </div>
+            <div className="relative h-48 w-full overflow-hidden rounded-lg border border-[#B69852] shadow-[0px_0px_8px_1px_rgba(182,152,82,0.3)]">
+              <div className="absolute inset-0 blur-sm">
+                <MovieDetailsPagePoster
+                  title={movie?.title ?? 'Untitled'}
+                  poster={movie?.poster ?? undefined}
+                />
+              </div>
+              <div className="absolute right-5 bottom-5">
+                {movie?.trailerUrl ? (
+                  <DialogTrailer>
+                    <DialogTrigger
+                      render={<BiografButton {...argsTrailer} />}
+                    />
+                    <DialogContent className="w-[90vw] max-w-3xl p-0">
+                      <div className="aspect-video w-full">
+                        <iframe
+                          className="h-full w-full rounded-xl"
+                          src={
+                            movie.trailerUrl.replace('watch?v=', 'embed/') +
+                            '?autoplay=0'
+                          }
+                          title="Trailer"
+                          allowFullScreen
+                        />
+                      </div>
+                    </DialogContent>
+                  </DialogTrailer>
+                ) : (
+                  <BiografButton {...argsTrailer} disabled />
+                )}
+              </div>
+            </div>
           </div>
-          <AspectRatio className="h-[91.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
+
+          <div className="w-full rounded-lg bg-[#1E1E1E] p-4">
             <h3 className="flex justify-center p-6 text-2xl text-[#b69852]">
               Välj Datum & tid
             </h3>
@@ -172,79 +206,44 @@ export default function MovieDetailsPage() {
                 </BiografButton>
               )}
             </div>
-          </AspectRatio>
-          <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
-            <AspectRatio className="self-top h-[62dvh] w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
-              <h1 className="flex justify-center p-3 text-2xl text-[#b69852]">
-                {movie?.title ?? 'No title'}
-              </h1>
-              <Separator className="flex justify-center" />
-              <div className="flex justify-center pt-1.5 pb-2.5">
-                <span>
-                  | {movie?.ageRating ? movie.ageRating + '+' : 'No age rating'}{' '}
-                  | | {movie?.language ?? 'No language'} | |{' '}
-                  {movie?.genres?.length
-                    ? movie.genres.join(', ')
-                    : 'No genres'}{' '}
-                  |
-                </span>
-              </div>
-              <Separator className="flex justify-center" />
-              <span className="flex justify-center p-5">
-                {movie?.description ?? 'No description'}
+          </div>
+
+          <div className="w-full rounded-lg bg-[#1E1E1E] p-4">
+            <h1 className="flex justify-center p-3 text-2xl text-[#b69852]">
+              {movie?.title ?? 'No title'}
+            </h1>
+            <Separator className="flex justify-center" />
+            <div className="flex justify-center pt-1.5 pb-2.5">
+              <span>
+                | {movie?.ageRating ? movie.ageRating + '+' : 'No age rating'} |
+                | {movie?.language ?? 'No language'} | |{' '}
+                {movie?.genres?.length ? movie.genres.join(', ') : 'No genres'}{' '}
+                |
               </span>
-              <Separator className="flex justify-center" />
-              <span className="flex justify-center pt-5 text-[#b69852]">
-                Direktör:{' '}
-              </span>
-              <span className="flex justify-center pt-1">
-                {movie?.director ?? 'No director'}
-              </span>
-              <span className="flex justify-center pt-5 text-[#b69852]">
-                Skådespelare:
-              </span>
-              <span className="flex justify-center pt-1 pl-10">
-                {' '}
-                {movie?.actors?.some((a) => a.name)
-                  ? movie.actors
-                      .map((a) => a.name)
-                      .filter(Boolean)
-                      .join(', ')
-                  : 'No actors'}
-              </span>
-            </AspectRatio>
-            <AspectRatio className="relative h-53 max-h-full w-full overflow-hidden rounded-lg border">
-              <div className="blur-sm">
-                <MovieDetailsPagePoster
-                  title={movie?.title ?? 'Untitled'}
-                  poster={movie?.poster ?? undefined}
-                />
-              </div>
-              <div className="absolute right-5 bottom-5">
-                {movie?.trailerUrl ? (
-                  <DialogTrailer>
-                    <DialogTrigger
-                      render={<BiografButton {...argsTrailer} />}
-                    />
-                    <DialogContent className="w-[90vw] max-w-3xl p-0">
-                      <div className="aspect-video w-full">
-                        <iframe
-                          className="h-full w-full rounded-xl"
-                          src={
-                            movie.trailerUrl.replace('watch?v=', 'embed/') +
-                            '?autoplay=0'
-                          }
-                          title="Trailer"
-                          allowFullScreen
-                        />
-                      </div>
-                    </DialogContent>
-                  </DialogTrailer>
-                ) : (
-                  <BiografButton {...argsTrailer} disabled />
-                )}
-              </div>
-            </AspectRatio>
+            </div>
+            <Separator className="flex justify-center" />
+            <span className="flex justify-center p-5">
+              {movie?.description ?? 'No description'}
+            </span>
+            <Separator className="flex justify-center" />
+            <span className="flex justify-center pt-5 text-[#b69852]">
+              Direktör:{' '}
+            </span>
+            <span className="flex justify-center pt-1">
+              {movie?.director ?? 'No director'}
+            </span>
+            <span className="flex justify-center pt-5 text-[#b69852]">
+              Skådespelare:
+            </span>
+            <span className="flex justify-center pt-1 pl-10">
+              {' '}
+              {movie?.actors?.some((a) => a.name)
+                ? movie.actors
+                    .map((a) => a.name)
+                    .filter(Boolean)
+                    .join(', ')
+                : 'No actors'}
+            </span>
           </div>
         </div>
       )}

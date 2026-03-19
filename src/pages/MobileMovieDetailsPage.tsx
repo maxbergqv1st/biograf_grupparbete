@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 
 import { useScreenings } from '@/api/hooks/useScreenings';
 import { Trailer } from '@/stories/ui/BiografButton.stories';
+import { AdvancedImage } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { fill } from '@cloudinary/url-gen/actions/resize';
 import { Link, useParams } from 'react-router-dom';
 
 import BiografButton from '@/components/custom/BiografButton';
 import BiografCarousel from '@/components/custom/BiografCarousel';
 import MobileMovieDetailsPagePoster from '@/components/custom/MobileMovieDetailsPoster';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
 import {
   DialogContent,
   DialogTrailer,
@@ -17,6 +19,8 @@ import {
 import { Separator } from '@/components/ui/separator';
 
 import { useMovieDetails } from '@/hooks/useMovieDetails';
+
+const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
 
 type BiografButtonProps = ComponentProps<typeof BiografButton>;
 
@@ -116,7 +120,7 @@ export default function MobileMovieDetailsPage() {
             ))
         : [<span key="select-date">Välj ett datum</span>];
   return (
-    <div className="relative left-1/2 grid h-full w-screen -translate-x-1/2 grid-cols-1 px-4 pb-24">
+    <div className="grid h-full w-full grid-cols-1 gap-4 overflow-hidden px-4 pb-24">
       <div className="h-[66dvh] w-full">
         <MobileMovieDetailsPagePoster
           title={movie?.title ?? 'Untitled'}
@@ -124,12 +128,17 @@ export default function MobileMovieDetailsPage() {
         />
       </div>
       <div className="h-[21dvh]">
-        <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
-          <div className="blur-sm">
-            <MobileMovieDetailsPagePoster
-              title={movie?.title ?? 'Untitled'}
-              poster={movie?.poster ?? undefined}
-            />
+        <div className="relative h-full w-full overflow-hidden rounded-lg">
+          <div className="absolute inset-0 blur-sm">
+            {movie?.poster ? (
+              <AdvancedImage
+                cldImg={cld.image(movie.poster).resize(fill().width(600).height(200))}
+                alt=""
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <div className="h-full w-full bg-zinc-800" />
+            )}
           </div>
           <div className="absolute right-5 bottom-5">
             {movie?.trailerUrl ? (
@@ -153,11 +162,11 @@ export default function MobileMovieDetailsPage() {
               <BiografButton {...argsTrailer} disabled />
             )}
           </div>
-        </AspectRatio>
+        </div>
       </div>
 
-      <div className="h-[62dvh]">
-        <AspectRatio className="h-[60dvh] w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
+      <div>
+        <div className="w-full max-w-md justify-self-center rounded-lg bg-[#1E1E1E] p-4">
           <h1 className="flex justify-center p-3 text-2xl text-[#b69852]">
             {movie?.title ?? 'No title'}
           </h1>
@@ -192,9 +201,9 @@ export default function MobileMovieDetailsPage() {
                   .join(', ')
               : 'No actors'}
           </span>
-        </AspectRatio>
+        </div>
       </div>
-      <AspectRatio className="h-[55dvh] w-full overflow-hidden rounded-lg bg-[#1E1E1E] p-4">
+      <div className="w-full rounded-lg bg-[#1E1E1E] p-4">
         <h3 className="flex justify-center p-6 text-2xl text-[#b69852]">
           Välj Datum & tid
         </h3>
@@ -240,7 +249,7 @@ export default function MobileMovieDetailsPage() {
             </BiografButton>
           )}
         </div>
-      </AspectRatio>
+      </div>
     </div>
   );
 }

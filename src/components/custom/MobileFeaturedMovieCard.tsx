@@ -174,7 +174,7 @@ export default function MobileFeaturedMovieCard({
   }, [movie, displayedMovie.id]);
 
   const handleBook = () => {
-    navigate(`/mmovies/${displayedMovie.id}`);
+    navigate(`/movies/${displayedMovie.id}`);
   };
 
   return (

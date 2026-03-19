@@ -1,8 +1,7 @@
 import { useState } from 'react';
 
 import { useGetMe } from '@/api/hooks/useAuth';
-import { getMobileNavItems } from '@/config/mobileNavigation';
-import { navLinks } from '@/config/navigation';
+import { getMobileNavLinks, getNavLinks } from '@/config/navigation';
 import { MessageCircleMore, User, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
@@ -44,7 +43,7 @@ export default function RootLayout() {
   return (
     <BiografContainer variant="page" colorScheme="brand">
       {!isMobile && (
-        <header className="bg-accent/50 sticky top-0 z-40 w-full border-b backdrop-blur-md">
+        <header className="sticky top-0 z-40 w-full border-b border-[#B69852]/20 bg-[#141414]/80 backdrop-blur-md">
           <BiografContainer>
             <div className="flex h-16 items-center justify-between">
               <Link
@@ -58,17 +57,19 @@ export default function RootLayout() {
                 />
               </Link>
               <nav className="flex" id="primary-navigation">
-                <ul className="flex items-center gap-6 text-sm font-medium">
-                  {navLinks.map(({ label, path }) => (
+                <ul className="flex items-center gap-1">
+                  {getNavLinks({ isLoggedIn: !!user }).map(({ label, path, icon: Icon }) => (
                     <li key={path}>
                       <Link
                         to={path}
-                        className={
+                        className={cn(
+                          'flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all duration-200',
                           isActive(path)
-                            ? 'text-foreground'
-                            : 'text-muted-foreground hover:text-foreground transition'
-                        }
+                            ? 'bg-[#B69852] text-black shadow-[0px_0px_10px_rgba(182,152,82,0.3)]'
+                            : 'text-[#F3EEE4]/70 hover:bg-white/5 hover:text-[#F3EEE4]',
+                        )}
                       >
+                        <Icon className="h-4 w-4" />
                         {t(label as string)}
                       </Link>
                     </li>
@@ -94,6 +95,18 @@ export default function RootLayout() {
               </div>
             </div>
           </BiografContainer>
+        </header>
+      )}
+
+      {isMobile && (
+        <header className="sticky top-0 z-40 flex w-full items-center justify-center border-b border-[#B69852]/20 bg-[#141414]/80 py-2 backdrop-blur-md">
+          <Link to="/">
+            <img
+              src="public/images/logo/Filmvisarnalogo.png"
+              alt="Biograf"
+              className="h-12 w-auto"
+            />
+          </Link>
         </header>
       )}
 
@@ -127,7 +140,7 @@ export default function RootLayout() {
         </div>
       )}
 
-      <footer className="bg-muted/40 border-t py-8">
+      <footer className={cn('bg-muted/40 border-t py-8', isMobile && 'pb-28')}>
         <BiografContainer className="text-muted-foreground flex flex-col items-center gap-2 text-center text-sm">
           <span className="text-foreground text-base font-semibold">
             Filmvisarna AB
@@ -138,7 +151,7 @@ export default function RootLayout() {
       <CookieConsent />
       {isMobile && (
         <MobileFooterNav
-          items={getMobileNavItems({ isLoggedIn: !!user })}
+          items={getMobileNavLinks({ isLoggedIn: !!user })}
           languagePicker={{
             languages: LANGUAGES,
             currentLanguage: i18n.language,

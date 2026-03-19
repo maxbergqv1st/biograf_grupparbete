@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 
 import MobileFooterNav from '@/components/custom/MobileFooterNav';
-import { mobileNavItems } from '@/config/mobileNavigation';
+import { getMobileNavLinks } from '@/config/navigation';
+
+const mobileNavItems = getMobileNavLinks({ isLoggedIn: false });
 
 const meta = {
   title: 'Example/components/ui/MobileFooterNav',

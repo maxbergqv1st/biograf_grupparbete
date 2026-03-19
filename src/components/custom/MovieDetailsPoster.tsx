@@ -19,7 +19,7 @@ export default function MovieDetailsPagePoster({
         <AdvancedImage
           cldImg={cld.image(poster).resize(fill().width(600).height(900))}
           alt={`Poster för ${title}`}
-          className="border-border h-[91.5dvh] w-full rounded-lg border object-contain shadow-sm"
+          className="h-full w-full rounded-lg border border-[#B69852] object-cover shadow-[0px_0px_8px_1px_rgba(182,152,82,0.3)]"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center rounded-lg bg-zinc-700">
