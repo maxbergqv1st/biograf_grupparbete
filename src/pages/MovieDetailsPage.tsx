@@ -107,7 +107,6 @@ export default function MovieDetailsPage() {
             <MovieDetailsPagePoster
               title={movie?.title ?? 'Untitled'}
               poster={movie?.poster ?? undefined}
-              alt={}
             />
           </div>
           <AspectRatio className="h-[91.5dvh] w-full rounded-lg bg-[#1E1E1E] p-4">
