@@ -1,14 +1,16 @@
 import { useState } from 'react';
 
+import type { BookingSeat } from '@/api/hooks/useBookingForm';
+import { seatsService } from '@/api/services/seats';
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useLocation, useSearchParams } from 'react-router-dom';
 
-import type { BookingSeat } from '@/api/hooks/useBookingForm';
-import { seatsService } from '@/api/services/seats';
+import BiografSelect from '@/components/custom/BiografSelect';
+
 import { useScreening } from '../api/hooks/useScreenings';
 import { useHallConfig, useSeatStatuses } from '../api/hooks/useSeats';
-import { Seat } from '../components/Seat';
+import { Seat, type SeatVariants } from '../components/Seat';
 
 const PRICE_CATEGORIES = {
   Adult: { priceCategorySeatId: 1, discountModifier: 1.0, label: 'Vuxen' },
@@ -19,9 +21,10 @@ const PRICE_CATEGORIES = {
 export default function SeatsPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
-  const locationState = location.state as
-    | { movieTitle?: string; posterUrl?: string }
-    | null;
+  const locationState = location.state as {
+    movieTitle?: string;
+    posterUrl?: string;
+  } | null;
   const screeningId = parseInt(searchParams.get('screeningId') || '0');
   const { data: screeningData, isLoading: screeningLoading } =
     useScreening(screeningId);
@@ -87,11 +90,13 @@ export default function SeatsPage() {
     0,
   );
   const allSelectedSeatsCategorized =
-    selectedSeats.length > 0 && selectedSeatDetails.length === selectedSeats.length;
+    selectedSeats.length > 0 &&
+    selectedSeatDetails.length === selectedSeats.length;
 
   if (!screeningId) return <div>Ingen screening vald.</div>;
 
-  if (screeningLoading || hallLoading || seatsLoading) return <div>Loading...</div>;
+  if (screeningLoading || hallLoading || seatsLoading)
+    return <div>Loading...</div>;
 
   return (
     <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center px-4 py-8 text-white md:px-6">
@@ -104,11 +109,14 @@ export default function SeatsPage() {
           <p>Tid: {screening?.screeningTime?.slice(0, 5) ?? '-'}</p>
           <p>Screening ID: {screeningId}</p>
           <p>Totalpris: {totalPrice} kr</p>
+          {/* {ageRestriction && (
+            <p>Åldersgräns för att se filmen: {movieAgeRestriction} år</p>
+          )} */}
         </div>
       </div>
 
       <div className="w-full max-w-5xl rounded-2xl bg-[#111] p-6 shadow-lg md:p-8">
-        <div className="mb-6 text-center text-sm uppercase tracking-[0.35em] text-[#b69852]">
+        <div className="mb-6 text-center text-sm tracking-[0.35em] text-[#b69852] uppercase">
           Duk
         </div>
 
@@ -120,13 +128,15 @@ export default function SeatsPage() {
               </span>
               {Array.from({ length: row.numberOfSeats }, (_, i) => {
                 const numberInRow = i + 1;
-                const seatStatus = seatStatusMap.get(`${row.name}-${numberInRow}`);
+                const seatStatus = seatStatusMap.get(
+                  `${row.name}-${numberInRow}`,
+                );
 
                 if (!seatStatus) {
                   return (
                     <div
                       key={`${row.name}-${numberInRow}`}
-                      className="h-10 w-10 rounded border border-dashed opacity-30"
+                      className="rounded border border-dashed opacity-30 sm:h-6 sm:w-6 lg:h-10 lg:w-10"
                     />
                   );
                 }
@@ -136,7 +146,7 @@ export default function SeatsPage() {
                     key={seatStatus.seatId}
                     seatId={seatStatus.seatId}
                     label={seatStatus.numberInRow}
-                    status={seatStatus.status}
+                    status={seatStatus.status as SeatVariants}
                     selected={selectedSeats.includes(seatStatus.seatId)}
                     onToggle={toggleSeat}
                   />
@@ -167,15 +177,20 @@ export default function SeatsPage() {
       </div>
 
       <div className="mt-8 w-full max-w-4xl rounded-2xl bg-[#1E1E1E] p-6 shadow-lg">
-        <h2 className="text-lg font-semibold text-[#b69852]">Valda biljetter</h2>
+        <h2 className="text-lg font-semibold text-[#b69852]">
+          Valda biljetter
+        </h2>
         {selectedSeats.length === 0 ? (
           <p className="mt-3 text-sm text-gray-300">
-            Välj ett eller flera säten och ange biljettkategori innan du går vidare.
+            Välj ett eller flera säten och ange biljettkategori innan du går
+            vidare.
           </p>
         ) : (
           <div className="mt-4 space-y-3">
             {selectedSeats.map((seatId) => {
-              const seat = (seatStatuses ?? []).find((item) => item.seatId === seatId);
+              const seat = (seatStatuses ?? []).find(
+                (item) => item.seatId === seatId,
+              );
               if (!seat) return null;
 
               return (
@@ -184,32 +199,29 @@ export default function SeatsPage() {
                   className="grid gap-3 rounded-xl border border-[#333] p-4 md:grid-cols-[1fr_220px]"
                 >
                   <div>
-                    <p className="font-medium">Plats {seat.rowName}{seat.numberInRow}</p>
-                    <p className="text-sm text-gray-300">Säte ID: {seat.seatId}</p>
+                    <p className="font-medium">
+                      Plats {seat.rowName}
+                      {seat.numberInRow}
+                    </p>
+                    <p className="text-sm text-gray-300">
+                      Säte ID: {seat.seatId}
+                    </p>
                   </div>
-                  <select
+                  <BiografSelect
                     value={seatCategories[seatId] ?? ''}
-                    onChange={(e) =>
+                    onValueChange={(value) =>
                       setSeatCategories((current) => ({
                         ...current,
-                        [seatId]: e.target.value as keyof typeof PRICE_CATEGORIES,
+                        [seatId]: value as keyof typeof PRICE_CATEGORIES,
                       }))
                     }
-                    className="rounded border border-gray-600 bg-transparent p-2 text-sm text-white"
-                  >
-                    <option value="" className="text-black">
-                      Välj biljettkategori
-                    </option>
-                    <option value="Adult" className="text-black">
-                      Vuxen
-                    </option>
-                    <option value="Child" className="text-black">
-                      Barn
-                    </option>
-                    <option value="Senior" className="text-black">
-                      Pensionär
-                    </option>
-                  </select>
+                    options={[
+                      { value: 'Adult', label: 'Vuxen' },
+                      { value: 'Child', label: 'Barn' },
+                      { value: 'Senior', label: 'Pensionär' },
+                    ]}
+                    placeholder="Välj biljettkategori"
+                  />
                 </div>
               );
             })}
@@ -249,7 +261,9 @@ export default function SeatsPage() {
                 },
                 seats: selectedSeatDetails,
                 reservationSessionId,
-                reservationExpiresAt: new Date(Date.now() + 2 * 60 * 1000).toISOString(),
+                reservationExpiresAt: new Date(
+                  Date.now() + 2 * 60 * 1000,
+                ).toISOString(),
               },
             });
           } catch {
