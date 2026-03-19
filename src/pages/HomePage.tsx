@@ -8,6 +8,7 @@ import {
   BiografRow,
 } from '@/components/custom/BiografContainer';
 import BiografFilters from '@/components/custom/BiografFilters';
+import DesktopFeaturedMovieCard from '@/components/custom/DesktopFeaturedMovieCard';
 import MobileFeaturedMovieCard from '@/components/custom/MobileFeaturedMovieCard';
 import MoviePoster from '@/components/custom/MoviePoster';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -51,9 +52,13 @@ export default function HomePage() {
     <BiografContainer>
       {!IS_V1 && <BiografFilters onFiltersChange={handleFilter} />}
 
-      {isMobile && currentFeatured && (
+      {currentFeatured && (
         <div className="mb-6 px-2">
-          <MobileFeaturedMovieCard movie={currentFeatured} />
+          {isMobile ? (
+            <MobileFeaturedMovieCard movie={currentFeatured} />
+          ) : (
+            <DesktopFeaturedMovieCard movie={currentFeatured} />
+          )}
         </div>
       )}
 

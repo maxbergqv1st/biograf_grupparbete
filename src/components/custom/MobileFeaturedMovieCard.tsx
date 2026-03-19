@@ -7,6 +7,7 @@ import { Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
+import type { MovieSummaryDto } from '@/api/generated/models/movieSummaryDto';
 import BiografButton from '@/components/custom/BiografButton';
 import { BiografContainer } from '@/components/custom/BiografContainer';
 import {
@@ -15,13 +16,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog-trailer';
 
-import type { FeaturedMovie } from '@/hooks/useFeaturedMovie';
-
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
-
-type MobileFeaturedMovieCardProps = {
-  movie: FeaturedMovie;
-};
 
 function FeaturedPoster({ poster, title }: { poster?: string; title: string }) {
   if (!poster) {
@@ -83,7 +78,7 @@ function FeaturedMovieInfoPanel({
   bookLabel,
   trendingLabel,
 }: {
-  movie: FeaturedMovie;
+  movie: MovieSummaryDto;
   onBook: () => void;
   bookLabel: string;
   trendingLabel: string;
@@ -122,7 +117,7 @@ function FeaturedMovieInfoPanel({
             <span className="text-[#F3EEE4]/50">.</span>
           </>
         )}
-        {movie.language && <span>{movie.language}</span>}
+        {movie.language && <span>{movie.language.code}</span>}
       </div>
 
       {movie.genres && movie.genres.length > 0 && (
@@ -136,7 +131,9 @@ function FeaturedMovieInfoPanel({
 
 export default function MobileFeaturedMovieCard({
   movie,
-}: MobileFeaturedMovieCardProps) {
+}: {
+  movie: MovieSummaryDto;
+}) {
   const navigate = useNavigate();
   const { t } = useTranslation('main');
   const [displayedMovie, setDisplayedMovie] = useState(movie);
@@ -148,7 +145,7 @@ export default function MobileFeaturedMovieCard({
 
     pendingRef.current = movie;
 
-    if (!movie.poster) {
+    if (!movie.posterUrl) {
       setFading(true);
       setTimeout(() => {
         setDisplayedMovie(movie);
@@ -159,7 +156,7 @@ export default function MobileFeaturedMovieCard({
 
     const img = new Image();
     img.src = cld
-      .image(movie.poster)
+      .image(movie.posterUrl)
       .resize(fill().width(600).height(600))
       .toURL();
 
@@ -187,13 +184,13 @@ export default function MobileFeaturedMovieCard({
     >
       <div className="relative overflow-hidden rounded-2xl border border-[#B69852]/40 shadow-[0px_0px_8px_1px_rgba(182,152,82,0.3)]">
         <FeaturedPoster
-          poster={displayedMovie.poster}
+          poster={displayedMovie.posterUrl ?? undefined}
           title={displayedMovie.title}
         />
 
         <div className="absolute right-4 bottom-20 z-10">
           <WatchTrailerButton
-            trailerUrl={displayedMovie.trailerUrl}
+            trailerUrl={displayedMovie.trailerUrl ?? undefined}
             label={t('featuredMovie.watchTrailer')}
           />
         </div>
