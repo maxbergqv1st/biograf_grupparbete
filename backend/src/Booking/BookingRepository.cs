@@ -42,6 +42,38 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
         var bookingReference = "FV-" + Guid.NewGuid().ToString("N")[..10].ToUpper();
 
         await using var connection = await db.OpenConnectionAsync(ct);
+        await using var transaction = await connection.BeginTransactionAsync(ct);
+
+        if (!string.IsNullOrWhiteSpace(dto.ReservationSessionId))
+        {
+            foreach (var seat in dto.Seats)
+            {
+                var reservationCheckSql = @"
+                    SELECT COUNT(*)
+                    FROM seat_ghosts
+                    WHERE screening_id = @screeningId
+                      AND seat_id = @seatId
+                      AND session_id = @sessionId
+                      AND expires_at > NOW()
+                ";
+                await using var reservationCheckCmd = connection.CreateCommand();
+                reservationCheckCmd.Transaction = transaction;
+                reservationCheckCmd.CommandText = reservationCheckSql;
+                reservationCheckCmd.Parameters.AddWithValue("@screeningId", dto.ScreeningId);
+                reservationCheckCmd.Parameters.AddWithValue("@seatId", seat.SeatId);
+                reservationCheckCmd.Parameters.AddWithValue("@sessionId", dto.ReservationSessionId);
+
+                var reservationCount = Convert.ToInt32(
+                    await reservationCheckCmd.ExecuteScalarAsync(ct)
+                );
+
+                if (reservationCount == 0)
+                {
+                    await transaction.RollbackAsync(ct);
+                    throw new InvalidOperationException("Seat reservation is missing or has expired.");
+                }
+            }
+        }
 
         var bookingSql = @"
             INSERT INTO bookings (email, screening_id, total_price, user_id, booking_reference)
@@ -49,6 +81,7 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
             SELECT LAST_INSERT_ID();
         ";
         await using var bookingCmd = connection.CreateCommand();
+        bookingCmd.Transaction = transaction;
         bookingCmd.CommandText = bookingSql;
         bookingCmd.Parameters.AddWithValue("@email", dto.Email);
         bookingCmd.Parameters.AddWithValue("@screeningId", dto.ScreeningId);
@@ -65,6 +98,7 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
                 VALUES (@bookingId, @seatId, @priceCategorySeatId, @finalPrice);
             ";
             await using var seatCmd = connection.CreateCommand();
+            seatCmd.Transaction = transaction;
             seatCmd.CommandText = seatSql;
             seatCmd.Parameters.AddWithValue("@bookingId", bookingId);
             seatCmd.Parameters.AddWithValue("@seatId", seat.SeatId);
@@ -72,6 +106,23 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
             seatCmd.Parameters.AddWithValue("@finalPrice", seat.FinalPrice);
             await seatCmd.ExecuteNonQueryAsync(ct);
         }
+
+        if (!string.IsNullOrWhiteSpace(dto.ReservationSessionId))
+        {
+            var deleteGhostsSql = @"
+                DELETE FROM seat_ghosts
+                WHERE screening_id = @screeningId
+                  AND session_id = @sessionId
+            ";
+            await using var deleteGhostsCmd = connection.CreateCommand();
+            deleteGhostsCmd.Transaction = transaction;
+            deleteGhostsCmd.CommandText = deleteGhostsSql;
+            deleteGhostsCmd.Parameters.AddWithValue("@screeningId", dto.ScreeningId);
+            deleteGhostsCmd.Parameters.AddWithValue("@sessionId", dto.ReservationSessionId);
+            await deleteGhostsCmd.ExecuteNonQueryAsync(ct);
+        }
+
+        await transaction.CommitAsync(ct);
 
         return new BookingResult(bookingId, bookingReference);
     }
@@ -128,6 +179,5 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
         return bookings;
     }
 }
-
 
 

@@ -18,6 +18,7 @@ public record CreateBookingDto(
     int ScreeningId,
     decimal Total_price,
     int? User_Id,
+    string? ReservationSessionId,
     List<BookingSeatDto> Seats
 );
 
