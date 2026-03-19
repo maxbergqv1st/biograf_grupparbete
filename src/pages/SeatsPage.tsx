@@ -142,8 +142,8 @@ export default function SeatsPage() {
     return <div>Loading...</div>;
 
   return (
-    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center px-4 py-8 text-white md:px-6">
-      <div className="mb-8 w-full max-w-4xl rounded-2xl bg-[#1E1E1E] p-6 shadow-lg">
+    <div className="mx-auto flex min-h-screen w-full max-w-6xl flex-col items-center px-2 py-6 text-white sm:px-4 md:px-6 md:py-8">
+      <div className="mb-8 w-full rounded-2xl bg-[#1E1E1E] p-4 shadow-lg sm:max-w-4xl sm:p-6">
         <h1 className="text-2xl font-bold text-[#b69852]">Välj säten</h1>
         <div className="mt-4 grid gap-2 text-sm md:grid-cols-2">
           <p>Film: {movieTitle}</p>
@@ -158,7 +158,7 @@ export default function SeatsPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-5xl rounded-2xl bg-[#111] p-4 shadow-lg md:p-8">
+      <div className="w-full rounded-2xl bg-[#111] p-3 shadow-lg sm:max-w-5xl sm:p-4 md:p-8">
         <div className="mb-6 text-center text-sm tracking-[0.35em] text-[#b69852] uppercase">
           Duk
         </div>
@@ -238,7 +238,7 @@ export default function SeatsPage() {
         </div>
       </div>
 
-      <div className="mt-8 w-full max-w-4xl rounded-2xl bg-[#1E1E1E] p-6 shadow-lg">
+      <div className="mt-8 w-full rounded-2xl bg-[#1E1E1E] p-4 shadow-lg sm:max-w-4xl sm:p-6">
         <h2 className="text-lg font-semibold text-[#b69852]">
           Valda biljetter
         </h2>
