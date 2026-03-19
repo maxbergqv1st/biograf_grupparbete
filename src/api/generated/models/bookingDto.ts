@@ -10,6 +10,12 @@ export interface BookingDto {
   id: number;
   email: string;
   screeningId: number;
+  /** @nullable */
+  screeningDate?: string | null;
+  /** @nullable */
+  movieTitle?: string | null;
+  /** @nullable */
+  hallName?: string | null;
   total_price: number;
   /** @nullable */
   user_Id?: number | null;

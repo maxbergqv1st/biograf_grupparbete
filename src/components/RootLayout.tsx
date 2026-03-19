@@ -6,6 +6,7 @@ import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import { CookieConsent } from '@/components/CookieConsent';
 import BiografButton from '@/components/custom/BiografButton';
 import { BiografContainer } from '@/components/custom/BiografContainer';
 import BiografSelect from '@/components/custom/BiografSelect';
@@ -131,6 +132,7 @@ export default function RootLayout() {
           <span>© {new Date().getFullYear()} All rights reserved.</span>
         </BiografContainer>
       </footer>
+      <CookieConsent />
     </BiografContainer>
   );
 }
