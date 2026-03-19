@@ -217,6 +217,7 @@ export default function MobileMovieDetailsPage() {
                 state={{
                   movieTitle: movie?.title ?? 'Okand film',
                   posterUrl: movie?.poster ?? '',
+                  ageRating: movie?.ageRating ?? 0,
                 }}
               >
                 Välj sittplats

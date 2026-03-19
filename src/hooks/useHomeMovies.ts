@@ -1,6 +1,8 @@
 import { useMovies } from '@/api/hooks/useMovies';
 import { useLoaderData } from 'react-router-dom';
 
+import type { MovieSummaryDto } from '@/api/generated/models/movieSummaryDto';
+
 const IS_V1 = import.meta.env.VITE_API_VERSION !== 'v2';
 
 export type MovieListItem = {
@@ -17,6 +19,7 @@ type Filters = {
 
 type HomeMoviesResult = {
   movies: MovieListItem[] | undefined;
+  featuredMovies: MovieSummaryDto[];
   isLoading: boolean;
   isError: boolean;
 };
@@ -30,7 +33,21 @@ function useHomeMoviesV1(_filters?: Filters): HomeMoviesResult {
     poster: (m.poster as string) ?? (m.poster_url as string),
   }));
 
-  return { movies, isLoading: false, isError: false };
+  const featuredMovies: MovieSummaryDto[] = (loaderData ?? []).map((m) => ({
+    id: m.id as number,
+    title: (m.title as string) ?? 'Untitled',
+    tagline: '',
+    ageRating: '',
+    posterUrl: ((m.poster as string) ?? (m.poster_url as string)) || undefined,
+    genres: [],
+  }));
+
+  return {
+    movies,
+    featuredMovies,
+    isLoading: false,
+    isError: false,
+  };
 }
 
 function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
@@ -42,7 +59,12 @@ function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
     poster: m.posterUrl ?? undefined,
   }));
 
-  return { movies, isLoading: query.isLoading, isError: query.isError,error:query.error };
+  return {
+    movies,
+    featuredMovies: query.data?.data ?? [],
+    isLoading: query.isLoading,
+    isError: query.isError,
+  };
 }
 
 export const useHomeMovies = IS_V1 ? useHomeMoviesV1 : useHomeMoviesV2;
