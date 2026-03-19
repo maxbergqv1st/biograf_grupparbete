@@ -77,6 +77,7 @@ public static class Server
         Session.Start();
         LoginRoutes.Start();
         RestApi.Start();
+        AiChatRoutes.Start();
         FileServer.Start();
 
         // V2
