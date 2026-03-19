@@ -1,8 +1,3 @@
-using WebApp.Halls;
-using WebApp.Screenings;
-using WebApp.Bookings;
-using WebApp.Seats;
-
 namespace WebApp;
 
 public static class Server
@@ -92,8 +87,6 @@ public static class Server
         App.MapCloudinaryEndpoints();
         App.MapHallEndpoints();
         App.MapBookingEndpoints();
-        RestApi.Start();
-        // Start the server on port 5001
         App.MapSeatsEndpoints();
         var runUrl = "http://localhost:" + Globals.port;
         Log("Server running on:", runUrl);

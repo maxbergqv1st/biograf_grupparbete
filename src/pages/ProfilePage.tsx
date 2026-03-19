@@ -1,4 +1,5 @@
 import { useGetMe, useLogout } from '@/api/hooks/useAuth';
+import { useMyBookings } from '@/api/hooks/useBookings';
 import { User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +16,21 @@ export default function ProfilePage() {
   const logout = useLogout();
   const navigate = useNavigate();
   const user = meData?.data;
+  const { data: bookings } = useMyBookings();
+
+  const now = new Date();
+  const bookingsData = bookings?.data || [];
+  const activeBookings = bookingsData.filter(
+    (b) =>
+      b.status === 'accepted' &&
+      b.screeningDate &&
+      new Date(b.screeningDate) > now,
+  );
+  const historyBookings = bookingsData.filter(
+    (b) =>
+      b.status === 'cancelled' ||
+      (b.screeningDate && new Date(b.screeningDate) <= now),
+  );
 
   if (isLoading) {
     return (
@@ -34,6 +50,22 @@ export default function ProfilePage() {
       onSuccess: () => navigate('/'),
     });
   };
+  const BookingCard = ({ booking }: { booking: any }) => (
+    <div className="mb-4 rounded-lg border border-[#B69852] bg-[#141414] p-4">
+      <h3 className="text-lg font-bold text-[#F3EEE4]">{booking.movieTitle}</h3>
+      <p className="text-sm text-[#7b6738]">
+        {new Date(booking.screeningDate).toLocaleDateString('sv-SE')}{' '}
+        {new Date(booking.screeningDate).toLocaleTimeString('sv-SE', {
+          hour: '2-digit',
+          minute: '2-digit',
+        })}
+      </p>
+      <p className="text-sm text-[#7b6738]">{booking.hallName}</p>
+      <p className="text-sm text-[#7b6738]">
+        Bokningsnummer: {booking.bookingReference}
+      </p>
+    </div>
+  );
 
   return (
     <BiografCol
@@ -75,6 +107,22 @@ export default function ProfilePage() {
           )}
         </BiografCol>
       </BiografRow>
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="rounded-lg border border-[#B69852] bg-[#141414] p-4">
+          <h2 className="mb-4 text-xl font-bold text-[#F3EEE4]">
+            Aktiva biljetter
+          </h2>
+          {activeBookings.map((b) => (
+            <BookingCard key={b.id} booking={b} />
+          ))}
+        </div>
+        <div className="rounded-lg border border-[#B69852] bg-[#141414] p-4">
+          <h2 className="mb-4 text-xl font-bold text-[#F3EEE4]">Historik</h2>
+          {historyBookings.map((b) => (
+            <BookingCard key={b.id} booking={b} />
+          ))}
+        </div>
+      </div>
 
       <Separator className="bg-[#B69852]/30" />
 
@@ -83,7 +131,7 @@ export default function ProfilePage() {
         onClick={handleLogout}
         disabled={logout.isPending}
       >
-        {logout.isPending ? 'Logging out...' : 'Log out'}
+        {logout.isPending ? 'Logging out...' : 'Logga ut'}
       </BiografButton>
     </BiografCol>
   );

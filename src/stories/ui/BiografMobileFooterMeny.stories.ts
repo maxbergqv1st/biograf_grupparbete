@@ -1,11 +1,12 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { MemoryRouter } from 'react-router-dom';
 
-import BiografMobileFooterMeny from '@/components/custom/BiografMobileFooterMeny';
+import MobileFooterNav from '@/components/custom/MobileFooterNav';
+import { mobileNavItems } from '@/config/mobileNavigation';
 
 const meta = {
-  title: 'Example/components/ui/BiografMobileFooterMeny',
-  component: BiografMobileFooterMeny,
+  title: 'Example/components/ui/MobileFooterNav',
+  component: MobileFooterNav,
   parameters: {
     layout: 'centered',
     viewport: {
@@ -19,9 +20,8 @@ const meta = {
         children: Story(),
       }),
   ],
-
-  args: { onClick: () => console.log('clicked') },
-} satisfies Meta<typeof BiografMobileFooterMeny>;
+  args: { items: mobileNavItems },
+} satisfies Meta<typeof MobileFooterNav>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;

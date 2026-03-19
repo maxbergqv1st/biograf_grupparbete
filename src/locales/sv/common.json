@@ -7,6 +7,33 @@
     "products": "Produkter",
     "vision": "Vår vision"
   },
+  "mobileNav": {
+    "movies": "Filmer",
+    "offers": "Erbjudanden",
+    "aboutUs": "Om oss",
+    "login": "Logga in",
+    "profile": "Profil",
+    "bookings": "Bokningar",
+    "tickets": "Biljetter",
+    "admin": "Admin",
+    "more": "Mer"
+  },
+  "filters": {
+    "filter": "Filtrera",
+    "filterMovies": "Filtrera filmer",
+    "searchMovie": "Sök film",
+    "searchPlaceholder": "Sök t.ex. Truman...",
+    "searchShort": "Sök...",
+    "selectDate": "Välj datum",
+    "ageRating": "Åldersgräns",
+    "allAges": "Alla åldrar",
+    "childrenB": "Barn (B)",
+    "from7": "Från 7 år",
+    "from11": "Från 11 år",
+    "from15": "Från 15 år",
+    "reset": "Rensa",
+    "search": "Sök"
+  },
   "underDevelopment": {
     "title": "Funktion under utveckling",
     "message": "Den här funktionen kommer snart.",
