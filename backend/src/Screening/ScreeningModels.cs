@@ -11,6 +11,7 @@ public record ScreeningDto(
     TimeOnly ScreeningTime
 );
 
+
 public record CreateScreeningDto(
     int MovieId,
     int HallId,

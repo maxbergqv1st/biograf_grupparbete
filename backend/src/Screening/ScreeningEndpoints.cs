@@ -50,7 +50,7 @@ public static class ScreeningEndpoints
 
         group
             .MapPost(
-                "/api/v2/screenings", 
+                "/",
                 async Task<Ok<ScreeningDto>> (
                     CreateScreeningDto dto,
                     IScreeningRepository repo,
