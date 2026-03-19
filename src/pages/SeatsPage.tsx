@@ -18,6 +18,15 @@ const PRICE_CATEGORIES = {
   Senior: { priceCategorySeatId: 3, discountModifier: 0.8, label: 'Pensionär' },
 } as const;
 
+// Generated to serve if crypto.randomUUID is not available. fallback, funkar att komma åt seatpage från min mobil. 
+function createReservationSessionId() {
+  if (typeof globalThis.crypto?.randomUUID === 'function') {
+    return globalThis.crypto.randomUUID();
+  }
+
+  return `reservation-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
 export default function SeatsPage() {
   const [searchParams] = useSearchParams();
   const location = useLocation();
@@ -39,7 +48,7 @@ export default function SeatsPage() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [selectedSeats, setSelectedSeats] = useState<number[]>([]);
-  const [reservationSessionId] = useState(() => crypto.randomUUID());
+  const [reservationSessionId] = useState(createReservationSessionId);
   const [reservationError, setReservationError] = useState('');
   const [isReserving, setIsReserving] = useState(false);
   const [seatCategories, setSeatCategories] = useState<
@@ -92,6 +101,9 @@ export default function SeatsPage() {
   const allSelectedSeatsCategorized =
     selectedSeats.length > 0 &&
     selectedSeatDetails.length === selectedSeats.length;
+  const maxSeatsInRow = Math.max(
+    ...(hallConfig?.map((row) => row.numberOfSeats) ?? [1]),
+  );
 
   if (!screeningId) return <div>Ingen screening vald.</div>;
 
@@ -107,7 +119,6 @@ export default function SeatsPage() {
           <p>Salong: {screening?.hallName ?? '-'}</p>
           <p>Datum: {screening?.screeningDate ?? '-'}</p>
           <p>Tid: {screening?.screeningTime?.slice(0, 5) ?? '-'}</p>
-          <p>Screening ID: {screeningId}</p>
           <p>Totalpris: {totalPrice} kr</p>
           {/* {ageRestriction && (
             <p>Åldersgräns för att se filmen: {movieAgeRestriction} år</p>
@@ -115,45 +126,59 @@ export default function SeatsPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-5xl rounded-2xl bg-[#111] p-6 shadow-lg md:p-8">
+      <div className="w-full max-w-5xl rounded-2xl bg-[#111] p-4 shadow-lg md:p-8">
         <div className="mb-6 text-center text-sm tracking-[0.35em] text-[#b69852] uppercase">
           Duk
         </div>
 
-        <div className="space-y-3">
-          {hallConfig?.map((row) => (
-            <div key={row.name} className="flex justify-center gap-2">
-              <span className="flex w-8 items-center justify-center font-semibold">
-                {row.name}
-              </span>
-              {Array.from({ length: row.numberOfSeats }, (_, i) => {
-                const numberInRow = i + 1;
-                const seatStatus = seatStatusMap.get(
-                  `${row.name}-${numberInRow}`,
-                );
+        <div className="px-1 sm:px-2">
+          <div className="space-y-2 sm:space-y-3">
+            {hallConfig?.map((row) => (
+              <div
+                key={row.name}
+                className="grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-3"
+              >
+                <div
+                  className="mx-auto grid items-center justify-center gap-1 sm:gap-2"
+                  style={{
+                    width: `${((row.numberOfSeats + 1) / (maxSeatsInRow + 1)) * 100}%`,
+                    gridTemplateColumns: `repeat(${row.numberOfSeats}, minmax(0, 1fr))`,
+                  }}
+                >
+                  {Array.from({ length: row.numberOfSeats }, (_, i) => {
+                    const numberInRow = i + 1;
+                    const seatStatus = seatStatusMap.get(
+                      `${row.name}-${numberInRow}`,
+                    );
 
-                if (!seatStatus) {
-                  return (
-                    <div
-                      key={`${row.name}-${numberInRow}`}
-                      className="rounded border border-dashed opacity-30 sm:h-6 sm:w-6 lg:h-10 lg:w-10"
-                    />
-                  );
-                }
+                    if (!seatStatus) {
+                      return (
+                        <div
+                          key={`${row.name}-${numberInRow}`}
+                          className="h-7 min-w-0 rounded border border-dashed opacity-30 sm:h-8 lg:h-10"
+                        />
+                      );
+                    }
 
-                return (
-                  <Seat
-                    key={seatStatus.seatId}
-                    seatId={seatStatus.seatId}
-                    label={seatStatus.numberInRow}
-                    status={seatStatus.status as SeatVariants}
-                    selected={selectedSeats.includes(seatStatus.seatId)}
-                    onToggle={toggleSeat}
-                  />
-                );
-              })}
-            </div>
-          ))}
+                    return (
+                      <Seat
+                        key={seatStatus.seatId}
+                        seatId={seatStatus.seatId}
+                        label={seatStatus.numberInRow}
+                        status={seatStatus.status as SeatVariants}
+                        selected={selectedSeats.includes(seatStatus.seatId)}
+                        onToggle={toggleSeat}
+                        className="h-7 min-w-0 w-full px-0 text-[11px] sm:h-8 sm:text-xs lg:h-10 lg:text-sm"
+                      />
+                    );
+                  })}
+                </div>
+                <span className="flex w-5 items-center justify-center text-xs font-semibold sm:w-8 sm:text-sm">
+                  {row.name}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 

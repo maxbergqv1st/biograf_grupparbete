@@ -16,6 +16,7 @@ interface SeatProps {
   selected: boolean;
   onToggle: (seatId: number) => void;
   label?: string | number;
+  className?: string;
 }
 
 export function Seat({
@@ -24,6 +25,7 @@ export function Seat({
   selected,
   onToggle,
   label,
+  className,
 }: SeatProps) {
   const isMobile = useIsMobile();
   const isDisabled = status !== 'available';
@@ -38,7 +40,7 @@ export function Seat({
       disabled={isDisabled}
       onClick={() => onToggle(seatId)}
       size={isMobile ? 'sm' : 'lg'}
-      className={cn('text-sm', visualClass)}
+      className={cn('text-sm', visualClass, className)}
     >
       {label ?? seatId}
     </Toggle>
