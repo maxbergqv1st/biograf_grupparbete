@@ -12,13 +12,11 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
+import type { NavLink as MobileNavItem } from '@/config/navigation';
+
 import { cn } from '@/lib/utils';
 
-export type MobileNavItem = {
-  path: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-};
+export type { NavLink as MobileNavItem } from '@/config/navigation';
 
 type LanguagePickerProps = {
   languages: string[];

@@ -49,7 +49,7 @@ export default function MobileBookingPage({
       <BiografCard
         title='Bokning & Betalning'
         headerClassName="text-[#b69852] text-center text-xl"
-        className="bg-[#1E1E1E] w-full border border-[#b69852]">
+        className="bg-[#1a1a1a] w-full border-none shadow-none">
         <div className="flex flex-col text-white p-4 space-y-4">
 
           {/* Booking details */}
@@ -106,7 +106,7 @@ export default function MobileBookingPage({
       </BiografCard>
 
       {bookingState?.reservationExpiresAt ? (
-        <div className="w-full rounded-xl border border-[#b69852] bg-[#141414] px-4 py-3 text-sm text-white text-center">
+        <div className="w-full rounded-xl bg-[#1a1a1a] px-4 py-3 text-sm text-white text-center">
           Dina platser är reserverade i 2 minuter.
           <div className="font-semibold text-[#b69852]">
             Tid kvar: {formattedTimeLeft}

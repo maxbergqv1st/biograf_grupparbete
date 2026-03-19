@@ -65,9 +65,9 @@ function TrailerPreview({
               <div className="aspect-video w-full bg-zinc-800" />
             )}
             <div className="absolute inset-0 flex items-center justify-center">
-              <BiografButton variant="playIcon" size="icon">
+              <div className="inline-flex items-center justify-center rounded-full bg-[#141414] border-2 border-[#B69852] h-10 w-10">
                 <Play className="ml-0.5 h-5 w-5 fill-current text-[#F3EEE4]" />
-              </BiografButton>
+              </div>
             </div>
           </button>
         }

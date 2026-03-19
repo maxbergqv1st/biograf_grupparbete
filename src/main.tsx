@@ -16,7 +16,6 @@ import CancelBookingPage from './pages/CancelBookingPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
-import MobileMovieDetailsPage from './pages/MobileMovieDetailsPage';
 import MovieDetailsPage from './pages/MovieDetailsPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ProfilePage from './pages/ProfilePage';
@@ -45,11 +44,6 @@ const router = createBrowserRouter([
       {
         path: 'movies/:id',
         element: <MovieDetailsPage />,
-        ...(IS_V1 && { loader: moviesLoader }),
-      },
-      {
-        path: 'mmovies/:id',
-        element: <MobileMovieDetailsPage />,
         ...(IS_V1 && { loader: moviesLoader }),
       },
       { path: 'admin', element: <AdminPage /> },

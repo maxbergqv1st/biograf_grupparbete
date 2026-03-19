@@ -19,7 +19,7 @@ export default function MobileMovieDetailsPagePoster({
         <AdvancedImage
           cldImg={cld.image(poster).resize(fill().width(600).height(900))}
           alt={`Poster för ${title}`}
-          className="border-border h-[63.5dvh] w-full rounded-lg border object-contain shadow-sm"
+          className="h-[63.5dvh] w-full rounded-lg object-cover shadow-sm"
         />
       ) : (
         <div className="flex h-full w-full items-center justify-center rounded-lg bg-zinc-700">
