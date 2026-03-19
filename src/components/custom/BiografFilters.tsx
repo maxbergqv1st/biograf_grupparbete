@@ -38,6 +38,7 @@ export default function BiografFilters({ onFiltersChange }: Props) {
     setDate('');
     setAgeRating('');
     setSearch('');
+    onFiltersChange({ date: '', ageRating: '', search: '' });
   };
 
   return (
