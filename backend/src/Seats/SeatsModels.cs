@@ -11,8 +11,19 @@ public record HallRowConfig(
 public record SeatStatus(
   int SeatId,
   int ScreeningId,
-  string? Status
+  string? Status,
+  string RowName,
+  int NumberInRow
 );
 
+public record ReserveSeatsRequest(
+  int ScreeningId,
+  string SessionId,
+  List<int> SeatIds
+);
 
+public record ReleaseSeatsRequest(
+  int ScreeningId,
+  string SessionId
+);
 
