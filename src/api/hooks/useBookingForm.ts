@@ -14,6 +14,7 @@ export type BookingPayload = {
   screeningId: number;
   totalPrice: number;
   userId?: number;
+  reservationSessionId?: string;
   seats: BookingSeat[];
 };
 
@@ -36,6 +37,7 @@ export function useBookingForm() {
         screeningId: payload.screeningId,
         total_price: payload.totalPrice,
         user_id: payload.userId ?? null,
+        reservationSessionId: payload.reservationSessionId ?? null,
         seats: payload.seats.map(s => ({
           seatId: s.seatId,
           priceCategorySeatId: s.priceCategorySeatId,

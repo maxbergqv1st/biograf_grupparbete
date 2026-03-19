@@ -37,6 +37,14 @@ export default function MovieDetailsPage() {
   const screenings = screeningsData?.data ?? [];
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const selectedScreening =
+    selectedDate && selectedTime
+      ? screenings.find(
+          (screening) =>
+            screening.screeningDate === selectedDate &&
+            screening.screeningTime === selectedTime,
+        )
+      : null;
   const uniqueDates = Array.from(
     new Set(
       screenings
@@ -134,9 +142,23 @@ export default function MovieDetailsPage() {
             </div>
             <Separator className="flex justify-center" />
             <div className="flex justify-center p-10">
-              <BiografButton className="w-full max-w-xs md:max-w-sm">
-                <Link to="/booking">Välj sittplats</Link>
-              </BiografButton>
+              {selectedScreening ? (
+                <BiografButton asChild className="w-full max-w-xs md:max-w-sm">
+                  <Link
+                    to={`/seats?screeningId=${selectedScreening.id}`}
+                    state={{
+                      movieTitle: movie?.title ?? 'Okand film',
+                      posterUrl: movie?.poster ?? '',
+                    }}
+                  >
+                    Välj sittplats
+                  </Link>
+                </BiografButton>
+              ) : (
+                <BiografButton className="w-full max-w-xs md:max-w-sm" disabled>
+                  Välj sittplats
+                </BiografButton>
+              )}
             </div>
           </AspectRatio>
           <div className="flex flex-col gap-4 lg:col-start-3 lg:row-span-3 lg:row-start-1">
@@ -180,7 +202,7 @@ export default function MovieDetailsPage() {
               </span>
             </AspectRatio>
             <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
-              <div className="blur-md">
+              <div className="absolute inset-0 translate-x-300 scale-100 scale-x-550 blur-sm">
                 <MovieDetailsPagePoster
                   title={movie?.title ?? 'Untitled'}
                   poster={movie?.poster ?? undefined}
