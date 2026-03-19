@@ -36,7 +36,7 @@ export default function BiografSelect({
     <Select value={value} onValueChange={onValueChange}>
       <SelectTrigger
         className={cn(
-          'border-input bg-background text-foreground ring-offset-background focus:ring-ring h-10 w-full !rounded-md border px-3 text-sm shadow-sm focus:ring-2 focus:ring-offset-2 focus:outline-none',
+    'h-10 w-full !rounded-md border border-border bg-[var(--color-bg-primary)] px-3 text-sm text-[var(--color-text-primary)] shadow-sm focus:outline-none focus:ring-2 focus:ring-border focus:ring-offset-0 [&>svg]:text-[var(--border)]',
           triggerClassName,
           className,
         )}
@@ -45,7 +45,7 @@ export default function BiografSelect({
       </SelectTrigger>
       <SelectContent
         className={cn(
-          'bg-popover text-popover-foreground !rounded-md border shadow-md',
+    'bg-popover text-popover-foreground !rounded-md border border-border shadow-md',
           contentClassName,
         )}
       >
