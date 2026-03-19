@@ -33,11 +33,19 @@ export default function MobileMovieDetailsPage() {
   const { movie } = useMovieDetails(movieId);
   const { data: screeningsData, isLoading: screeningsLoading } =
     useScreenings(movieId);
-
+  console.log('mobilepage');
   const argsTrailer = (Trailer.args ?? {}) as BiografButtonProps;
   const screenings = screeningsData?.data ?? [];
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const selectedScreening =
+    selectedDate && selectedTime
+      ? screenings.find(
+          (screening) =>
+            screening.screeningDate === selectedDate &&
+            screening.screeningTime === selectedTime,
+        )
+      : null;
   const uniqueDates = Array.from(
     new Set(
       screenings
@@ -202,9 +210,23 @@ export default function MobileMovieDetailsPage() {
         </div>
         <Separator className="flex justify-center" />
         <div className="flex justify-center p-10">
-          <BiografButton className="w-full max-w-xs md:max-w-sm">
-            <Link to="/booking">Välj sittplats</Link>
-          </BiografButton>
+          {selectedScreening ? (
+            <BiografButton className="w-full max-w-xs md:max-w-sm">
+              <Link
+                to={`/seats?screeningId=${selectedScreening.id}`}
+                state={{
+                  movieTitle: movie?.title ?? 'Okand film',
+                  posterUrl: movie?.poster ?? '',
+                }}
+              >
+                Välj sittplats
+              </Link>
+            </BiografButton>
+          ) : (
+            <BiografButton className="w-full max-w-xs md:max-w-sm" disabled>
+              Välj sittplats
+            </BiografButton>
+          )}
         </div>
       </AspectRatio>
     </div>

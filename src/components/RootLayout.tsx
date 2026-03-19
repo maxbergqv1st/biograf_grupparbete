@@ -6,6 +6,7 @@ import { User } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
+import { CookieConsent } from '@/components/CookieConsent';
 import BiografButton from '@/components/custom/BiografButton';
 import { BiografContainer } from '@/components/custom/BiografContainer';
 import BiografSelect from '@/components/custom/BiografSelect';
@@ -126,11 +127,12 @@ export default function RootLayout() {
       <footer className="bg-muted/40 border-t py-8">
         <BiografContainer className="text-muted-foreground flex flex-col items-center gap-2 text-center text-sm">
           <span className="text-foreground text-base font-semibold">
-            The Good Grocery
+            Filmvisarna AB
           </span>
           <span>© {new Date().getFullYear()} All rights reserved.</span>
         </BiografContainer>
       </footer>
+      <CookieConsent />
     </BiografContainer>
   );
 }

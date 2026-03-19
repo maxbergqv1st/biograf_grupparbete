@@ -1,8 +1,9 @@
 import React from 'react';
-import BiografInput from './BiografInput';
-import BiografSelect from './BiografSelect';
+
 import BiografButton from './BiografButton';
 import BiografDatePicker from './BiografDatePicker';
+import BiografInput from './BiografInput';
+import BiografSelect from './BiografSelect';
 
 type FormValues = {
   title: string;
@@ -45,10 +46,7 @@ export function MovieFormView({
   error,
 }: MovieFormViewProps) {
   return (
-    <form
-      onSubmit={onSubmit}
-      className="grid max-w-520px gap-3 p-6"
-    >
+    <form onSubmit={onSubmit} className="max-w-520px grid gap-3 p-6">
       <h1 className="text-2xl font-bold text-[#F3EEE4]">Lägg till filmer</h1>
       <BiografInput
         value={values.title}
@@ -72,7 +70,7 @@ export function MovieFormView({
         onChange={(e) => onChange('description', e.target.value)}
         placeholder="Beskrivning"
         required
-        className="bg--card-foreground text--color-gold border--border placeholder:text--muted focus-visible:ring--gold min-h-80px rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2"
+        className="bg--card-foreground text--color-gold border--border placeholder:text--muted focus-visible:ring--gold min-h-80px rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:outline-none"
       />
       <BiografInput
         type="number"
@@ -116,7 +114,9 @@ export function MovieFormView({
       <BiografInput
         type="file"
         accept="image/*"
-        onChange={(e) => onFileChange((e.target as HTMLInputElement).files?.[0] ?? null)}
+        onChange={(e) =>
+          onFileChange((e.target as HTMLInputElement).files?.[0] ?? null)
+        }
       />
       <BiografButton type="submit" disabled={submitting}>
         {submitting ? 'Sparar...' : 'Spara'}
