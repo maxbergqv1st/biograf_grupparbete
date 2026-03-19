@@ -75,11 +75,11 @@
   --color-bg-elevated: oklch(0.1 0 0);
   --color-bg-tertiary: oklch(0.14 0 0);
   --color-text-primary: oklch(0.95 0.02 85);
-  --color-gold: oklch(0.65 0.12 55);
-  --color-gold-dark: oklch(0.4 0.1 45);
+  --color-gold: #B69852;
+  --color-gold-dark: #8A7340;
 
-  --shadow-gold: 0px 0px 5px 1px oklch(0.65 0.12 55);
-  --shadow-gold-lg: 0px 0px 15px 1px oklch(0.65 0.12 55);
+  --shadow-gold: 0px 0px 5px 1px #B69852;
+  --shadow-gold-lg: 0px 0px 15px 1px #B69852;
 }
 
 @layer base {
