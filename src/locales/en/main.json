@@ -4,5 +4,31 @@
     "about": "About us",
     "products": "Products",
     "vision": "Our vision"
+  },
+  "movieDetails": {
+    "director": "Director",
+    "actors": "Actors",
+    "noTitle": "No title",
+    "noAgeRating": "No age rating",
+    "noLanguage": "No language",
+    "noGenres": "No genres",
+    "noDescription": "No description",
+    "noDirector": "No director",
+    "noActors": "No actors",
+    "bookTickets": "Book tickets",
+    "selectDateAndTime": "Select date & time",
+    "loadingDates": "Loading dates...",
+    "noDates": "No dates available",
+    "loadingTimes": "Loading times...",
+    "noTimes": "No times available",
+    "selectADate": "Select a date",
+    "selectSeat": "Select seat",
+    "close": "Close"
+  },
+  "featuredMovie": {
+    "trending": "Trending",
+    "watchTrailer": "Watch Trailer",
+    "book": "Book",
+    "moviesInCinema": "Movies in our cinema:"
   }
 }
