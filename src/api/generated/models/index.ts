@@ -6,8 +6,14 @@
  * OpenAPI spec version: v2
  */
 
+export * from './actorDto';
+export * from './bookingDto';
+export * from './bookingResult';
+export * from './bookingSeatDto';
+export * from './cancelBookingRequest';
+export * from './createBookingDto';
 export * from './createScreeningDto';
-export * from './getApiMoviesParams';
+export * from './forgotPasswordRequest';
 export * from './getApiV2MoviesParams';
 export * from './hallDto';
 export * from './languageDto';
@@ -15,5 +21,8 @@ export * from './loginRequest';
 export * from './movieDto';
 export * from './movieSummaryDto';
 export * from './postApiV2MoviesMovieIdPosterBody';
+export * from './registerRequest';
+export * from './resetPasswordRequest';
 export * from './screeningDto';
 export * from './userDto';
+export * from './verifyEmailRequest';

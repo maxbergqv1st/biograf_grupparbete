@@ -7,8 +7,9 @@ import {
 } from '@/components/custom/BiografContainer';
 import BiografFilters from '@/components/custom/BiografFilters';
 import MoviePoster from '@/components/custom/MoviePoster';
-import { useHomeMovies } from '@/hooks/useHomeMovies';
 import { Skeleton } from '@/components/ui/skeleton';
+
+import { useHomeMovies } from '@/hooks/useHomeMovies';
 
 const IS_V1 = import.meta.env.VITE_API_VERSION !== 'v2';
 
@@ -27,7 +28,7 @@ export default function HomePage() {
     setFilters(newFilters);
   };
 
-  const { movies, isLoading, isError } = useHomeMovies(
+  const { movies, isLoading, isError, error } = useHomeMovies(
     IS_V1
       ? undefined
       : {
@@ -36,6 +37,9 @@ export default function HomePage() {
           search: filters.search || undefined,
         },
   );
+
+  console.log(movies);
+  console.log(error);
 
   return (
     <BiografContainer>

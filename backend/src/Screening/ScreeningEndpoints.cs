@@ -14,6 +14,24 @@ public static class ScreeningEndpoints
 
         group
             .MapGet(
+                "/{id:int}",
+                async Task<Results<Ok<ScreeningDto>, NotFound>> (
+                    int id,
+                    IScreeningRepository repo,
+                    CancellationToken ct
+                ) =>
+                {
+                    var screening = await repo.GetScreeningByIdAsync(id, ct);
+                    return screening is null
+                        ? TypedResults.NotFound()
+                        : TypedResults.Ok(screening);
+                }
+            )
+            .WithSummary("Get screening by id")
+            .WithDescription("Returns a screening by id");
+
+        group
+            .MapGet(
                 "/by-movie-id/{id:int}",
                 async Task<Ok<IEnumerable<ScreeningDto>>> (
                     int id,
@@ -32,7 +50,7 @@ public static class ScreeningEndpoints
 
         group
             .MapPost(
-                "/api/v2/screenings", 
+                "/",
                 async Task<Ok<ScreeningDto>> (
                     CreateScreeningDto dto,
                     IScreeningRepository repo,

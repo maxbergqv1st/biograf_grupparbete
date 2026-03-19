@@ -125,7 +125,7 @@ export default function BiografFilters({ onFiltersChange }: Props) {
               Åldersgräns
             </label>
             <BiografSelect
-              placeholder="Age Rating"
+              placeholder="Alla åldrar"
               value={ageRating}
               options={ageOptions}
               onValueChange={(e) => setAgeRating(e)}
@@ -182,7 +182,7 @@ export default function BiografFilters({ onFiltersChange }: Props) {
               Åldersgräns
             </label>
             <BiografSelect
-              placeholder="Age Rating"
+              placeholder="Alla åldrar"
               value={ageRating}
               options={ageOptions}
               onValueChange={(e) => setAgeRating(e)}

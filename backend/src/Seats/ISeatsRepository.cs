@@ -6,6 +6,6 @@ public interface ISeatsRepository
 {
   Task<List<HallRowConfig>> GetHallRowConfigsAsync(int hallId, CancellationToken ct);
   Task<List<SeatStatus>> GetSeatStatusesAsync(int screeningId, CancellationToken ct);
-
+  Task<bool> ReserveSeatsAsync(ReserveSeatsRequest request, CancellationToken ct);
+  Task ReleaseSeatsAsync(ReleaseSeatsRequest request, CancellationToken ct);
 }
-
