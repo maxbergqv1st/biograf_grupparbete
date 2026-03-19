@@ -11,7 +11,7 @@ import {
   generateReservationSessionId,
   PRICE_CATEGORIES,
   type PriceCategory,
-} from '@/components/seats/seatPricing';
+} from '@/components/seats/SeatPricing';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';

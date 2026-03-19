@@ -3,7 +3,7 @@ import BiografSelect from '@/components/custom/BiografSelect';
 import {
   calculateTicketPrice,
   type PriceCategory,
-} from '@/components/seats/seatPricing';
+} from '@/components/seats/SeatPricing';
 import { useTranslation } from 'react-i18next';
 
 type SeatSelectionPanelProps = {
