@@ -49,7 +49,7 @@
   --foreground: #f3f3f3;
   --card: #141414(1 0 0);
   --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
+  --popover: #7b6738;
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0% 0 0);
   --primary-foreground: #f3eee4;
@@ -58,7 +58,7 @@
   --muted: #7b6738;
   --muted-foreground: #f3eee4;
   --accent: oklch(0% 0 0);
-  --accent-foreground: oklch(0.205 0 0);
+  --accent-foreground: #7b6738;
   --destructive: oklch(0.577 0.245 27.325);
   --border: #7b6738;
   --input: oklch(0.922 0 0);
