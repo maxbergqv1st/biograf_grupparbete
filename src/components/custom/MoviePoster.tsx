@@ -2,6 +2,7 @@ import { Cloudinary } from '@cloudinary/url-gen';
 import { fill } from '@cloudinary/url-gen/actions/resize';
 import { AdvancedImage } from '@cloudinary/react';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/common/useIsMobile';
 import BiografCard from './BiografCard';
 
 const cld = new Cloudinary({ cloud: { cloudName: 'dveubqvv8' } });
@@ -18,12 +19,13 @@ export default function MoviePoster({
   poster,
 }: MoviePosterProps) {
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
 
   return (
     <BiografCard
       className="group relative mx-auto w-full max-w-xs cursor-pointer overflow-hidden rounded-xl! border-zinc-800 p-0! shadow-md transition-transform hover:scale-[1.02]"
       contentClassName="p-0!"
-      onClick={() => navigate('/movies/' + id)}
+      onClick={() => navigate(isMobile ? '/mmovies/' + id : '/movies/' + id)}
     >
       {poster ? (
         <AdvancedImage
