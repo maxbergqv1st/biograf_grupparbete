@@ -28,7 +28,9 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
                 Total_price: reader.GetDecimal("total_price"),
                 User_Id: reader.IsDBNull(reader.GetOrdinal("user_id")) ? null : reader.GetInt32("user_id"),
                 BookingReference: reader.GetString("booking_reference"),
-                Status: reader.GetString("status")
+                Status: reader.GetString("status"),
+                MovieTitle: null,
+                HallName: null
             ));
         }
         return bookings;
@@ -89,9 +91,11 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
     public async Task<List<BookingDto>> GetBookingsByUserIdAsync(int userId, CancellationToken ct)
     {
         var sql = @"
-            SELECT b.id, b.email, b.screening_id, s.start_time AS screening_date, b.total_price, b.status, b.booking_reference AS reference, b.user_id
+            SELECT b.id, b.email, b.screening_id, s.start_time AS screening_date, m.title, h.name AS hall_name, b.total_price, b.status, b.booking_reference AS reference, b.user_id
             FROM bookings b
             JOIN screenings s ON b.screening_id = s.id
+            JOIN movies m ON s.movie_id = m.id
+            JOIN hall h ON s.hall_id = h.id
             WHERE b.user_id = @userId
             ORDER BY s.start_time DESC
             ";
@@ -115,7 +119,10 @@ public class BookingRepository(MySqlDataSource db) : IBookingRepository
                 Total_price: reader.GetDecimal("total_price"),
                 Status: reader.GetString("status"),
                 BookingReference: reader.GetString("reference"),
-                User_Id: reader.GetInt32("user_id")
+                User_Id: reader.GetInt32("user_id"),
+                MovieTitle: reader.GetString("title"),
+                HallName: reader.GetString("hall_name")
+
             ));
         }
         return bookings;
