@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { useGetMe } from '@/api/hooks/useAuth';
 import { navLinks } from '@/config/navigation';
 import { User } from 'lucide-react';
+import { MessageCircleMore } from 'lucide-react';
+import { X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 
@@ -14,6 +16,7 @@ import BiografSelect from '@/components/custom/BiografSelect';
 import { useStateObject } from '@/utils/useStateObject';
 
 import { LANGUAGES } from '../../i18n';
+import AiChat from '../parts/AiChat';
 
 export default function RootLayout() {
   const [expanded, setExpanded] = useState(false);
@@ -25,6 +28,8 @@ export default function RootLayout() {
   const pathName = useLocation().pathname;
 
   const isActive = (path: string) => path === pathName;
+
+  const [showChat, setShowChat] = useState(false);
 
   const stateAndSetter = useStateObject({
     categoryChoice: 'All',
@@ -57,6 +62,7 @@ export default function RootLayout() {
             >
               Menu
             </button>
+
             <nav className="hidden md:flex" id="primary-navigation">
               <ul className="flex items-center gap-6 text-sm font-medium">
                 {navLinks.map(({ label, path }) => (
@@ -123,6 +129,30 @@ export default function RootLayout() {
           <Outlet context={stateAndSetter} />
         </BiografContainer>
       </main>
+
+      <button
+        onClick={() => setShowChat(!showChat)}
+        className="fixed right-4 bottom-32 z-50 rounded-full bg-[#B69852] p-3 text-white shadow-lg hover:bg-[#a08547]"
+      >
+        <MessageCircleMore size={24} />
+      </button>
+
+      {showChat && (
+        <div className="fixed right-4 bottom-20 z-50 flex h-[400px] w-80 flex-col rounded-lg border-2 border-[#B69852] bg-[#141414] shadow-xl sm:w-96">
+          <div className="flex items-center justify-between border-b border-[#B69852] p-3">
+            <h3 className="font-bold text-[#F3EEE4]">Chatta med Margot</h3>
+            <button
+              onClick={() => setShowChat(false)}
+              className="text-[#F3EEE4] hover:text-[#B69852]"
+            >
+              <X size={20} />
+            </button>
+          </div>
+          <div className="flex-grow overflow-auto">
+            <AiChat />
+          </div>
+        </div>
+      )}
 
       <footer className="bg-muted/40 border-t py-8">
         <BiografContainer className="text-muted-foreground flex flex-col items-center gap-2 text-center text-sm">
