@@ -10,18 +10,6 @@ public record ScreeningDto(
     DateOnly ScreeningDate,
     TimeOnly ScreeningTime
 );
-/*
-public record BookingDto(
-    int Id,
-    string Email,
-    int ScreeningId,
-    string ScreeningDate,
-    decimal TotalPrice,
-    string Status,
-    string Reference,
-    int UserId
-);
-*/
 
 
 public record CreateScreeningDto(
