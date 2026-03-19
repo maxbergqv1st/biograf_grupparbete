@@ -41,9 +41,9 @@
 :root {
   --radius: 0.625rem;
   --background: oklch(0% 0 0);
-  --background-gradient: linear-gradient(to top right,
-      #000000 0%,
-      #141414 25%,
+  --background-gradient: radial-gradient(at center,
+      #7b6738a7 0%,
+      #141414 50%,
       #141414 75%,
       #000000 100%);
   --foreground: #f3f3f3;
