@@ -118,7 +118,10 @@ export default function BiografFilters({ onFiltersChange }: Props) {
             <BiografInput
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => {
+                setDate(e.target.value);
+                onFiltersChange({ search, ageRating: ageRating === 'all' ? '' : ageRating, date: e.target.value });
+              }}
               className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
             />
           </BiografCol>
@@ -178,7 +181,10 @@ export default function BiografFilters({ onFiltersChange }: Props) {
             <BiografInput
               type="date"
               value={date}
-              onChange={(e) => setDate(e.target.value)}
+              onChange={(e) => {
+                setDate(e.target.value);
+                onFiltersChange({ search, ageRating: ageRating === 'all' ? '' : ageRating, date: e.target.value });
+              }}
               className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
             />
           </BiografCol>
