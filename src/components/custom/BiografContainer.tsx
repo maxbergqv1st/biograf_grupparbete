@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils';
 const containerVariants = cva('w-full', {
   variants: {
     variant: {
-      default: 'mx-auto max-w-[970px] px-3',
+      default: 'mx-auto max-w-[970px] px-2',
       fluid: 'mx-auto px-3',
       page: 'flex min-h-screen flex-col',
     },
@@ -24,8 +24,8 @@ const containerVariants = cva('w-full', {
 
 interface ContainerProps
   extends
-  HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof containerVariants> { }
+    HTMLAttributes<HTMLDivElement>,
+    VariantProps<typeof containerVariants> {}
 
 export function BiografContainer({
   variant,

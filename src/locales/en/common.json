@@ -7,6 +7,33 @@
     "products": "Products",
     "vision": "Our vision"
   },
+  "mobileNav": {
+    "movies": "Movies",
+    "offers": "Offers",
+    "aboutUs": "About us",
+    "login": "Login",
+    "profile": "Profile",
+    "bookings": "Bookings",
+    "tickets": "Tickets",
+    "admin": "Admin",
+    "more": "More"
+  },
+  "filters": {
+    "filter": "Filter",
+    "filterMovies": "Filter movies",
+    "searchMovie": "Search movie",
+    "searchPlaceholder": "Search e.g. Truman...",
+    "searchShort": "Search...",
+    "selectDate": "Select date",
+    "ageRating": "Age rating",
+    "allAges": "All ages",
+    "childrenB": "Children (B)",
+    "from7": "From 7 years",
+    "from11": "From 11 years",
+    "from15": "From 15 years",
+    "reset": "Reset",
+    "search": "Search"
+  },
   "underDevelopment": {
     "title": "Feature under development",
     "message": "This feature is coming soon.",
