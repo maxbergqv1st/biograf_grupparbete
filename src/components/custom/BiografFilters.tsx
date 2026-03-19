@@ -31,7 +31,8 @@ export default function BiografFilters({ onFiltersChange }: Props) {
   ];
   console.log(ageRating, 'Alla åldrar');
   const handleFilter = () => {
-    onFiltersChange({ date, ageRating, search });
+    onFiltersChange({ date, search, ageRating: ageRating === 'all' ? '' : ageRating });
+    //onFiltersChange({ date, ageRating, search });
   };
 
   const handleReset = () => {
