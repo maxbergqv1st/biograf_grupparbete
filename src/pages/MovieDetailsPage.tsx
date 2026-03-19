@@ -60,6 +60,15 @@ export default function MovieDetailsPage() {
   useEffect(() => {
     setSelectedTime(null);
   }, [selectedDate]);
+  useEffect(() => {
+    if (!selectedDate || selectedTime) return;
+    const firstForDate = screenings.find(
+      (screening) => screening.screeningDate === selectedDate,
+    );
+    if (firstForDate?.screeningTime) {
+      setSelectedTime(firstForDate.screeningTime);
+    }
+  }, [selectedDate, selectedTime, screenings]);
   const dateItems = screeningsLoading
     ? [<span key="loading">Hämtar datum...</span>]
     : uniqueDates.length === 0
@@ -110,7 +119,7 @@ export default function MovieDetailsPage() {
       {isMobile ? (
         <MobileMovieDetailsPage />
       ) : (
-        <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 gap-4 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
+        <div className="relative left-1/2 grid h-dvh w-screen -translate-x-1/2 grid-cols-1 px-4 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-3 lg:gap-6 lg:px-8">
           <div className="h-[91.5dvh] w-full">
             <MovieDetailsPagePoster
               title={movie?.title ?? 'Untitled'}
@@ -127,6 +136,7 @@ export default function MovieDetailsPage() {
                 selectable
                 desktopTwoRows
                 className="p-5"
+                autoSelectFirst
                 items={dateItems}
               />
             </div>
@@ -138,6 +148,7 @@ export default function MovieDetailsPage() {
                 className="p-5"
                 items={timeItems}
                 resetSelectionKey={selectedDate}
+                autoSelectFirst
               />
             </div>
             <Separator className="flex justify-center" />
@@ -202,8 +213,8 @@ export default function MovieDetailsPage() {
                   : 'No actors'}
               </span>
             </AspectRatio>
-            <AspectRatio className="relative h-40 max-h-full w-full overflow-hidden rounded-lg border">
-              <div className="absolute inset-0 translate-x-300 scale-100 scale-x-550 blur-sm">
+            <AspectRatio className="relative h-53 max-h-full w-full overflow-hidden rounded-lg border">
+              <div className="blur-sm">
                 <MovieDetailsPagePoster
                   title={movie?.title ?? 'Untitled'}
                   poster={movie?.poster ?? undefined}

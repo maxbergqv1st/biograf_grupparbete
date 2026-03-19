@@ -16,17 +16,28 @@ type BiografCarouselProps = BaseCarouselProps & {
   desktopTwoRows?: boolean;
   items?: React.ReactNode[];
   resetSelectionKey?: string | number | null;
+  autoSelectFirst?: boolean;
 };
 //lagt till  selectable = false,
 export default function CarouselSize({
   selectable = false,
   desktopTwoRows = false,
+  autoSelectFirst = false,
   ...props
 }: BiografCarouselProps) {
   const [selectedIndex, setSelectedIndex] = React.useState<number | null>(null);
   React.useEffect(() => {
     setSelectedIndex(null);
   }, [props.resetSelectionKey]);
+  React.useEffect(() => {
+    if (autoSelectFirst && selectedIndex === null) {
+      const itemsLength = props.items?.length ?? (props.children ? 5 : 0);
+      if (itemsLength > 0) {
+        setSelectedIndex(0);
+      }
+    }
+  }, [autoSelectFirst, selectable, selectedIndex, props.items, props.children]);
+
   const fallbackItems = props.children
     ? Array.from({ length: 5 }, () => props.children)
     : [];
