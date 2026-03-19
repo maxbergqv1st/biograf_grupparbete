@@ -1,6 +1,8 @@
 import { useMovies } from '@/api/hooks/useMovies';
 import { useLoaderData } from 'react-router-dom';
 
+import type { FeaturedMovie } from './useFeaturedMovie';
+
 const IS_V1 = import.meta.env.VITE_API_VERSION !== 'v2';
 
 export type MovieListItem = {
@@ -17,6 +19,8 @@ type Filters = {
 
 type HomeMoviesResult = {
   movies: MovieListItem[] | undefined;
+  featuredMovie: FeaturedMovie | undefined;
+  featuredMovies: FeaturedMovie[];
   isLoading: boolean;
   isError: boolean;
 };
@@ -30,7 +34,19 @@ function useHomeMoviesV1(_filters?: Filters): HomeMoviesResult {
     poster: (m.poster as string) ?? (m.poster_url as string),
   }));
 
-  return { movies, isLoading: false, isError: false };
+  const featuredMovies: FeaturedMovie[] = (loaderData ?? []).map((m) => ({
+    id: m.id as number,
+    title: (m.title as string) ?? 'Untitled',
+    poster: ((m.poster as string) ?? (m.poster_url as string)) || undefined,
+  }));
+
+  return {
+    movies,
+    featuredMovie: featuredMovies[0],
+    featuredMovies,
+    isLoading: false,
+    isError: false,
+  };
 }
 
 function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
@@ -42,7 +58,23 @@ function useHomeMoviesV2(filters?: Filters): HomeMoviesResult {
     poster: m.posterUrl ?? undefined,
   }));
 
-  return { movies, isLoading: query.isLoading, isError: query.isError,error:query.error };
+  const featuredMovies: FeaturedMovie[] = (query.data?.data ?? []).map((m) => ({
+    id: m.id,
+    title: m.title ?? 'Untitled',
+    poster: m.posterUrl ?? undefined,
+    trailerUrl: m.trailerUrl ?? undefined,
+    language: m.language?.code ?? undefined,
+    ageRating: m.ageRating ?? undefined,
+    genres: m.genres ?? [],
+  }));
+
+  return {
+    movies,
+    featuredMovie: featuredMovies[0],
+    featuredMovies,
+    isLoading: query.isLoading,
+    isError: query.isError,
+  };
 }
 
 export const useHomeMovies = IS_V1 ? useHomeMoviesV1 : useHomeMoviesV2;
