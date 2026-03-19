@@ -28,38 +28,27 @@ export default function BiografFilters({ onFiltersChange }: Props) {
   const { t } = useTranslation('common');
   const [date, setDate] = useState<string>('');
   const [ageRating, setAgeRating] = useState<string>('all');
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [searchFocused, setSearchFocused] = useState(false);
-  const [ageRating, setAgeRating] = useState<string>('');
   const [search, setSearch] = useState<string>('');
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const ageOptions = [
-    { value: 'all', label: 'Alla åldrar' },
-    { value: 'B', label: 'Barn (B)' },
-    { value: '7', label: 'Från 7 år' },
-    { value: '11', label: 'Från 11 år' },
-    { value: '15', label: 'Från 15 år' },
-    { value: ' ', label: t('filters.allAges') },
+    { value: 'all', label: t('filters.allAges') },
     { value: 'B', label: t('filters.childrenB') },
     { value: '7', label: t('filters.from7') },
     { value: '11', label: t('filters.from11') },
     { value: '15', label: t('filters.from15') },
   ];
 
-  console.log(ageRating, 'Alla åldrar');
   const handleFilter = () => {
-    onFiltersChange({ date, ageRating, search });
-    setDialogOpen(false);
     onFiltersChange({ date, search, ageRating: ageRating === 'all' ? '' : ageRating });
-    //onFiltersChange({ date, ageRating, search });
+    setDialogOpen(false);
   };
 
   const handleReset = () => {
-  setDate('');
-  setAgeRating('all');
-  setSearch('');
-  onFiltersChange({ date: '', ageRating: '', search: '' });
+    setDate('');
+    setAgeRating('all');
+    setSearch('');
+    onFiltersChange({ date: '', ageRating: '', search: '' });
   };
 
   return (
@@ -103,7 +92,10 @@ export default function BiografFilters({ onFiltersChange }: Props) {
               <BiografInput
                 type="date"
                 value={date}
-                onChange={(e) => setDate(e.target.value)}
+                onChange={(e) => {
+                  setDate(e.target.value);
+                  onFiltersChange({ search, ageRating: ageRating === 'all' ? '' : ageRating, date: e.target.value });
+                }}
                 className="box-border h-11 w-full min-w-0 appearance-none rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4] [&::-webkit-calendar-picker-indicator]:invert [&::-webkit-date-and-time-value]:text-left"
               />
             </BiografCol>
@@ -115,7 +107,10 @@ export default function BiografFilters({ onFiltersChange }: Props) {
                 placeholder={t('filters.allAges')}
                 value={ageRating}
                 options={ageOptions}
-                onValueChange={(e) => setAgeRating(e)}
+                onValueChange={(e) => {
+                  setAgeRating(e);
+                  onFiltersChange({ date, search, ageRating: e === 'all' ? '' : e });
+                }}
                 className="h-11 w-full rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
               />
             </BiografCol>
@@ -138,70 +133,6 @@ export default function BiografFilters({ onFiltersChange }: Props) {
           </BiografContainer>
         </DialogContent>
       </Dialog>
-              <BiografButton
-                variant="default"
-                onClick={handleFilter}
-                className="h-11 px-4"
-              >
-                Sök
-              </BiografButton>
-            </div>
-          </BiografCol>
-        </BiografRow>
-      </div>
-
-      {/* mobil filter delen */}
-      <div
-        className={`overflow-hidden transition-all duration-300 ease-in-out md:hidden ${filterOpen ? 'max-h-[500px] opacity-100' : 'max-h-0 opacity-0'}`}
-      >
-        <BiografRow className="items-end gap-y-4">
-          <BiografCol xs={12} sm={6}>
-            <label className="mb-1 block text-sm text-[#F3EEE4]">
-              Välj datum
-            </label>
-            <BiografInput
-              type="date"
-              value={date}
-              onChange={(e) => {
-                setDate(e.target.value);
-                onFiltersChange({ search, ageRating: ageRating === 'all' ? '' : ageRating, date: e.target.value });
-              }}
-              className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
-            />
-          </BiografCol>
-          <BiografCol xs={12} sm={6}>
-            <label className="mb-1 block text-sm text-[#F3EEE4]">
-              Åldersgräns
-            </label>
-            <BiografSelect
-              placeholder="Alla åldrar"
-              value={ageRating}
-              options={ageOptions}
-              onValueChange={(e) => {
-              setAgeRating(e);
-              onFiltersChange({ date, search, ageRating: e === 'all' ? '' : e });
-            }}
-              className="h-11 w-full cursor-pointer rounded-md border border-[#7b6738] bg-[#141414] px-3 py-2 text-[#F3EEE4]"
-            />
-          </BiografCol>
-          <BiografCol xs={12} className="flex items-center gap-3">
-            <BiografButton
-              variant="default" //  samma som sök knappen
-              onClick={handleReset}
-              className="h-11 flex-1"
-            >
-              Rensa
-            </BiografButton>
-            <BiografButton
-              variant="default"
-              onClick={handleFilter}
-              className="h-11 flex-1"
-            >
-              Sök
-            </BiografButton>
-          </BiografCol>
-        </BiografRow>
-      </div>
 
       <BiografContainer className="hidden px-0 md:block">
         <BiografRow className="items-end gap-x-4 gap-y-4">
