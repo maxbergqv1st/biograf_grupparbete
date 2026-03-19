@@ -64,11 +64,15 @@ public class MovieRepository(MySqlDataSource db) : IMovieRepository
     WHERE (@search IS NULL OR m.title LIKE @search OR m.original_title LIKE @search)
     AND (@ageRating IS NULL OR m.age_rating = @ageRating)
     AND (@genre IS NULL OR EXISTS (
-        SELECT 1 FROM movie_genres mg2
-        JOIN genres g2 ON g2.id = mg2.genre_id
-        WHERE mg2.movie_id = m.id 
-        AND g2.name = @genre
-        AND (@screeningDate IS NULL OR m.release_date >= @screeningDate)
+    SELECT 1 FROM movie_genres mg2
+    JOIN genres g2 ON g2.id = mg2.genre_id
+    WHERE mg2.movie_id = m.id 
+    AND g2.name = @genre
+    ))
+    AND (@screeningDate IS NULL OR EXISTS (
+        SELECT 1 FROM screenings s
+        WHERE s.movie_id = m.id
+        AND DATE(s.start_time) = @screeningDate
     ))
     GROUP BY m.id";
         await using var connection = await db.OpenConnectionAsync(ct);
