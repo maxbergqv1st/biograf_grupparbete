@@ -4,7 +4,7 @@ Ett fullstack-projekt-exempel för att lära sig .NET Minimal API med React. Anv
 
 ## Teknikstack
 
-**Frontend:** Vite + React + TypeScript + Bootstrap + Sass
+**Frontend:** Vite + React + TypeScript + Tailwind + Shadcn
 **Backend:** .NET 10 Minimal API + DynData
 **Databas:** MySQL
 
@@ -14,7 +14,7 @@ Ett fullstack-projekt-exempel för att lära sig .NET Minimal API med React. Anv
 ┌─────────────────────────────────────────────────────────────┐
 │                        Frontend                             │
 │              Vite + React + TypeScript                      │
-│                 Bootstrap + Sass                            │
+│                 Tailwind + Shadcn                           │
 └─────────────────────┬───────────────────────────────────────┘
                       │ HTTP (REST API)
 ┌─────────────────────▼───────────────────────────────────────┐
@@ -56,8 +56,8 @@ cp backend/db-config.template.json backend/db-config.json
 
 3. Installera och starta:
 ```bash
-npm install
-npm run dev
+bun install
+bun run dev
 ```
 
 ## Konfiguration

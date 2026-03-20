@@ -31,8 +31,15 @@ dist-ssr
 *.sw?
 
 backend/db-config.json
+backend/auth-config.json
+backend/email-config.json
 backend/obj/
 backend/bin/
 
 *storybook.log
 storybook-static
+
+src/mocks/
+
+# env files
+.env*

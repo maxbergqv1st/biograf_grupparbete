@@ -1,19 +1,22 @@
+import { useEffect } from 'react';
+
 import { useLocation } from 'react-router-dom';
 
-import Footer from './partials/Footer';
-import Header from './partials/Header';
-import Main from './partials/Main';
+import RootLayout from '@/components/RootLayout';
+// import LoginModal from '@/components/auth/LoginModal';
 
 export default function App() {
-  // scroll to top when the route changes
-  useLocation();
-  window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  const { pathname } = useLocation();
+
+  // Scroll to top on every route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+  }, [pathname]);
 
   return (
     <>
-      <Header />
-      <Main />
-      <Footer />
+      <RootLayout />
+      {/* <LoginModal /> */}
     </>
   );
 }

@@ -1,0 +1,14 @@
+{
+  "cancel": {
+    "title": "Avboka",
+    "confirmMessage": "Är du säker på att du vill avboka bokning {{ref}}?",
+    "confirmButton": "Ja, avboka",
+    "cancelling": "Avbokar...",
+    "successTitle": "Bokning avbokad",
+    "successMessage": "Din bokning har avbokats.",
+    "errorTitle": "Fel",
+    "errorMessage": "Kunde inte avboka. Bokningen kan redan vara avbokad.",
+    "missingRef": "Ingen bokningsreferens angiven.",
+    "goHome": "Gå till startsidan"
+  }
+}

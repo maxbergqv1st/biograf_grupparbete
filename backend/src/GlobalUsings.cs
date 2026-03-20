@@ -16,3 +16,13 @@ global using WebApp;
 global using static WebApp.Shared;
 global using static WebApp.RequestBodyParser;
 global using static WebApp.DbQuery;
+
+// Movies
+
+global using WebApp.Movies;
+global using WebApp.Screenings;
+global using WebApp.Auth;
+global using WebApp.Email;
+global using WebApp.Halls;
+global using WebApp.Bookings;
+global using WebApp.Seats;

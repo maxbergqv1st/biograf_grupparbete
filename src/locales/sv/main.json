@@ -1,8 +1,34 @@
 {
-    "title": "Välkommen till Biograf",
-    "navigation": {
-        "about": "Om oss",
-        "products": "Produkter",
-        "vision": "Vår vision"
-    }
+  "title": "Välkommen till Biograf",
+  "navigation": {
+    "about": "Om oss",
+    "products": "Produkter",
+    "vision": "Vår vision"
+  },
+  "movieDetails": {
+    "director": "Regissör",
+    "actors": "Skådespelare",
+    "noTitle": "Ingen titel",
+    "noAgeRating": "Ingen åldersgräns",
+    "noLanguage": "Inget språk",
+    "noGenres": "Inga genrer",
+    "noDescription": "Ingen beskrivning",
+    "noDirector": "Ingen regissör",
+    "noActors": "Inga skådespelare",
+    "bookTickets": "Boka biljetter",
+    "selectDateAndTime": "Välj datum & tid",
+    "loadingDates": "Hämtar datum...",
+    "noDates": "Inga datum tillgängliga",
+    "loadingTimes": "Hämtar tider...",
+    "noTimes": "Inga tider tillgängliga",
+    "selectADate": "Välj ett datum",
+    "selectSeat": "Välj sittplats",
+    "close": "Stäng"
+  },
+  "featuredMovie": {
+    "trending": "Trendig",
+    "watchTrailer": "Watch Trailer",
+    "book": "Boka",
+    "moviesInCinema": "Filmer i våran bio:"
+  }
 }
