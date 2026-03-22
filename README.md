@@ -1,160 +1,175 @@
-# Minimal API + React Fullstack
+# Filmvisarna
 
-Ett fullstack-projekt-exempel för att lära sig .NET Minimal API med React. Använd gärna detta som utgångspunkt för ert projektarbete, men ta bort produkttabell ur databasen och "börja om" med egna komponenter ocxh stajling i frontend-kod.
+**Filmvisarna** (The Film Watchers) is a full-stack cinema booking web application where users can browse movies, view screenings, select seats, and book tickets.
 
-## Teknikstack
+## Team
 
-**Frontend:** Vite + React + TypeScript + Tailwind + Shadcn
-**Backend:** .NET 10 Minimal API + DynData
-**Databas:** MySQL
+| Name | GitHub |
+|------|--------|
+| Ivan | [@ikolokoltsev](https://github.com/ikolokoltsev) |
+| David | [@NonSentientExistence](https://github.com/NonSentientExistence) |
+| Marcus | [@Marcusjk9](https://github.com/Marcusjk9) / [@marcusHome9](https://github.com/marcusHome9) |
+| Dusan | [@DusanTodo](https://github.com/DusanTodo) |
+| Max Bergqvist | [@maxbergqv1st](https://github.com/maxbergqv1st) / [@MaxBergqvist](https://github.com/MaxBergqvist) |
+| Lukas | [@smilefaceea](https://github.com/smilefaceea) |
 
-## Arkitektur
+## Tech Stack
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                        Frontend                             │
-│              Vite + React + TypeScript                      │
-│                 Tailwind + Shadcn                           │
-└─────────────────────┬───────────────────────────────────────┘
-                      │ HTTP (REST API)
-┌─────────────────────▼───────────────────────────────────────┐
-│                        Backend                              │
-│                   .NET 10 Minimal API                       │
-│                                                             │
-│  ┌─────────────────────┐    ┌────────────────────────────┐  │
-│  │      App.cs         │    │     db-config.json         │  │
-│  │  ─────────────────  │    │  ────────────────────────  │  │
-│  │  debugOn            │    │  host                      │  │
-│  │  detailedAclDebug   │    │  port                      │  │
-│  │  aclOn              │    │  username                  │  │
-│  │  isSpa              │    │  password                  │  │
-│  │  port               │    │  database                  │  │
-│  │  serverName         │    │  createTablesIfNotExist    │  │
-│  │  frontendPath       │    │  seedDataIfEmpty           │  │
-│  │  sessionLifeTimeHours│   └────────────────────────────┘  │
-│  └─────────────────────┘                                    │
-│                                                             │
-│  DynData: Dynamisk C# (Obj, Arr, JSON, Log)                 │
-└─────────────────────┬───────────────────────────────────────┘
-                      │ MySqlConnector
-┌─────────────────────▼───────────────────────────────────────┐
-│                        MySQL                                │
-│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │
-│  │ sessions │ │   acl    │ │  users   │ │ products │        │
-│  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │
-└─────────────────────────────────────────────────────────────┘
-```
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | Vite, React 19, TypeScript, Tailwind CSS 4, shadcn/ui, React Router, TanStack Query, i18next, Storybook(visual testing) |
+| **Backend** | .NET 10 Minimal API, JWT authentication, Cloudinary, MailKit |
+| **Database** | MySQL |
+| **Tooling** | ESLint, Prettier, Orval (API models generation) |
 
-## Kom igång
+## Features
 
-1. Kopiera databas-konfigurationen och fyll i värden från läraren:
-```bash
-cp backend/db-config.template.json backend/db-config.json
-```
+- **Movie browsing** — filter by genre, age rating, date, and free-text search
+- **Movie details** — view trailer, cast, director, and available screenings
+- **Seat selection** — interactive seat map with real-time availability(implemented via short pulling)
+- **Ticket booking** — price categories for adults, children, and seniors
+- **Authentication** — register, login, email verification, password reset (JWT-based, should be CSRF)
+- **Booking management** — view active tickets, booking history, and cancel bookings
+- **Admin panel** — manage movies, screenings, and upload posters via Cloudinary(under development)
+- **AI chatbot** — built-in chat assistant for movie-related queries
+- **Multi-language** — Swedish and English (i18next)
+- **Responsive design** — optimized views for mobile and desktop
 
-2. Redigera `backend/db-config.json` med rätt uppgifter (host, port, username, password, database)
-
-3. Installera och starta:
-```bash
-bun install
-bun run dev
-```
-
-## Konfiguration
-
-### App-inställningar (`backend/src/App.cs`)
-- `aclOn` - Slå på/av ACL-systemet
-- `debugOn` - Aktivera debug-loggning
-- `sessionLifeTimeHours` - Sessionens livslängd
-
-### Databas-inställningar (`backend/db-config.json`)
-- `createTablesIfNotExist` - Skapa tabeller automatiskt vid uppstart
-- `seedDataIfEmpty` - Fyll tabeller med exempeldata om de är tomma
-
-## DynData
-
-* Backend använder [DynData](https://www.nuget.org/packages/Dyndata) för att göra C# mer dynamiskt.
-* Se `README-DYNDATA.md` för dokumentation.
-
----
-
-# Om REST-api:t
-
-#### Fem standardroutes per tabell
-Självklart har vi det grundläggande för alla REST-API:er täckt. För vilken tabell som helst, ersätt tabellnamn nedan med ett tabellnamn och id med ett specifikt id:
-* POST /api/tabellnamn - med en request body i JSON-format - skapa en ny rad i tabellen och få tillbaka insert-id:t.
-* GET /api/tabellnamn - hämta alla rader från tabellen som en JSON-array med objekt.
-* GET /api/tabellnamn/id - hämta raden från tabellen med ett specifikt id som ett JSON-objekt. (Obs: Du måste namnge dina id-kolumner i dina tabeller bara "id", inte "elefantId" etc).
-* PUT /api/tabellnamn/id - ändra en eller flera egenskaper för en befintlig rad. Skicka en request body i JSON-format som endast innehåller de fält/kolumner du vill ändra.
-* DELETE /api/tabellnamn/id - ta bort en specifik rad i tabellen.
-
-#### Mer än bara standardroutes
-* Du kan använda (upp till) fyra olika query-parametrar för GET-förfrågan utan id för att göra mycket mer, och hitta det du letar efter direkt:
-* where = villkor, för att filtrera returnerade poster
-* orderby = fält1,[fält2... etc] för att sortera returnerade poster. För fallande sortering, sätt ett "-" före fältnamnet
-* limit = antalPoster, för att begränsa antalet poster
-* offset = antalPoster, för att hoppa över ett antal poster i början.
-
-Ett exempel:
-* /api/users?where=firstName=Thomas_AND_lastName!=Irons&orderby=email&limit=2&offset=1
-* Obs: Omge inte strängar med citattecken, som du kan se i exemplet ovan gör vi inte det.
-
-##### För närvarande stödda operatorer för where
-*  !=, >=, <=, =, >, <, _AND_, _OR_, _LIKE_  (att skriva de tre sista med understreck är valfritt men förbättrar läsbarheten)
-*  Parenteser stöds för närvarande inte.
-
-##### Söka i JSON-fält med _CONTAINS_
-För kolumner med JSON-datatyp (t.ex. `categories` i products-tabellen) kan du använda `_CONTAINS_` för att söka efter värden i JSON-arrayer:
+## Project Structure
 
 ```
-/api/products?where=categories_CONTAINS_Vegetables
+├-- src/                        # Frontend (React)
+│   |-- pages/                  # Page components (19 pages)
+│   ├-- components/             # UI components (shadcn/ui + custom)
+│   ├-- api/                    # API client, hooks, services, generated types
+│   ├-- locales/                # i18n translation files (sv, en)
+│   ├-- config/                 # Navigation and app constants
+│   ├-- interfaces/             # TypeScript interfaces
+│   └-- utils/                  # Helper functions
+├-- backend/                    # Backend (.NET 10)
+│   └-- src/
+│       ├-- Auth/               # JWT authentication & token management
+│       ├-- Movies/             # Movie endpoints & repository
+│       ├-- Screening/          # Screening management
+│       ├-- Booking/            # Booking endpoints & repository
+│       ├-- Seats/              # Seat selection & availability
+│       ├-- Halls/              # Cinema hall management
+│       ├-- Cloudinary/         # Image upload service
+│       ├-- Email/              # Email service (MailKit)
+│       ├-- AiChatRoutes.cs     # AI chatbot endpoint
+│       ├-- RestApi.cs          # V1 dynamic REST API
+│       └-- App.cs              # Application entry point
+├-- public/                     # Static assets
+└-- .storybook/                 # Storybook configuration
 ```
 
-Detta returnerar alla produkter där `categories`-arrayen innehåller "Vegetables".
+## Getting Started
 
-Du kan kombinera med andra operatorer:
-```
-/api/products?where=categories_CONTAINS_Vegetables_AND_price$>2
-```
+### Prerequisites
 
-**Obs:** `_CONTAINS_` fungerar endast på JSON-fält. Om du försöker använda det på ett vanligt fält får du ett felmeddelande som visar vilka fält som stöder `_CONTAINS_`.
+- [Bun](https://bun.sh/), node can be an option, but bun is recommended
+- [.NET 10 SDK](https://dotnet.microsoft.com/download)
 
-### SQL-injektioner? Är vi säkra mot dem?
-* Allt som vi kan flytta till parametrar i prepared statements är parametrar i prepared statements. Debuggern visar SQL:en som genereras för en specifik route, inklusive parametrarna!
-* Användarinput som måste vara del av huvudfrågan (och inte kan parametriseras) - som data för ORDER BY, LIMIT etc. saneras med ganska restriktiva regex:er.
-* Vi bör alltså vara säkra mot SQL-injektioner.
+### Installation
 
-### Om ACL:en är på måste du lägga till regler i acl-tabellen!
-* Du vitlistar routes baserat på userRoles.
-* Om du sätter match till false negeras route-matchningen. Se kommentarer i ACL-tabellen.
-* Alla regler markerade "allow" (vitlistning) körs före regler markerade "disallow" (svartlistning).
-* Så du använder bara svartlistning för att strama åt din tidigare vitlistning. Se kommentarer i ACL-tabellen.
-* ACL:en är inte bara för REST-API:et utan för alla routes (dvs. frontend/statiska filer också).
-* ACL-regler läses om var 60:e sekund, alternativt kan du starta om servern för att observera ändringar direkt.
+1. Copy the database config template and fill in your credentials:
+   ```bash
+   cp backend/db-config.template.json backend/db-config.json
+   ```
 
-### Cookies och session
-* Alla användare (även besökare) får en cookie bunden till en session lagrad i DB-tabellen sessions,
-  så snart de besöker en sida.
-* Varje gång du gör en förfrågan uppdateras ändrad tid för sessionen i databasen.
-* Om en session inte har ändrats på 2 timmar tas den bort.
-* Dock överlever cookies en webbläsarsession (så länge webbläsaren är öppen).
-* Detta betyder: En ny session kan skapas från en "gammal" cookie, vilket inte är ett problem.
+2. Edit `backend/db-config.json` with the correct values for DB and AI chat:
+   ```json
+   {
+     "host": "...",
+     "port": 4567,
+     "username": "...",
+     "password": "...",
+     "database": "...",
+     "createTablesIfNotExist": true,
+     "seedDataIfEmpty": true,
+     "aiAccessToken": "..."
+   }
+   ```
+   - `createTablesIfNotExist` — automatically creates database tables on startup
+   - `seedDataIfEmpty` — populates tables with sample data if empty
+   - `aiAccessToken` — API key for the AI chatbot (Mistral/Devstral via nodehill)
 
-### Login-routes
-De enda api-routes som inte styrs av vilka tabeller och vyer du har i din databas är login-routes.
+3. Create `backend/auth-config.json` for JWT authentication:
+   ```json
+   {
+     "secret": "your-jwt-secret-key",
+     "accessTokenLifetimeMinutes": 15,
+     "refreshTokenLifetimeMinutes": 10080,
+     "issuer": "filmvisarna"
+   }
+   ```
 
-#### POST /api/login: Logga in
-* Request body ska vara i JSON-format och innehålla en befintlig email och lösenord.
+4. Create `backend/email-config.json` for SMTP email service:
+   ```json
+   {
+     "smtpHost": "smtp.gmail.com",
+     "smtpPort": 587,
+     "senderEmail": "your-email@gmail.com",
+     "senderName": "Filmvisarna",
+     "appPassword": "your-app-password",
+     "frontendUrl": "http://localhost:5173"
+   }
+   ```
 
-#### GET /api/login: Kolla om någon är inloggad och hämta användaruppgifter.
-* Kolla om någon är inloggad och hämta användaruppgifter.
+5. Create `backend/.env` for Cloudinary image uploads:
+   ```
+   CLOUDINARY_URL=cloudinary://API_KEY:API_SECRET@CLOUD_NAME
+   ```
 
-#### DELETE /api/login: Logga ut
-*  Logga ut!
+6. Create frontend env files `.env.v1` and `.env.v2`:
+   ```
+   VITE_API_VERSION=v1   # or v2
+   ```
 
-### Men hur registrerar jag en ny användare? POST /api/users
-* Request body ska vara i JSON-format och innehålla en icke-existerande email, ett lösenord, ett firstName och ett lastName.
+7. Install dependencies:
+   ```bash
+   bun install
+   ```
 
-### Lösenord
-* Lösenord är BCryptade (med styrka 13) och tas bort från REST-api-svar också.
-* Det finns inga begränsningar för hur komplexa de måste vara just nu - men jag funderar på att lägga till en kontroll för minsta lösenordsentropi och/eller kräva en minimilängd och att de är en blandning av små och stora bokstäver, siffror och minst ett annat tecken.
+## Running the Project
+
+| Command | Description |
+|---------|-------------|
+| `bun run dev` | Run frontend + backend (V1 API) |
+| `bun run dev:v2` | Run frontend + backend (V2 API with JWT) |
+| `bun run dev:fe` | Frontend only v1 |
+| `bun run dev:be` | Backend only v1 |
+| `bun run build` | Build for production |
+| `bun run storybook` | Launch Storybook (port 6006) |
+| `bun run lint` | Run ESLint |
+| `bun run format` | Format code with Prettier |
+| `bun run api:generate` | Generate API types from backend (Orval) |
+
+- **Frontend:** http://localhost:5173
+- **Backend:** http://localhost:5001
+- **Swagger docs:** http://localhost:5001/swagger (development only)
+
+### V1 — `/api/v1`
+Session and ACL-based dynamic REST API. Automatically generates CRUD endpoints for all database tables. Supports query parameters: `where`, `orderby`, `limit`, `offset`. See [README-V1.md](README-V1.md) for V1 documentation.
+
+### V2 — `/api/v2`
+JWT-based API with dedicated endpoints:
+
+| Area | Endpoints |
+|------|-----------|
+| **Auth** | Login, register, refresh token, logout, verify email, password reset |
+| **Movies** | List with filters, movie details |
+| **Screenings** | Screening info, screenings by movie |
+| **Bookings** | Create, cancel, get user bookings |
+| **Seats** | Hall layout, seat availability, reserve/release |
+| **Chat** | AI chatbot endpoint |
+| **Cloudinary** | Image upload |
+
+## Admin Access
+
+The following accounts with admin privileges are available (seeded via `seedDataIfEmpty`):
+
+| Login | Password |
+|-------|----------|
+| `admin` | `admin` |
+| `erik.andersson@email.se` | `password123` |
